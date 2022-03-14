@@ -34,6 +34,9 @@ INSTALLED_APPS = [
     # Re:pill이 사용하는 앱
     'accounts',
 
+    # Third-party apps
+    'corsheaders',
+
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -125,6 +128,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CORS: 모든 Origin 허용 (배포 시 수정할 것)
+CORS_ORIGIN_ALLOW_ALL = True
 
 # 자체 User Model 사용
 AUTH_USER_MODEL = 'accounts.User'

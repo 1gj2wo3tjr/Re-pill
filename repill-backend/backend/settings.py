@@ -33,10 +33,12 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # Re:pill이 사용하는 앱
     'accounts',
+    'community',
 
     # Third-party apps
     'corsheaders',
-
+    'rest_framework',
+    'rest_framework_simplejwt',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -134,3 +136,24 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 # 자체 User Model 사용
 AUTH_USER_MODEL = 'accounts.User'
+
+import datetime
+
+JWT_AUTH = {
+    # JWT 토큰 만료기한: 1일
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1)
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        
+        # 기본값: 로그인 사용자
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 기본값: JWT 토큰 확인
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+    ),
+}

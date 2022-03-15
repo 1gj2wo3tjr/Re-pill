@@ -17,5 +17,6 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('notices/', views.get_notice_list),
+    path('notice/', views.notice_list),
+    path('notice/<int:pk>', views.notice_detail),
 ]

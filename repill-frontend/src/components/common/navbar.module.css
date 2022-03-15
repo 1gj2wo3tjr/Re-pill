@@ -1,0 +1,40 @@
+.navbar {
+  height: 60px;
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20rem;
+  font-size: 1.2rem;
+  border-bottom: 1px solid;
+  border-color: rgb(71, 71, 71);
+}
+
+.nav_logo {
+  text-decoration: none;
+  color: rgb(71, 71, 71);
+}
+
+.nav_links {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  grid-gap: 50px;
+  list-style: none;
+}
+
+.nav_link {
+  text-decoration: none;
+  color: rgb(71, 71, 71);
+  transition: 0.3s all;
+}
+
+.nav_link:hover {
+  color: #c1deae;
+}
+
+.nav_icon {
+  display: none;
+  font-size: 2rem;
+  cursor: pointer;
+}

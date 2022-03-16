@@ -7,6 +7,7 @@ import Main from "./pages/main/main"
 import Notice from "./components/main/notice/Notice"
 import Product from "./components/main/product/product"
 import Login from "./components/main/login/login"
+import "./index.css"
 
 function App() {
   return (

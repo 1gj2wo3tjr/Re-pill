@@ -2,7 +2,7 @@ import React from 'react'
 import { TableBody, TableCell } from "@mui/material";
 
 
-function content() {
+function Content() {
   return (
     <TableBody>
       <TableCell style={{ textAlign: 'center' }}>1</TableCell>
@@ -14,4 +14,4 @@ function content() {
   )
 }
 
-export default content
+export default Content

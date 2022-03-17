@@ -1,7 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Modal, Button, Form, TextArea } from 'semantic-ui-react'
 
-function ModalCompo({setOpen, open}) {
+const btnStyle = {
+  color: "black",
+  padding: ".375rem .75rem",
+  background: "#F2F5C8",
+  border: "0",
+  borderRadius: "25px",
+  fontSize: "1rem",
+  lineHeight: 1.5,
+  boxShadow: "0px 5px 10px rgb(207 206 206)",
+  marginLeft: '10px'
+};
+
+function ModalCompo({setOpen, open }) {
+  const [form, setForm] = useState({
+    title: "",
+    content: ""
+  })
+
+  const onChange = (event) => {
+    const { name, value } = event.target
+    setForm({
+      ...form,
+      [name] : value
+    })
+    console.log(form)
+  }
 
   return (
     <>
@@ -15,11 +40,15 @@ function ModalCompo({setOpen, open}) {
           <Modal.Header>공지사항 등록</Modal.Header>
           <Modal.Content>
             <Form>
-              <TextArea placeholder='Tell us more'></TextArea>
+              <Form.Field>
+                <input placeholder='제목을 작성해주세요' onChange={onChange} value={form.title} name="title" />
+              </Form.Field>
+              <TextArea rows={20} placeholder='내용을 작성해주세요' onChange={onChange} value={form.content} name="content"></TextArea>
             </Form>
           </Modal.Content>
           <Modal.Actions>
-            <Button onClick={() => setOpen(false)}>OK</Button>
+            <Button style={btnStyle} onClick={() => setOpen(false)}>등록</Button>
+            <Button onClick={() => setOpen(false)}>취소</Button>
           </Modal.Actions>
         </Modal>
       ) : null}

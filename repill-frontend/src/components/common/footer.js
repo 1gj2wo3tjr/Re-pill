@@ -1,9 +1,6 @@
 import React from 'react'
 import {
   Container,
-  Divider,
-  Grid,
-  Header,
   Image,
   List,
   Segment,
@@ -36,47 +33,9 @@ function Footer() {
           }
         `}
       </style>
+
       <Segment inverted vertical>
         <Container textAlign='center'>
-          {/* <Grid columns={4} divided stackable inverted>
-            <Grid.Row>
-              <Grid.Column>
-                <Header inverted as='h4' content='Group 1' />
-                <List link inverted>
-                  <List.Item as='a'>Link One</List.Item>
-                  <List.Item as='a'>Link Two</List.Item>
-                  <List.Item as='a'>Link Three</List.Item>
-                  <List.Item as='a'>Link Four</List.Item>
-                </List>
-              </Grid.Column>
-              <Grid.Column>
-                <Header inverted as='h4' content='Group 2' />
-                <List link inverted>
-                  <List.Item as='a'>Link One</List.Item>
-                  <List.Item as='a'>Link Two</List.Item>
-                  <List.Item as='a'>Link Three</List.Item>
-                  <List.Item as='a'>Link Four</List.Item>
-                </List>
-              </Grid.Column>
-              <Grid.Column>
-                <Header inverted as='h4' content='Group 3' />
-                <List link inverted>
-                  <List.Item as='a'>Link One</List.Item>
-                  <List.Item as='a'>Link Two</List.Item>
-                  <List.Item as='a'>Link Three</List.Item>
-                  <List.Item as='a'>Link Four</List.Item>
-                </List>
-              </Grid.Column>
-              <Grid.Column>
-                <Header inverted as='h4' content='Footer Header' />
-                <p>
-                  Extra space for a call to action inside the footer that could help re-engage
-                  users.
-                </p>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid> */}
-          {/* <Divider inverted section /> */}
           {/* logo 자리 */}
           <Image src='/logo.png' centered size='mini' />
           <List horizontal inverted divided link size='small'>

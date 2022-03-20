@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Modal, Button, Form, TextArea } from 'semantic-ui-react'
+import styles from './Notice.module.css';
 
 const btnStyle = {
   color: "black",
@@ -28,6 +29,11 @@ function ModalCompo({setOpen, open }) {
     console.log(form)
   }
 
+  // const addNotice = () => {
+  //   setOpen(false)
+  // }
+
+  // onClick={() => setOpen(false)}
   return (
     <>
       {open ? (
@@ -48,7 +54,7 @@ function ModalCompo({setOpen, open }) {
           </Modal.Content>
           <Modal.Actions>
             <Button style={btnStyle} onClick={() => setOpen(false)}>등록</Button>
-            <Button onClick={() => setOpen(false)}>취소</Button>
+            <button onClick={() => setOpen(false)} className={styles.close_button}>취소</button>
           </Modal.Actions>
         </Modal>
       ) : null}

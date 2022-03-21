@@ -6,13 +6,13 @@ import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { CardActionArea } from '@mui/material';
+import styles from './Pagination.module.css';
 
 function ProductList({ list }) {
   return (
     <>
-      {console.log(list)}
       {list.map((item, index) => (
-        <Card sx={{ maxWidth: 300 }} >
+        <Card sx={{ maxWidth: 200, minWidth: 200, margin: 1 }} key={index} className={styles.product}>
           <CardActionArea>
             <CardMedia
               component="img"

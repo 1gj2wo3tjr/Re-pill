@@ -31,3 +31,10 @@ input:focus {
   background-color: #e8e8a6;
   margin-left: 10px;
 }
+
+.product_lists {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}

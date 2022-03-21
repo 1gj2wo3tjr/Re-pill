@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './Pagination.module.css';
+import { useMediaQuery } from 'react-responsive';
 
 function Paging({ postPerPage, totalPosts, paginate }) {
   const pageNumbers = [];
@@ -8,18 +9,26 @@ function Paging({ postPerPage, totalPosts, paginate }) {
     pageNumbers.push(i);
   }
 
-  console.log(pageNumbers)
+  const isMobile = useMediaQuery({
+    query: "(max-width : 768px)"
+  });
 
   return (
-    <nav>
-      <ul className={styles.pagination}>
-        {pageNumbers.map(num =>
-          <li key={num}>
-            <p onClick={() => paginate(num)}>{num}</p>
-          </li>
-        )}
-      </ul>
-    </nav>
+    <>
+      {isMobile ? (
+        <></>
+      ) : (
+        <nav>
+          <ul className={styles.pagination}>
+            {pageNumbers.map(num =>
+              <li key={num}>
+                <p onClick={() => paginate(num)}>{num}</p>
+              </li>
+            )}
+          </ul>
+        </nav>
+      )}
+    </>
   )
 }
 

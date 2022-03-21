@@ -5,11 +5,6 @@ import styles from "./Product.module.css"
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import ProductList from './ProductList'
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
 import Paging from './Pagination'
 import './Pagination.module.css';
 
@@ -24,24 +19,6 @@ function Product() {
 
     setProducts(response.data);
   }
-
-  // const productList = (products) => {
-  //   let result = [];
-  //   if (products.length > 0) {
-  //     products.map((item, index) => {
-  //       result = result.concat(
-  //         <div key={index}>{item.url}</div>
-  //       )
-  //     })
-  //   } else {
-  //     result = result.concat(
-  //       <div>
-  //         해당 상품이 존재하지 않습니다.
-  //       </div>
-  //     )
-  //   }
-  //   return result;
-  // }
 
   useEffect(() => {
     getProducts()
@@ -68,20 +45,9 @@ function Product() {
             </button>
           </>
         </div>
-        <div>
-          {/* {product.map(p => (
-            <div key={p.id}>
-              <div>{p.title}</div>
-            </div>
-          ))} */}
 
-
-          {/* {productList(products)} */}
-          {/* <ProductList list={productList(products)} /> */}
-
-          <ProductList list={products} />
-          {/* {console.log(products)} */}
-
+        <div className={styles.product_lists} >
+          <ProductList list={currentProducts} />
         </div >
 
         {/* pagination */}

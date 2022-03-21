@@ -156,6 +156,15 @@ REST_FRAMEWORK = {
         # 기본값: JWT 토큰 확인
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.BasicAuthentication',        # BasicAuth로 동작 확인: 추후 끌 것
     ),
+}
+
+# Swagger에서 인증을 Basic으로 사용하도록 정의: 추후 바꿀 것
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    }
 }

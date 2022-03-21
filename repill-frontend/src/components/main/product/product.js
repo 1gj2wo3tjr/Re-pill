@@ -10,9 +10,14 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
+import Paging from './Pagination'
+import './Pagination.module.css';
 
 function Product() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentpage] = useState(1);
+  const [postPerPage] = useState(50);
 
   const getProducts = async () => {
     const response = await axios.get("https://jsonplaceholder.typicode.com/photos");
@@ -42,6 +47,14 @@ function Product() {
     getProducts()
   }, [])
 
+
+  // 현재 페이지 가져오기
+  const indexOfLast = currentPage * postPerPage;  // 1*10 = 10번 포스트
+  const indexOfFirst = indexOfLast - postPerPage; // 10-10 = 0번 포스트
+  const currentProducts = products.slice(indexOfFirst, indexOfLast);  // 0~10번까지
+
+  const paginate = pageNum => setCurrentpage(pageNum);
+
   return (
     <div>
       <Navbar />
@@ -70,6 +83,13 @@ function Product() {
           {/* {console.log(products)} */}
 
         </div >
+
+        {/* pagination */}
+        <Paging
+          postPerPage={postPerPage}
+          totalPosts={products.length}
+          paginate={paginate}
+        />
       </Container>
     </div>
   )

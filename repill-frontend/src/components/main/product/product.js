@@ -53,19 +53,17 @@ function Product() {
       </div>
       <Container className={styles.container}>
         <div className={styles.search_div}>
-          <>
-            <input
-              type="text"
-              placeholder='찾으시는 제품을 검색해주세요.'
-              className={styles.search_input}
-              onChange={onChange}
-              value={keyword}
-            >
-            </input>
-            <button className={styles.search_btn} onClick={onClick}>
-              <SearchIcon></SearchIcon>
-            </button>
-          </>
+          <input
+            type="text"
+            placeholder='찾으시는 제품을 검색해주세요.'
+            className={styles.search_input}
+            onChange={onChange}
+            value={keyword}
+          >
+          </input>
+          <button className={styles.search_btn} onClick={onClick}>
+            <SearchIcon></SearchIcon>
+          </button>
         </div>
 
         <div className={styles.product_lists} >

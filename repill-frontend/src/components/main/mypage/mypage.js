@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
 
 function mypage() {
   return (
-    <div>mypage</div>
-  )
+    <>
+      <h1>mypage</h1>
+      <div id="mypageElement"></div>
+    </>
+  );
 }
 
-export default mypage
+export default mypage;

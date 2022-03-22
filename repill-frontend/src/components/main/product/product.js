@@ -4,27 +4,26 @@ import styles from "./Product.module.css"
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import ProductList from './ProductList'
-import Category from './Category'
-import Paging from './Pagination'
-import './Pagination.module.css';
+import Category from './Category';
+import Pagination from "react-js-pagination";
 
 function Product() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentpage] = useState(1);
   const [postPerPage] = useState(24);
   const [keyword, setKeyword] = useState("");
+  const [result, setResult] = useState([]);
 
   const getProducts = async () => {
     const response = await axios.get("https://jsonplaceholder.typicode.com/photos");
     setProducts(response.data);
+    setResult(response.data);
   }
 
   // 현재 페이지 가져오기
   const indexOfLast = currentPage * postPerPage;  // 1*10 = 10번 포스트
   const indexOfFirst = indexOfLast - postPerPage; // 10-10 = 0번 포스트
-  const currentProducts = products.slice(indexOfFirst, indexOfLast);  // 0~10번까지
-
-  const paginate = pageNum => setCurrentpage(pageNum);
+  const currentProducts = result.slice(indexOfFirst, indexOfLast);  // 0~10번까지
 
   const onChange = (e) => {
     setKeyword(e.target.value);
@@ -38,8 +37,12 @@ function Product() {
 
   const filter = (keyword) => {
     if (keyword !== "") {
-      setProducts(products.filter((item) => item.title.includes(keyword)))
+      setResult(products.filter((item) => item.title.includes(keyword)))
     }
+  }
+
+  const handlePageChange = (currentPage) => {
+    setCurrentpage(currentPage);
   }
 
   useEffect(() => {
@@ -48,6 +51,62 @@ function Product() {
 
   return (
     <div>
+      <style>
+        {`
+          .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 80px 0;
+          }
+          ul {
+            list-style: none;
+            padding: 0;
+          }
+          ul.pagination li {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #e2e2e2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+          }
+          ul.pagination li:first-child {
+            border-radius: 50%;
+          }
+          ul.pagination li:last-child {
+            border-radius: 50px;
+          }
+          ul.pagination li a {
+            text-decoration: none;
+            color: #575757;
+            font-size: 15px;
+            // font-weight: bold;
+          }
+          ul.pagination li.active a {
+            color: rgb(87, 87, 87);
+            font-weight: bold;
+          }
+          ul.pagination li.active {
+            background-color: #e8e8a6;
+          }
+          ul.pagination li a:hover,
+          ul.pagination li a.active {
+            color: #575757;
+            font-weight: bold;
+          }
+          .page-selection {
+            width: 48px;
+            height: 30px;
+            color: #575757;
+          }
+        `}
+      </style>
+
       <div style={{ display: "inline" }}>
         <Category />
       </div>
@@ -70,14 +129,20 @@ function Product() {
           <ProductList list={currentProducts} />
         </div >
 
-        {/* pagination */}
-        <Paging
-          postPerPage={postPerPage}
-          totalPosts={products.length}
-          paginate={paginate}
-        />
+        <div className={styles.paging}>
+          <Pagination
+            activePage={currentPage}
+            itemsCountPerPage={24}
+            totalItemsCount={result.length}
+            pageRangeDisplayed={5}
+            prevPageText={"<"}
+            nextPageText={">"}
+            onChange={handlePageChange}
+          />
+        </div>
       </Container>
-    </div>
+
+    </div >
   )
 
 }

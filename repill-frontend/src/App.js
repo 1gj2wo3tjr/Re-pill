@@ -1,13 +1,9 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route
-} from "react-router-dom"
-import Main from "./pages/main/main"
-import Notice from "./components/main/notice/notice"
-import Product from "./components/main/product/product"
-import Login from "./components/main/login/login"
-import "./index.css"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Main from "./pages/main/main";
+import Notice from "./components/main/notice/notice";
+import Product from "./components/main/product/product";
+import Login from "./components/main/login/login";
+import "./index.css";
 
 function App() {
   return (

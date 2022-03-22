@@ -16,26 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-
-schema_view = get_schema_view(
-    openapi.Info(
-        title='Re:pill API',
-        default_version='v1',
-        description='Hello!',
-        terms_of_service='',
-        contact=openapi.Contact(email='noreply@i6a503.ssafy.io'),
-        license=openapi.License(name='BSD License'),
-    ),
-    public=True,
-    permission_classes=[permissions.AllowAny],
-)
-
+from . import yasg
 
 urlpatterns = [
-    path('swagger-ui/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
     path('admin/', admin.site.urls),
     path('api/v1/community/', include('community.urls')),
-]
+] + yasg.schema_url_patterns

@@ -1,18 +1,7 @@
 import React, { useState } from 'react'
-import { Modal, Button, Form, TextArea } from 'semantic-ui-react'
+import { Modal, Form, TextArea } from 'semantic-ui-react';
 import styles from './Notice.module.css';
-
-const btnStyle = {
-  color: "black",
-  padding: ".375rem .75rem",
-  background: "#F2F5C8",
-  border: "0",
-  borderRadius: "25px",
-  fontSize: "1rem",
-  lineHeight: 1.5,
-  boxShadow: "0px 5px 10px rgb(207 206 206)",
-  marginLeft: '10px'
-};
+import axios from "axios";
 
 function ModalCompo({setOpen, open }) {
   const [form, setForm] = useState({
@@ -29,11 +18,25 @@ function ModalCompo({setOpen, open }) {
     console.log(form)
   }
 
-  // const addNotice = () => {
-  //   setOpen(false)
-  // }
+  const addNotice = () => {
+    if (!form.title && form.content) {
+      alert("제목을 입력해주세요")
+    } else if (!form.content && form.title) {
+      alert("내용을 입력해주세요")
+    } else if (!form.title && !form.content) {
+      alert("제목과 내용을 입력해주세요")
+    } else {
+      axios
+        .post('http://127.0.0.1:8000/api/v1/community/notice/', { title: form.title, content: form.content })
+      setOpen((prev) => !prev)
+      window.location.reload(true)
+    }
+  }
 
-  // onClick={() => setOpen(false)}
+  const closeModal = () => {
+    setOpen((prev) => !prev)
+  }
+
   return (
     <>
       {open ? (
@@ -53,8 +56,8 @@ function ModalCompo({setOpen, open }) {
             </Form>
           </Modal.Content>
           <Modal.Actions>
-            <Button style={btnStyle} onClick={() => setOpen(false)}>등록</Button>
-            <button onClick={() => setOpen(false)} className={styles.close_button}>취소</button>
+            <button className={styles.add_notice_button_modal} onClick={addNotice}>등록</button>
+            <button onClick={closeModal} className={styles.close_button}>취소</button>
           </Modal.Actions>
         </Modal>
       ) : null}

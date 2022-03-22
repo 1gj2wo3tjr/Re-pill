@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import Navbar from "../../common/navbar"
 import styles from './Notice.module.css';
 import axios from "axios";
 import EditNoticeModal from './EditNoticeModal';
@@ -18,20 +17,23 @@ function NoticeDetail() {
   const [next, setNext] = useState()
   const [user, setUser] = useState("admin")
   const [open, setOpen] = useState(false)
+  const [slicedDate, setSlicedDate] = useState("")
 
   const getDetail = async () => {
-    const response = await axios.get(`https://jsonplaceholder.typicode.com/posts/${params.id}`)
+    const response = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${params.id}`)
     setDetail(response.data)
+    let plus_views = detail.views + 1
+    setSlicedDate(response.data.created_at.slice(0, 10))
   }
 
   const getLength = async () => {
-    const notices = await axios.get("https://jsonplaceholder.typicode.com/posts")
+    const notices = await axios.get("http://127.0.0.1:8000/api/v1/community/notice/")
     setList(notices.data.length)
   }
 
   const getPrev = async () => {
     if (params.id > 1) {
-      const previousNotice = await axios.get(`https://jsonplaceholder.typicode.com/posts/${params.id-1}`)
+      const previousNotice = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${params.id-1}`)
       setPrevious(previousNotice.data.title)
     }
   }
@@ -40,29 +42,33 @@ function NoticeDetail() {
     let int_params = parseInt(params.id)
     let list_len = parseInt(list)
     if (int_params !== list_len) {
-      const nextNotice = await axios.get(`https://jsonplaceholder.typicode.com/posts/${int_params+1}`)
+      const nextNotice = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${int_params+1}`)
       console.log(nextNotice)
       setNext(nextNotice.data.title)
     }
+  }
+
+  // data 확인 용 테스트 함수
+  const prac = async () => {
+    const exam = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/`).catch((err) => console.log(err))
+    console.log(exam)
   }
 
   const openModal = () => {
     setOpen((prev) => !prev)
   }
 
-  // console.log(next)
-
   useEffect(() => {
     getDetail()
     getLength()
     getPrev()
     getNext()
+    prac()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params.id])
 
   return (
     <>
-    <Navbar />
       <Container>
         <h2 style={{ marginTop: "5%" }}>공지사항</h2>
         {user==="admin" ? (
@@ -75,14 +81,14 @@ function NoticeDetail() {
               <TableCell style={{ display: "grid", gridTemplateColumns: "10% 80% 10%" }}>
                 <div></div>
                 <div className={styles.notice_title}>{detail.title}</div>
-                <div className={styles.notice_date}>날짜</div>
+                <div className={styles.notice_date}>{slicedDate}</div>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             <TableRow style={{ height: "30rem" }}>
               <TableCell style={{ fontSize: "2rem", textAlign: "center" }}>
-                {detail.body}
+                {detail.content}
               </TableCell>
             </TableRow>
             {params.id==="1000" ? (null) : (
@@ -105,7 +111,9 @@ function NoticeDetail() {
               </>)}
           </TableBody>
         </Table>
-        <button className={styles.goNotice_button} onClick={goNotice}>목록보기</button>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <button className={styles.goNotice_button} onClick={goNotice}>목록보기</button>
+        </div>
       </Container>
       <EditNoticeModal open={open} setOpen={setOpen} title={detail.title} content={detail.body} />
     </>

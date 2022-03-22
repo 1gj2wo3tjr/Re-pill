@@ -34,6 +34,7 @@ input:focus {
   border-radius: 20px;
   background-color: #e8e8a6;
   margin: 0 10px;
+  cursor: pointer;
 }
 
 .product_lists {

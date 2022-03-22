@@ -11,17 +11,13 @@ import './Pagination.module.css';
 function Product() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentpage] = useState(1);
-  const [postPerPage] = useState(40);
+  const [postPerPage] = useState(24);
+  const [keyword, setKeyword] = useState("");
 
   const getProducts = async () => {
     const response = await axios.get("https://jsonplaceholder.typicode.com/photos");
     setProducts(response.data);
   }
-
-  useEffect(() => {
-    getProducts()
-  }, [])
-
 
   // 현재 페이지 가져오기
   const indexOfLast = currentPage * postPerPage;  // 1*10 = 10번 포스트
@@ -29,6 +25,26 @@ function Product() {
   const currentProducts = products.slice(indexOfFirst, indexOfLast);  // 0~10번까지
 
   const paginate = pageNum => setCurrentpage(pageNum);
+
+  const onChange = (e) => {
+    setKeyword(e.target.value);
+  }
+
+  const onClick = (e) => {
+    setCurrentpage(1);
+    setKeyword("");
+    filter(keyword);
+  }
+
+  const filter = (keyword) => {
+    if (keyword !== "") {
+      setProducts(products.filter((item) => item.title.includes(keyword)))
+    }
+  }
+
+  useEffect(() => {
+    getProducts()
+  }, [])
 
   return (
     <div>
@@ -38,8 +54,15 @@ function Product() {
       <Container className={styles.container}>
         <div className={styles.search_div}>
           <>
-            <input type="text" placeholder='찾으시는 제품을 검색해주세요.' className={styles.search_input}></input>
-            <button className={styles.search_btn}>
+            <input
+              type="text"
+              placeholder='찾으시는 제품을 검색해주세요.'
+              className={styles.search_input}
+              onChange={onChange}
+              value={keyword}
+            >
+            </input>
+            <button className={styles.search_btn} onClick={onClick}>
               <SearchIcon></SearchIcon>
             </button>
           </>

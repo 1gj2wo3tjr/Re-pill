@@ -22,6 +22,7 @@ function App() {
           <Route path="/notice" element={<Notice />} />
           <Route path="/product" element={<Product />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/notice/:id" element={<NoticeDetail />} />
         </Routes>
       </div>
       <Footer />

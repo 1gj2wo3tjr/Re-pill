@@ -35,8 +35,6 @@
   margin-top: 3%;
   display: flex;
   justify-content: center;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .page_li {

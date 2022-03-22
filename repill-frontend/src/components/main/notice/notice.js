@@ -1,23 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Button } from 'semantic-ui-react';
 import { Table, TableCell, TableHead, TableRow, Container } from "@mui/material";
 import Content from "./Content"
-import ModalCompo from "./ModalCompo"
+import AddNoticeModal from "./AddNoticeModal"
 import styles from './Notice.module.css';
 import axios from "axios";
 import Pagination from "./Pagination";
-
-const btnStyle = {
-  color: "black",
-  background: "#F2F5C8",
-  padding: ".375rem .75rem",
-  border: "0",
-  borderRadius: "25px",
-  fontSize: "1rem",
-  lineHeight: 1.5,
-  boxShadow: "0px 5px 10px rgb(207 206 206)",
-  marginLeft: '10px'
-};
 
 function Notice() {
   const [open, setOpen] = useState(false)
@@ -36,7 +23,7 @@ function Notice() {
 
 
   const getNotices = async() => {
-    const response = await axios.get("https://jsonplaceholder.typicode.com/posts")
+    const response = await axios.get("http://127.0.0.1:8000/api/v1/community/notice/")
     setList(response.data)
   }
 
@@ -69,7 +56,7 @@ function Notice() {
           {user === "admin" ? (
             <>
               <input type="text" placeholder="검색어를 입력해주세요" onChange={searchTitle} value={keyword} className={styles.search_content}></input>
-              <Button style={btnStyle} onClick={openModal}>+작성하기</Button>
+              <button className={styles.add_notice_button} onClick={openModal}>+작성하기</button>
             </>) : (
             <><input type="text" placeholder="검색어를 입력해주세요" onChange={searchTitle} value={keyword} className={styles.search_content}></input></>)
           }
@@ -98,7 +85,7 @@ function Notice() {
             <Pagination postsPerPage={postsPerPage} totalPosts={list.length} paginate={setCurrentPage} />
           </>)}
       </Container>
-      <ModalCompo open={open} setOpen={setOpen} />
+      <AddNoticeModal open={open} setOpen={setOpen} />
     </div>
   )
 }

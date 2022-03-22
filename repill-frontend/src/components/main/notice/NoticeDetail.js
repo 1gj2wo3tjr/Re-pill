@@ -4,6 +4,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import Navbar from "../../common/navbar"
 import styles from './Notice.module.css';
 import axios from "axios";
+import EditNoticeModal from './EditNoticeModal';
 
 function NoticeDetail() {
   let params = useParams()
@@ -15,6 +16,8 @@ function NoticeDetail() {
   const [list, setList] = useState()
   const [previous, setPrevious] = useState()
   const [next, setNext] = useState()
+  const [user, setUser] = useState("admin")
+  const [open, setOpen] = useState(false)
 
   const getDetail = async () => {
     const response = await axios.get(`https://jsonplaceholder.typicode.com/posts/${params.id}`)
@@ -43,6 +46,10 @@ function NoticeDetail() {
     }
   }
 
+  const openModal = () => {
+    setOpen((prev) => !prev)
+  }
+
   // console.log(next)
 
   useEffect(() => {
@@ -58,7 +65,11 @@ function NoticeDetail() {
     <Navbar />
       <Container>
         <h2 style={{ marginTop: "5%" }}>공지사항</h2>
-        <Table style={{ marginTop: "7%" }}>
+        {user==="admin" ? (
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button className={styles.edit_notice_button} onClick={openModal}>수정하기</button>
+          </div>) : null}
+        <Table style={{ marginTop: "3%" }}>
           <TableHead>
             <TableRow style={{ backgroundColor: '#F2F5C8', boxShadow: "0px 5px 10px rgb(207 206 206)" }}>
               <TableCell style={{ display: "grid", gridTemplateColumns: "10% 80% 10%" }}>
@@ -96,6 +107,7 @@ function NoticeDetail() {
         </Table>
         <button className={styles.goNotice_button} onClick={goNotice}>목록보기</button>
       </Container>
+      <EditNoticeModal open={open} setOpen={setOpen} title={detail.title} content={detail.body} />
     </>
   )
 }

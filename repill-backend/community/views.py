@@ -72,8 +72,8 @@ def notice_detail(request, pk):
         prev = Notice.objects.filter(pk__lt=notice.pk).order_by('-pk').first()
 
         cursor = {
-            'next': NoticeSerializer(next).data if next else '마지막 글입니다.',
-            'previous': NoticeSerializer(prev).data if prev else '첫번째 글입니다.',
+            'next': NoticeSerializer(next).data if next else None,
+            'previous': NoticeSerializer(prev).data if prev else None,
             }
 
         serializer = NoticeSerializer(notice)

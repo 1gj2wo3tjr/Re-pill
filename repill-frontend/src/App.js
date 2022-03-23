@@ -1,16 +1,13 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route
-} from "react-router-dom"
-import Main from "./pages/main/main"
-import Notice from "./components/main/notice/Notice"
-import Product from "./components/main/product/product"
-import Login from "./components/main/login/login"
-import NoticeDetail from "./components/main/notice/NoticeDetail"
-import "./index.css"
-import Navbar from "../src/components/common/navbar"
-import Footer from "../src/components/common/footer"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Main from "./pages/main/main";
+import Notice from "./components/main/notice/Notice";
+import Product from "./components/main/product/product";
+import NoticeDetail from "./components/main/notice/NoticeDetail";
+import "./index.css";
+import Navbar from "../src/components/common/navbar";
+import Footer from "../src/components/common/footer";
+import KakaoLogin from "./components/main/login/kakaologin";
+import Auth from "./components/main/login/Auth";
 
 function App() {
   return (
@@ -21,7 +18,8 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/notice" element={<Notice />} />
           <Route path="/product" element={<Product />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/kakaologin" exact element={<KakaoLogin />} />
+          <Route path="/oauth/callback/kakao" element={<Auth />} />
           <Route path="/notice/:id" element={<NoticeDetail />} />
         </Routes>
       </div>

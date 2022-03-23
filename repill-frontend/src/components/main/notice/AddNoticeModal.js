@@ -43,8 +43,6 @@ function ModalCompo({setOpen, open }) {
         <Modal
           centered={false}
           open={open}
-          onClose={() => setOpen(false)}
-          onOpen={() => setOpen(true)}
         >
           <Modal.Header>공지사항 등록</Modal.Header>
           <Modal.Content>

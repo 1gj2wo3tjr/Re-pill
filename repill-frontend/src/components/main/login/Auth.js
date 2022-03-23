@@ -26,7 +26,7 @@ const Auth = () => {
       .catch(({ err }) => {
         // console.log("소셜로그인 에러", err);
         alert("로그인에 실패하였습니다.");
-        navigate("/kakaologin");
+        navigate("/KakaoLogin");
       });
   }, []);
   return (

@@ -24,77 +24,71 @@ function ProductList({ list }) {
   return (
     <>
       {isMobile ? (
-        <>
-
-        </>
+        <h1>모바일</h1>
       ) : (
         <>
-          {list.map((item, index) => (
+          {isMiddle ? (
             <>
-              {isMiddle ? (
-                <>
-                  <Card sx={{ maxWidth: "30%", minWidth: "30%", margin: "5px" }} key={index} >
-                    <CardActionArea >
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image={item.url}
-                        alt="green iguana"
-                      />
-                      <CardContent style={{ height: "120px" }}>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {item.id}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {item.title}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions style={{ justifyContent: "end" }} >
-                      <Button sx={{ borderRadius: "20px" }} style={{ backgroundColor: "#E8E8A6" }}>
-                        <AddShoppingCartIcon sx={{ color: "rgb(87, 87, 87)" }}>
-                        </AddShoppingCartIcon>
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </>
-              ) : (
-                <>
-                  <Card sx={{ maxWidth: "23%", minWidth: "23%", margin: "1%" }} key={index} >
-                    <CardActionArea >
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image={item.url}
-                        alt="green iguana"
-                      />
-                      <CardContent style={{ height: "120px" }}>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {item.id}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {item.title}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions style={{ justifyContent: "end" }} >
-                      <Button sx={{ borderRadius: "20px" }} style={{ backgroundColor: "#E8E8A6" }}>
-                        <AddShoppingCartIcon sx={{ color: "rgb(87, 87, 87)" }}>
-                        </AddShoppingCartIcon>
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </>
-              )}
-
+              {list.map((item, index) => (
+                <Card sx={{ maxWidth: "30%", minWidth: "30%", margin: "5px" }} key={index} >
+                  <CardActionArea >
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={item.url}
+                      alt="green iguana"
+                    />
+                    <CardContent style={{ height: "120px" }}>
+                      <Typography gutterBottom variant="h5" component="div">
+                        {item.id}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {item.title}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions style={{ justifyContent: "end" }} >
+                    <Button sx={{ borderRadius: "20px" }} style={{ backgroundColor: "#E8E8A6" }}>
+                      <AddShoppingCartIcon sx={{ color: "rgb(87, 87, 87)" }}>
+                      </AddShoppingCartIcon>
+                    </Button>
+                  </CardActions>
+                </Card>
+              ))}
             </>
-
-          ))}
-
+          ) : (
+            <>
+              {list.map((item, index) => (
+                <Card sx={{ maxWidth: "23%", minWidth: "23%", margin: "1%" }} key={index} >
+                  <CardActionArea >
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={item.url}
+                      alt="green iguana"
+                    />
+                    <CardContent style={{ height: "120px" }}>
+                      <Typography gutterBottom variant="h5" component="div">
+                        {item.id}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {item.title}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions style={{ justifyContent: "end" }} >
+                    <Button sx={{ borderRadius: "20px" }} style={{ backgroundColor: "#E8E8A6" }}>
+                      <AddShoppingCartIcon sx={{ color: "rgb(87, 87, 87)" }}>
+                      </AddShoppingCartIcon>
+                    </Button>
+                  </CardActions>
+                </Card>
+              ))}
+            </>
+          )}
         </>
       )
       }
-
     </>
   )
 }

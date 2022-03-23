@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import { Button, Header, Icon, Modal } from 'semantic-ui-react'
 import { useParams, useNavigate, Link } from "react-router-dom";
 import styles from './Notice.module.css';
 import axios from "axios";
@@ -18,6 +19,7 @@ function NoticeDetail() {
   const [user, setUser] = useState("admin")
   const [open, setOpen] = useState(false)
   const [slicedDate, setSlicedDate] = useState("")
+  const [remove, setRemove] = useState(false)
 
   const getDetail = async () => {
     const response = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${params.id}`)
@@ -43,19 +45,22 @@ function NoticeDetail() {
     let list_len = parseInt(list)
     if (int_params !== list_len) {
       const nextNotice = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${int_params+1}`)
-      console.log(nextNotice)
       setNext(nextNotice.data.title)
     }
   }
 
   // data 확인 용 테스트 함수
   const prac = async () => {
-    const exam = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/`).catch((err) => console.log(err))
+    const exam = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${params.id}`).catch((err) => console.log(err))
     console.log(exam)
   }
 
   const openModal = () => {
     setOpen((prev) => !prev)
+  }
+
+  const openDeleteModal = () => {
+    setRemove((prev) => !prev)
   }
 
   useEffect(() => {
@@ -74,6 +79,7 @@ function NoticeDetail() {
         {user==="admin" ? (
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button className={styles.edit_notice_button} onClick={openModal}>수정하기</button>
+            <button className={styles.delete_notice_button} onClick={openDeleteModal}>삭제하기</button>
           </div>) : null}
         <Table style={{ marginTop: "3%" }}>
           <TableHead>
@@ -116,6 +122,23 @@ function NoticeDetail() {
         </div>
       </Container>
       <EditNoticeModal open={open} setOpen={setOpen} title={detail.title} content={detail.body} />
+      {/* 삭제하기 버튼 클릭 시 확인용 모달 생성 */}
+      <Modal
+        size='tiny'
+        open={remove}
+      >
+        <Header icon='archive' content='공지사항을 삭제하시겠습니까?' />
+        <Modal.Actions>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button color='green' onClick={() => setRemove(false)}>
+              <Icon name='checkmark' /> 삭제
+            </Button>
+            <Button color='red' onClick={() => setRemove(false)}>
+              <Icon name='remove' /> 취소
+            </Button>
+          </div>
+        </Modal.Actions>
+      </Modal>
     </>
   )
 }

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # Re:pill이 사용하는 앱
     'accounts',
     'community',
+    'products',
 
     # Third-party apps
     'corsheaders',

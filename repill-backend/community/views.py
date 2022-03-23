@@ -1,15 +1,31 @@
 # from django.shortcuts import render
-
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.shortcuts import get_list_or_404, get_object_or_404
-
 from .models import Notice
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from .serializers import NoticeListSerializer, NoticeSerializer
-# Create your views here.
 
+@swagger_auto_schema(
+    method='POST',
+    # request_body=NoticeSerializer,
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'title': openapi.Schema(
+                title='title',
+                type=openapi.TYPE_STRING,
+            ),
+            'content': openapi.Schema(
+                title='content',
+                type=openapi.TYPE_STRING
+            ),
+        }
+    )
+)
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 def notice_list(request):
@@ -20,15 +36,19 @@ def notice_list(request):
         serializer = NoticeListSerializer(notices, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @permission_classes([IsAdminUser])
     def post_notice(request):
-        user = request.user
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if not request.user.is_staff:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        
+        author = request.user
         serializer = NoticeSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(user=request.user)
+            serializer.save(author=author)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         # 참고: raise_exception이 True이므로 if 미실행 시 부분을 작성하지 않아도 됩니다.
-
+        
 
     # 위에서 정의한 method별 함수를 여기에서 실행합니다.
     if request.method == 'POST':
@@ -45,10 +65,21 @@ def notice_list(request):
 @permission_classes([AllowAny])
 def notice_detail(request, pk):
     notice = get_object_or_404(Notice, pk=pk)
-
+    
     def get_notice_detail():
+
+        next = Notice.objects.filter(pk__gt=notice.pk).order_by('pk').first()
+        prev = Notice.objects.filter(pk__lt=notice.pk).order_by('-pk').first()
+
+        cursor = {
+            'next': NoticeSerializer(next).data if next else None,
+            'previous': NoticeSerializer(prev).data if prev else None,
+            }
+
         serializer = NoticeSerializer(notice)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        data = serializer.data
+        data['cursor'] = cursor
+        return Response(data, status=status.HTTP_200_OK)
 
     @permission_classes([IsAuthenticated])
     def update_notice():

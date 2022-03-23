@@ -8,6 +8,7 @@ import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
 import KakaoLogin from "./components/main/login/KakaoLogin";
 import Auth from "./components/main/login/Auth";
+import Mypage from "./components/main/mypage/Mypage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/notice" element={<Notice />} />
           <Route path="/product" element={<Product />} />
+          <Route path="/mypage" element={<Mypage />} />
           <Route path="/kakaologin" exact element={<KakaoLogin />} />
           <Route path="/oauth/callback/kakao" element={<Auth />} />
           <Route path="/notice/:id" element={<NoticeDetail />} />

@@ -20,5 +20,6 @@ from . import yasg
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/accounts/', include('accounts.urls')),
     path('api/v1/community/', include('community.urls')),
 ] + yasg.schema_url_patterns

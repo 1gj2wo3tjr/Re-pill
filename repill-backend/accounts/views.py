@@ -4,6 +4,7 @@ from django.views import View
 
 from accounts.models import User
 
+import os
 import jwt
 import requests
 
@@ -15,7 +16,7 @@ class KakaoLogin(View):
         kakao_token_api = "https://kauth.kakao.com/oauth/token"
         data = {
             "grant_type": "authorization_code",
-            "client_id": "600acda95b91e8c309764ed293d14bf5",
+            "client_id": os.environ.get("REACT_APP_REST_API_KEY"),
             "redirection_uri": "http://localhost:8000/accounts/login/callback",
             "code": auth_code,
         }

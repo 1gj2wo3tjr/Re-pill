@@ -1,0 +1,131 @@
+.search_content {
+  border-radius: 5px;
+
+}
+
+.notice_title {
+  font-size: 1.3rem;
+  text-align: center;
+  margin: auto;
+}
+
+.notice_date {
+  font-size: 1rem;
+  text-align: end;
+}
+
+.notice_link {
+  height: 5%;
+  box-shadow: 0px 0px 5px rgb(207 206 206);
+}
+
+.goNotice_button {
+  margin-top: 1rem;
+  padding: 1rem;
+  width: 9rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #F2F5C8;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-bottom: 5%;
+}
+
+.page_nav {
+  margin-top: 3%;
+  display: flex;
+  justify-content: center;
+}
+
+.page_li {
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px;
+  text-align: center;
+  line-height: 2;
+  border: 0;
+  color: gray;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.page_li:hover {
+  cursor: pointer;
+  color: white;
+  background-color: #F2F5C8;
+}
+
+.close_button {
+  color: black;
+  padding: .375rem .75rem;
+  background: "#F2F5C8";
+  border: 0;
+  border-radius: 25px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.edit_notice_button {
+  color: black;
+  background: #C1DEAE;
+  padding: .375rem .75rem;
+  border: 0;
+  border-radius: 25px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  width: 7rem;
+  height: 3rem;
+  cursor: pointer;
+}
+
+.delete_notice_button {
+  color: black;
+  background: #F2F5C8;
+  padding: .375rem .75rem;
+  border: 0;
+  border-radius: 25px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  width: 7rem;
+  height: 3rem;
+  cursor: pointer;
+  margin-left: 1%;
+}
+
+.add_notice_button {
+  color: black;
+  background: #F2F5C8;
+  padding: .375rem .75rem;
+  border: 0;
+  border-radius: 25px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  width: 7rem;
+  height: 2.5rem;
+  cursor: pointer;
+  margin-left: 1%;
+  cursor: pointer;
+}
+
+.add_notice_button_modal {
+  color: black;
+  padding: .375rem .75rem;
+  background: #F2F5C8;
+  border: 0;
+  border-radius: 25px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-left: 10px;
+  cursor: pointer;
+}

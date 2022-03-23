@@ -65,10 +65,21 @@ def notice_list(request):
 @permission_classes([AllowAny])
 def notice_detail(request, pk):
     notice = get_object_or_404(Notice, pk=pk)
-
+    
     def get_notice_detail():
+
+        next = Notice.objects.filter(pk__gt=notice.pk).order_by('pk').first()
+        prev = Notice.objects.filter(pk__lt=notice.pk).order_by('-pk').first()
+
+        cursor = {
+            'next': NoticeSerializer(next).data if next else None,
+            'previous': NoticeSerializer(prev).data if prev else None,
+            }
+
         serializer = NoticeSerializer(notice)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        data = serializer.data
+        data['cursor'] = cursor
+        return Response(data, status=status.HTTP_200_OK)
 
     @permission_classes([IsAuthenticated])
     def update_notice():

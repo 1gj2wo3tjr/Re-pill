@@ -1,13 +1,29 @@
 # from django.shortcuts import render
+from tkinter.messagebox import NO
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.shortcuts import get_list_or_404, get_object_or_404
+from django.http import JsonResponse
 from .models import Notice
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .serializers import NoticeListSerializer, NoticeSerializer
+
+from django.core.paginator import Paginator
+from rest_framework.pagination import PageNumberPagination
+# from rest_framework.viewsets import ModelViewSet
+
+# class NoticeViewSet(ModelViewSet):
+#     queryset = Notice.objects.all()
+#     serializer_class = NoticeSerializer
+#     permission_classes = [IsAuthenticatedOrReadOnly]
+
+#     def list(self, request, pk=None):
+#         notices = self.get_queryset()
+#         serializer = NoticeListSerializer(notices, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @swagger_auto_schema(
     method='POST',
@@ -31,10 +47,15 @@ from .serializers import NoticeListSerializer, NoticeSerializer
 def notice_list(request):
 
     def get_notice_list(request):  
+
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
+
         # 공지를 PK 역순으로 표시
         notices = get_list_or_404(Notice.objects.order_by('-pk'))        
-        serializer = NoticeListSerializer(notices, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        page = paginator.paginate_queryset(notices, request)
+        serializer = NoticeListSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post_notice(request):
         if not request.user.is_authenticated:
@@ -67,8 +88,19 @@ def notice_detail(request, pk):
     notice = get_object_or_404(Notice, pk=pk)
 
     def get_notice_detail():
+
+        next = Notice.objects.filter(pk__gt=notice.pk).order_by('pk').first()
+        prev = Notice.objects.filter(pk__lt=notice.pk).order_by('-pk').first()
+
+        cursor = {
+            'next': NoticeSerializer(next).data if next else None,
+            'previous': NoticeSerializer(prev).data if prev else None,
+            }
+
         serializer = NoticeSerializer(notice)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        data = serializer.data
+        data['cursor'] = cursor
+        return Response(data, status=status.HTTP_200_OK)
 
     @permission_classes([IsAuthenticated])
     def update_notice():

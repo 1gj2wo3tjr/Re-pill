@@ -20,3 +20,10 @@ urlpatterns = [
     path('notice/', views.notice_list),
     path('notice/<int:pk>', views.notice_detail),
 ]
+
+# from rest_framework.routers import DefaultRouter
+# router = DefaultRouter()
+# router.register(r'notice', views.NoticeViewSet)
+# urlpatterns = [
+#     path('', include(router.urls)),
+# ]

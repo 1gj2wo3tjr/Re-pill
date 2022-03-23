@@ -9,6 +9,25 @@ code {
   font-family: "Noto Sans KR", sans-serif;
 }
 
+#root {
+  min-height: 100vh;
+  position: relative;
+  width: 100%;
+}
+
+#wrapper {
+  /* footer위한 */
+
+  padding-bottom: 200px;
+  /* min-height: 100vh;
+  position: relative;
+  width: 100%; */
+
+  /* height: auto; */
+  /* min-height: 100%;
+  padding-bottom: 100px; */
+}
+
 @font-face {
   font-family: "Noto Sans KR", sans-serif;
   font-style: normal;

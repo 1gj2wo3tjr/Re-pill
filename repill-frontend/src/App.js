@@ -1,24 +1,33 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Main from "./pages/main/main";
-import Notice from "./components/main/notice/notice";
-import Product from "./components/main/product/product";
-import Mypage from "./components/main/mypage/mypage";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom"
+import Main from "./pages/main/main"
+import Notice from "./components/main/notice/Notice"
+import Product from "./components/main/product/product"
+import NoticeDetail from "./components/main/notice/NoticeDetail"
+import "./index.css"
+import Navbar from "../src/components/common/navbar"
+import Footer from "../src/components/common/footer"
 import KakaoLogin from "./components/main/login/kakaologin";
-import Auth from "./components/main/login/Auth";
-import "./index.css";
+
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/notice" element={<Notice />} />
-        <Route path="/product" element={<Product />} />
-        <Route path="/mypage" element={<Mypage />} />
-        {/* <Route path="/login" element={<Login />} /> */}
-        <Route path="/kakaologin" exact element={<KakaoLogin />} />
+      <Navbar />
+      <div id="wrapper">
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/notice" element={<Notice />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="/kakaologin" exact element={<KakaoLogin />} />
         <Route path="/oauth/callback/kakao" element={<Auth />} />
-      </Routes>
+          <Route path="/notice/:id" element={<NoticeDetail />} />
+        </Routes>
+      </div>
+      <Footer />
     </Router>
   );
 }

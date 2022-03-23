@@ -1,0 +1,13 @@
+.footer {
+  width: 100%;
+  height: 200px;
+  bottom: 0px;
+  position: absolute;
+
+  /* height: 200px;
+  position: relative; */
+  /* transform: translateY(-100%); */
+}
+
+/* 1 참고 : https://cocoder16.tistory.com/39 */
+/* 2 참고 : https://velog.io/@gomiseki/footer-%ED%95%98%EB%8B%A8-%EA%B3%A0%EC%A0%95 */

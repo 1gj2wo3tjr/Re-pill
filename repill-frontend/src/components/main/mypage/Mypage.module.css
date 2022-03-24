@@ -1,0 +1,30 @@
+.add_button {
+  margin-top: 1rem;
+  padding: 1rem;
+  width: 9rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #F2F5C8;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+}
+
+.edit_button {
+  padding: 1rem;
+  width: 7rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #F2F5C8;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+}
+
+.delete_button {
+  padding: 1rem;
+  width: 7rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #F2F5C8;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+}

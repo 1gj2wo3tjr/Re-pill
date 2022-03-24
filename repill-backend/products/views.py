@@ -1,26 +1,34 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.generics import ListCreateAPIView
 
 from .models import Product
 from .serializers import ProductListSerializer, ProductSerializer
 
 
-from rest_framework.views import APIView
+from rest_framework.filters import SearchFilter
 
-class ProductList(APIView):
+class ProductList(ListCreateAPIView):
     """
     건강기능식품 제품 관련 view 함수들입니다.
     """
-
     permission_classes = [AllowAny]
+    queryset = Product.objects.all()
+    serializer_class = ProductListSerializer
 
-    def get(self, request):
-        products = Product.objects.all()
-        serializer = ProductListSerializer(products, many=True)
-        return Response(serializer.data)
+    filter_backends = [SearchFilter]
+    search_fields = ['name']
+
+
+    # def get(self, request):
+    #     queryset = self.get_queryset()
+    #     serializer = ProductListSerializer(queryset, many=True)
+    #     return Response(serializer.data)
 
     def post(self, request):
         if not request.user.is_authenticated:

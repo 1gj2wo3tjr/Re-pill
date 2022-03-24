@@ -50,11 +50,22 @@ def notice_list(request):
 
         paginator = PageNumberPagination()
         paginator.page_size = 10
+        
 
         # 공지를 PK 역순으로 표시
-        notices = get_list_or_404(Notice.objects.order_by('-pk'))        
+        notices = Notice.objects.order_by('-pk')
+
+        
+        query = request.GET.get('search', None)
+        if query:
+            notices = get_list_or_404(notices.filter(title__contains=query))
+        else:
+            notices = get_list_or_404(notices)
+        
         page = paginator.paginate_queryset(notices, request)
         serializer = NoticeListSerializer(page, many=True)
+
+
         return paginator.get_paginated_response(serializer.data)
 
     def post_notice(request):

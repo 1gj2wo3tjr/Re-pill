@@ -126,6 +126,10 @@ function Product() {
           </button>
         </div>
 
+        <div className={styles.search_num}>
+          <p>총 {result.length}건</p>
+        </div>
+
         <div className={styles.product_lists} >
           <ProductList list={currentProducts} />
         </div >

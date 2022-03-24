@@ -54,4 +54,33 @@ input:focus {
   margin-top: 10px;
 }
 
+/* ProductDetail */
+.detail_top {
+  padding-top: 100px;
+  display: block;
+}
+.detail_img {
+  float: left;
+  position: relative;
+  width: 50%;
+}
+.detail_img img {
+  width: 500px;
+}
+.detail_view {
+  float: right;
+  width: 50%;
+}
+.detail_id {
+  font-size: 18px;
+  color: #585858;
+}
+.detail_title {
+  font-size: 25px;
+  font-weight: bold;
+}
+.detail_short_info {
+  font-size: 18px;
+  font-weight: bold;
+  color: #585858;
 }

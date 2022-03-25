@@ -14,45 +14,32 @@ function NoticeDetail() {
   }
   const [detail, setDetail] = useState([])
   const [list, setList] = useState()
-  const [previous, setPrevious] = useState()
-  const [next, setNext] = useState()
   const [user, setUser] = useState("admin")
   const [open, setOpen] = useState(false)
   const [slicedDate, setSlicedDate] = useState("")
   const [remove, setRemove] = useState(false)
+  const [previousId, setPreviousId] = useState()
+  const [nextId, setNextId] = useState()
+  const [previousTitle, setPreviousTitle] = useState()
+  const [nextTitle, setNextTitle] = useState()
 
   const getDetail = async () => {
     const response = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${params.id}`)
     setDetail(response.data)
-    let plus_views = detail.views + 1
+    if (response.data.cursor.previous !== null) {
+      setPreviousId(response.data.cursor.previous.id)
+      setPreviousTitle(response.data.cursor.previous.title)
+    }
+    if (response.data.cursor.next !== null) {
+      setNextId(response.data.cursor.next.id)
+      setNextTitle(response.data.cursor.next.title)
+    }
     setSlicedDate(response.data.created_at.slice(0, 10))
   }
 
   const getLength = async () => {
     const notices = await axios.get("http://127.0.0.1:8000/api/v1/community/notice/")
     setList(notices.data.length)
-  }
-
-  const getPrev = async () => {
-    if (params.id > 1) {
-      const previousNotice = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${params.id-1}`)
-      setPrevious(previousNotice.data.title)
-    }
-  }
-
-  const getNext = async () => {
-    let int_params = parseInt(params.id)
-    let list_len = parseInt(list)
-    if (int_params !== list_len) {
-      const nextNotice = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${int_params+1}`)
-      setNext(nextNotice.data.title)
-    }
-  }
-
-  // data 확인 용 테스트 함수
-  const prac = async () => {
-    const exam = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${params.id}`).catch((err) => console.log(err))
-    console.log(exam)
   }
 
   const openModal = () => {
@@ -66,9 +53,6 @@ function NoticeDetail() {
   useEffect(() => {
     getDetail()
     getLength()
-    getPrev()
-    getNext()
-    prac()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params.id])
 
@@ -102,7 +86,7 @@ function NoticeDetail() {
                 <TableRow className={styles.notice_link}>
                   <TableCell style={{ display: "flex" }}>
                     <div>이전글</div>
-                    <div style={{ margin: "auto" }}><Link to={`/notice/${parseInt(params.id)-1}`} style={{ color: "inherit" }}>{previous}</Link></div>
+                    <div style={{ margin: "auto" }}><Link to={`/notice/${previousId}`} style={{ color: "inherit" }}>{previousTitle}</Link></div>
                   </TableCell>
                 </TableRow>
               </>)}
@@ -111,7 +95,7 @@ function NoticeDetail() {
                 <TableRow className={styles.notice_link}>
                   <TableCell style={{ display: "flex"}}>
                     <div>다음글</div>
-                    <div style={{ margin: "auto" }}><Link to={`/notice/${parseInt(params.id)+1}`} style={{ color: "inherit" }}>{next}</Link></div>
+                    <div style={{ margin: "auto" }}><Link to={`/notice/${parseInt(nextId)}`} style={{ color: "inherit" }}>{nextTitle}</Link></div>
                   </TableCell>
                 </TableRow>
               </>)}

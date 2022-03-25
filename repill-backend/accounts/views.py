@@ -1,8 +1,12 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from django.views import View
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from accounts.models import User
+from .models import User, DeliveryAddress
+from .serializers import DeliveryAddressSerializer
 
 import os
 import jwt
@@ -52,3 +56,48 @@ class KakaoLogin(View):
             "email": user_info.email,
             "profile_img": user_info.profile_img
         }, status)
+
+
+# 배송지 관련 API
+class AddressList(APIView):
+    # 특정 사용자의 배송지 전체 조회
+    def get(self, request):
+        addresses = DeliveryAddress.objects.filter(user=request.user)
+        serializer = DeliveryAddressSerializer(addresses, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 배송지 저장
+    def post(self, request):
+        serializer = DeliveryAddressSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class AddressDetail(APIView):
+    def get(self, request, address_pk):
+        try:
+            address = get_object_or_404(DeliveryAddress.objects.get(pk=address_pk))
+            serializer = DeliveryAddressSerializer(address)
+            if address.user == request.user:
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
+        except DeliveryAddress.DoesNotExist():
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, address_pk):
+        address = DeliveryAddress.objects.get(pk=address_pk)
+        serializer = DeliveryAddressSerializer(address, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, address_pk):
+        address = DeliveryAddress.objects.get(pk=address_pk)
+        if address.user == request.user:
+            address.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_403_FORBIDDEN)

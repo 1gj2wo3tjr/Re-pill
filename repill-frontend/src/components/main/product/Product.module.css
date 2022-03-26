@@ -1,5 +1,6 @@
 .container {
-  margin: 70px 0;
+  margin: 100px 0;
+  /* display: block; */
 }
 
 .search_div {
@@ -56,7 +57,7 @@ input:focus {
 
 /* ProductDetail */
 .detail_top {
-  padding-top: 100px;
+  /* padding-top: 100px; */
   display: block;
 }
 .detail_img {
@@ -65,7 +66,7 @@ input:focus {
   width: 50%;
 }
 .detail_img img {
-  width: 500px;
+  width: 80%;
 }
 .detail_view {
   float: right;
@@ -73,7 +74,8 @@ input:focus {
 }
 .detail_id {
   font-size: 18px;
-  color: #585858;
+  font-weight: bold;
+  color: #656962;
 }
 .detail_title {
   font-size: 25px;
@@ -83,4 +85,86 @@ input:focus {
   font-size: 18px;
   font-weight: bold;
   color: #585858;
+  margin: 10px 0 50px 0;
+  height: 35px;
+}
+.product_qty {
+  font-size: 15px;
+  font-weight: bold;
+  display: flex;
+  justify-content: start;
+}
+.qty_btn {
+  color: rgb(87, 87, 87);
+  font-size: 20px;
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  background-color: #e8e8a6;
+  margin: 0 10px;
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+  vertical-align: middle;
+  padding: 10px;
+}
+.qty_btn:hover {
+  background-color: #f3f3f3;
+}
+.qty_input {
+  border: 1px solid #cfcfcf;
+  border-radius: 3px;
+  height: 35px;
+  width: 60px;
+  text-align: center;
+  vertical-align: middle;
+}
+.detail_price {
+  margin-top: 50px;
+  font-size: 25px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+.button_cart {
+  background-color: #e8e8a6;
+  padding: 12px 33px;
+  color: rgb(87, 87, 87);
+  font-size: 15px;
+  font-weight: bold;
+  margin-right: 20px;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.button_cart:hover {
+  background-color: #f3f3f3;
+}
+.button_buy {
+  background-color: #c1deae;
+  padding: 12px 33px;
+  color: rgb(87, 87, 87);
+  font-size: 15px;
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.button_buy:hover {
+  background-color: #f3f3f3;
+}
+
+.detail_main {
+  margin: 80px 0;
+  text-align: center;
+}
+
+/* review carousel */
+.review {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 500px;
+  background-color: antiquewhite;
+  margin: 50px 0;
 }

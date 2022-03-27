@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import {
   Table,
@@ -9,34 +8,38 @@ import {
   TableBody,
   Container,
 } from "@mui/material";
-import axios from "axios";
-import styles from "./Cart.module.css";
+import styles from "./Order.module.css";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
+import { Link } from "react-router-dom";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import Linked from "@mui/material/Link";
 import Checkbox from "@mui/material/Checkbox";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
 
-function Cart() {
-  const [checked, setChecked] = useState([true, false]);
-
-  const handleChange1 = (e) => {
-    setChecked([e.target.checked, e.target.checked]);
-  };
-
+function Order() {
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });
 
-  // https://mui.com/components/breadcrumbs/
+  const handleClick = (e) => {
+    e.preventDefault();
+  };
+
   const breadcrumbs = [
-    <Typography key="1" color="#219F94" fontSize={"20px"} fontWeight={"bold"}>
+    // react-router-dom 의 Link와 겹치지 않도록
+    <Linked
+      underline="hover"
+      key="1"
+      color="#BCBCBC"
+      href="/"
+      onClick={handleClick}
+      fontSize={"20px"}
+      fontWeight={"bold"}
+    >
       01. 장바구니
-    </Typography>,
-    <Typography key="2" color="#BCBCBC" fontSize={"20px"} fontWeight={"bold"}>
+    </Linked>,
+    <Typography key="2" color="#219F94" fontSize={"20px"} fontWeight={"bold"}>
       02. 주문/결제
     </Typography>,
     <Typography key="3" color="#BCBCBC" fontSize={"20px"} fontWeight={"bold"}>
@@ -49,8 +52,8 @@ function Cart() {
       {isMobile ? null : (
         <div>
           <Container className={styles.container}>
-            <div className={styles.cart_top}>
-              <h2>장바구니</h2>
+            <div className={styles.order_top}>
+              <h2>주문/결제</h2>
               <Breadcrumbs
                 separator={<NavigateNextIcon fontSize="20px" />}
                 aria-label="breadcrumb"
@@ -59,28 +62,10 @@ function Cart() {
                 {breadcrumbs}
               </Breadcrumbs>
             </div>
-            <div className={styles.cart_main}>
+            <div className={styles.order_main}>
               <Table>
                 <TableHead>
                   <TableRow style={{ backgroundColor: "#F2F5C8" }}>
-                    <TableCell
-                      style={{
-                        fontSize: "1rem",
-                        width: "5%",
-                        textAlign: "center",
-                      }}
-                    >
-                      <FormControlLabel
-                        label=""
-                        control={
-                          <Checkbox
-                            checked={checked[0] && checked[1]}
-                            indeterminate={checked[0] !== checked[1]}
-                            onChange={handleChange1}
-                          />
-                        }
-                      />
-                    </TableCell>
                     <TableCell
                       style={{
                         fontSize: "1rem",
@@ -120,13 +105,9 @@ function Cart() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableCell style={{ textAlign: "center" }}>
-                    {/* 체크박스 */}
-                  </TableCell>
                   <TableCell style={{ textAlign: "center" }}>a</TableCell>
                   <TableCell style={{ textAlign: "center" }}>
                     <div style={{ display: "flex", justifyContent: "center" }}>
-                      <RemoveIcon className={styles.qty_icon}></RemoveIcon>
                       <input
                         type="text"
                         // value={quantity}
@@ -135,7 +116,6 @@ function Cart() {
                         // onChange={onChange}
                         disabled
                       />
-                      <AddIcon className={styles.qty_icon}></AddIcon>
                     </div>
                   </TableCell>
                   <TableCell style={{ textAlign: "center" }}>a</TableCell>
@@ -143,22 +123,44 @@ function Cart() {
                 </TableBody>
               </Table>
             </div>
-            <div className={styles.cart_bottom}>
-              <p>총 2개의 상품 금액</p>
-              <AddIcon className={styles.add_icon}></AddIcon>
-              <p>배송비</p>
-              <DragHandleIcon className={styles.add_icon}></DragHandleIcon>
-              <p>합계</p>
-            </div>
-            <div className={styles.cart_btn}>
-              <Link to={`/order`}>
-                <button className={styles.button_check}>
-                  <p>선택 상품 주문</p>
-                </button>
-              </Link>
-              <Link to={`/order`}>
-                <button className={styles.button_all}>
-                  <p>전체 상품 주문</p>
+            <div></div>
+            <div className={styles.order_bottom}>
+              <div className={styles.final_pay}>
+                <p>최종 결제 금액</p>
+                <p
+                  style={{
+                    color: "#219f94",
+                    fontSize: "25px",
+                    lineHeight: "25px",
+                    marginLeft: "10px",
+                  }}
+                >
+                  50,000원
+                </p>
+              </div>
+              <div className={styles.agreement}>
+                <Checkbox
+                  aria-label="a"
+                  sx={{
+                    color: "#cfcfcf",
+                    "&.Mui-checked": {
+                      color: "#219F94",
+                    },
+                  }}
+                />
+                <p style={{ fontSize: "15px", lineHeight: "37px" }}>
+                  <span style={{ fontWeight: "bold" }}>(필수)</span> 구매하실
+                  상품의 결제정보를 확인하였으며, 구매진행에 동의합니다.
+                </p>
+              </div>
+              <Link to={`/orderCompleted`}>
+                <button className={styles.button_buy}>
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <CreditScoreIcon
+                      style={{ marginRight: "10px" }}
+                    ></CreditScoreIcon>
+                    <p>결제하기</p>
+                  </div>
                 </button>
               </Link>
             </div>
@@ -169,4 +171,4 @@ function Cart() {
   );
 }
 
-export default Cart;
+export default Order;

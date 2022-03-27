@@ -29,6 +29,8 @@ function App() {
           <Route path="/notice/:id" element={<NoticeDetail />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/order" element={<Order />} />
+          <Route path="/orderCompleted" element={<OrderCompleted />} />
         </Routes>
       </div>
       <Footer />

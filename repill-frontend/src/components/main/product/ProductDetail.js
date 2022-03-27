@@ -10,6 +10,8 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { Link } from "react-router-dom";
+import Cart from "../cart/Cart";
 
 function ProductDetail() {
   let params = useParams();
@@ -137,17 +139,20 @@ function ProductDetail() {
                 <p>{(15000 * quantity).toLocaleString()}원</p>
               </div>
               <div style={{ float: "right", marginTop: "20px" }}>
-                <button className={styles.button_cart}>
-                  <div style={{ display: "flex", justifyContent: "start" }}>
-                    <AddShoppingCartIcon
-                      sx={{
-                        color: "rgb(87, 87, 87)",
-                        marginRight: "10px",
-                      }}
-                    ></AddShoppingCartIcon>{" "}
-                    <p> 장바구니 담기</p>
-                  </div>
-                </button>
+                {/* 회원 토큰 */}
+                <Link to={`/cart`}>
+                  <button className={styles.button_cart}>
+                    <div style={{ display: "flex", justifyContent: "start" }}>
+                      <AddShoppingCartIcon
+                        sx={{
+                          color: "rgb(87, 87, 87)",
+                          marginRight: "10px",
+                        }}
+                      ></AddShoppingCartIcon>{" "}
+                      <p> 장바구니 담기</p>
+                    </div>
+                  </button>
+                </Link>
                 <button className={styles.button_buy}>
                   <div style={{ display: "flex", justifyContent: "start" }}>
                     <PaymentIcon

@@ -1,0 +1,65 @@
+.container {
+  margin-top: 100px;
+}
+
+.cart_top {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* main */
+.cart_main {
+  margin: 50px 0;
+}
+
+/* bottom */
+.cart_bottom {
+  margin: 50px 0;
+  display: flex;
+  justify-content: end;
+}
+.add_icon {
+  color: rgb(87, 87, 87);
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  background-color: #e8e8a6;
+  margin: 0 30px;
+  height: 30px;
+  width: 30px;
+  vertical-align: middle;
+  padding: 5px;
+}
+
+/* btn */
+.cart_btn {
+  display: flex;
+  justify-content: end;
+}
+.button_check {
+  background-color: #e8e8a6;
+  padding: 12px 33px;
+  color: rgb(87, 87, 87);
+  font-size: 15px;
+  font-weight: bold;
+  margin-right: 20px;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.button_check:hover {
+  background-color: #f3f3f3;
+}
+.button_all {
+  background-color: #c1deae;
+  padding: 12px 33px;
+  color: rgb(87, 87, 87);
+  font-size: 15px;
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.button_all:hover {
+  background-color: #f3f3f3;
+}

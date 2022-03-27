@@ -1,12 +1,16 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from django.views import View
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from accounts.models import User
-
+from .models import User, Order
+# from .serializers import OrderSerializer
 import os
 import jwt
 import requests
+
 
 
 # Create your views here.
@@ -52,3 +56,51 @@ class KakaoLogin(View):
             "email": user_info.email,
             "profile_img": user_info.profile_img
         }, status)
+
+
+# 주문 관련 API
+class OrderList(APIView):
+    # 특전 사용자의 주문 전체 조회
+    def get(self, request):
+        orders = Order.objects.filter(user_id=request.user.pk)
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 주문 접수
+    def post(self, request):
+        serializer = Order(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class OrderDetail(APIView):
+    def get(self, request, order_pk):
+        try:
+            order = get_object_or_404(Order.objects.get(pk=order_pk))
+            serializer = OrderSerializer(address)
+            if order.user_id == request.user.pk:
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
+        except Order.DoesNotExist():
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, order_pk):
+        try:
+            order = get_object_or_404(Order.objects.get(pk=order_pk))
+            serializer = OrderSerializer(Order, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Order.DoesNotExist():
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, order_pk):
+        order = get_object_or_404(Order.objects.get(pk=order_pk))
+        if order.user_id == request.user.pk:
+            order.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_403_FORBIDDEN)

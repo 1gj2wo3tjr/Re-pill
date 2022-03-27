@@ -11,6 +11,30 @@
 .cart_main {
   margin: 50px 0;
 }
+.qty_input {
+  border: 0px solid #cfcfcf;
+  border-radius: 3px;
+  height: 35px;
+  width: 60px;
+  text-align: center;
+  vertical-align: middle;
+}
+.qty_icon {
+  color: rgb(87, 87, 87);
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  background-color: #e8e8a6;
+  margin: 0 10px;
+  height: 30px;
+  width: 30px;
+  vertical-align: middle;
+  padding: 5px;
+  cursor: pointer;
+}
+.qty_icon:hover {
+  background-color: #f3f3f3;
+}
 
 /* bottom */
 .cart_bottom {

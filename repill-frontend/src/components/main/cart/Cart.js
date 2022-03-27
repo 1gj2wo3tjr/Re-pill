@@ -18,6 +18,7 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 
 function Cart() {
@@ -66,7 +67,7 @@ function Cart() {
                     <TableCell
                       style={{
                         fontSize: "1rem",
-                        width: "10%",
+                        width: "5%",
                         textAlign: "center",
                       }}
                     >
@@ -93,7 +94,7 @@ function Cart() {
                     <TableCell
                       style={{
                         fontSize: "1rem",
-                        width: "10%",
+                        width: "15%",
                         textAlign: "center",
                       }}
                     >
@@ -124,7 +125,20 @@ function Cart() {
                     {/* 체크박스 */}
                   </TableCell>
                   <TableCell style={{ textAlign: "center" }}>a</TableCell>
-                  <TableCell style={{ textAlign: "center" }}>async</TableCell>
+                  <TableCell style={{ textAlign: "center" }}>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                      <RemoveIcon className={styles.qty_icon}></RemoveIcon>
+                      <input
+                        type="text"
+                        // value={quantity}
+                        title="상품개수"
+                        className={styles.qty_input}
+                        // onChange={onChange}
+                        disabled
+                      />
+                      <AddIcon className={styles.qty_icon}></AddIcon>
+                    </div>
+                  </TableCell>
                   <TableCell style={{ textAlign: "center" }}>a</TableCell>
                   <TableCell style={{ textAlign: "center" }}>a</TableCell>
                 </TableBody>

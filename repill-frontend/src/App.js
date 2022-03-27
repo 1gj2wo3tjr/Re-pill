@@ -9,6 +9,7 @@ import Footer from "./components/common/Footer";
 import KakaoLogin from "./components/main/login/KakaoLogin";
 import Auth from "./components/main/login/Auth";
 import Mypage from "./components/main/mypage/Mypage";
+import Recommend from "./components/main/recommend/Recommend";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/kakaologin" exact element={<KakaoLogin />} />
           <Route path="/oauth/callback/kakao" element={<Auth />} />
           <Route path="/notice/:id" element={<NoticeDetail />} />
+          <Route path="/recommend" element={<Recommend />} />
         </Routes>
       </div>
       <Footer />

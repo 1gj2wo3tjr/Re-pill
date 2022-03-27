@@ -1,22 +1,23 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
+import MypageCompo from "./MypageCompo";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import PersonIcon from "@mui/icons-material/Person";
+import ReceiptTwoToneIcon from "@mui/icons-material/ReceiptTwoTone";
+import CardMembershipTwoToneIcon from "@mui/icons-material/CardMembershipTwoTone";
+import HomeWorkIcon from "@mui/icons-material/HomeWork";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const drawerWidth = 240;
 
@@ -61,7 +62,7 @@ export default function PersistentDrawerLeft() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", height: "700px", color: "grey" }}>
       <CssBaseline />
       <IconButton
         color="inherit"
@@ -70,7 +71,7 @@ export default function PersistentDrawerLeft() {
         edge="start"
         sx={{ mr: 2, ...(open && { display: "none" }) }}
       >
-        <MenuIcon />
+        <ArrowForwardIosIcon />
       </IconButton>
       <Drawer
         sx={{
@@ -96,37 +97,53 @@ export default function PersistentDrawerLeft() {
         </DrawerHeader>
         <Divider />
         <List>
-          {["분석리포트"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem>
+            <ListItemIcon>
+              <BarChartIcon />
+            </ListItemIcon>
+            <Link to="/recommend">분석리포트</Link>
+          </ListItem>
         </List>
         <Divider />
         <List>
-          {["회원정보 관리", "결제 내역", "구독관리", "배송지 관리"].map(
-            (text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            )
-          )}
+          <ListItem>
+            <ListItemIcon>
+              <PersonIcon />
+            </ListItemIcon>
+            <Link to="/">회원정보 관리</Link>
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <ReceiptTwoToneIcon />
+            </ListItemIcon>
+            <Link to="/">결제 내역</Link>
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <CardMembershipTwoToneIcon />
+            </ListItemIcon>
+            <Link to="/">구독관리</Link>
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <HomeWorkIcon />
+            </ListItemIcon>
+            <Link to="/">배송지 관리</Link>
+          </ListItem>
         </List>
       </Drawer>
       <Main open={open}>
-        <DrawerHeader />
+        {/* <DrawerHeader />
         <Typography paragraph>
           <h1>Mypage</h1>
         </Typography>
         <Typography paragraph>
-          <h1>마이페이지</h1>
+          <MypageCompo />
         </Typography>
+        <Typography paragraph>
+          <h1>마이페이지</h1>
+        </Typography> */}
+        <MypageCompo />
       </Main>
     </Box>
   );

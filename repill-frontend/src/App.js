@@ -11,6 +11,8 @@ import KakaoLogin from "./components/main/login/KakaoLogin";
 import Auth from "./components/main/login/Auth";
 import Mypage from "./components/main/mypage/Mypage";
 import Cart from "./components/main/cart/Cart";
+import Order from "./components/main/order/Order";
+import OrderCompleted from "./components/main/order/OrderCompleted";
 
 function App() {
   return (

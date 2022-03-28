@@ -82,7 +82,6 @@ function Order() {
           font-family:"Noto Sans KR";
         }
         .css-1e6y48t-MuiButtonBase-root-MuiButton-root{
-          // 왜 갑자기 잘 먹다가 이렇게 해야하지...
           background-color: #f2f5c8;
           padding: 10px 15px;
           color: rgb(87, 87, 87);
@@ -271,7 +270,7 @@ function Order() {
                       className={styles.address_left}
                       style={{ textAlign: "center" }}
                     >
-                      배송지 확인
+                      <p>배송지 확인</p>
                     </TableCell>
                     <TableCell className={styles.address_right}>
                       <FormControl>
@@ -325,7 +324,7 @@ function Order() {
                       className={styles.address_left}
                       style={{ textAlign: "center" }}
                     >
-                      받는 분
+                      <p>받는 분</p>
                     </TableCell>
                     <TableCell className={styles.address_right}>
                       <input
@@ -341,7 +340,7 @@ function Order() {
                       className={styles.address_left}
                       style={{ textAlign: "center" }}
                     >
-                      주소
+                      <p>주소</p>
                     </TableCell>
                     <TableCell className={styles.address_right}>
                       <div>
@@ -378,7 +377,7 @@ function Order() {
                       className={styles.address_left}
                       style={{ textAlign: "center" }}
                     >
-                      휴대폰 번호
+                      <p>휴대폰 번호</p>
                     </TableCell>
                     <TableCell className={styles.address_right}>
                       <input
@@ -394,7 +393,7 @@ function Order() {
                       className={styles.address_left}
                       style={{ textAlign: "center" }}
                     >
-                      배송 요청사항
+                      <p>배송 요청사항</p>
                     </TableCell>
                     <TableCell className={styles.address_right}>
                       <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -453,7 +452,7 @@ function Order() {
                       className={styles.address_left}
                       style={{ textAlign: "center" }}
                     >
-                      결제 수단
+                      <p>결제 수단</p>
                     </TableCell>
                     <TableCell className={styles.address_right}>
                       <FormControl>

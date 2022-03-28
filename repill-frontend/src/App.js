@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Main from "./pages/main/Main";
 import Notice from "./components/main/notice/Notice";
 import Product from "./components/main/product/Product";
+import ProductDetail from "./components/main/product/ProductDetail";
 import NoticeDetail from "./components/main/notice/NoticeDetail";
 import "./index.css";
 import Navbar from "./components/common/Navbar";
@@ -23,6 +24,7 @@ function App() {
           <Route path="/kakaologin" exact element={<KakaoLogin />} />
           <Route path="/oauth/callback/kakao" element={<Auth />} />
           <Route path="/notice/:id" element={<NoticeDetail />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
         </Routes>
       </div>
       <Footer />

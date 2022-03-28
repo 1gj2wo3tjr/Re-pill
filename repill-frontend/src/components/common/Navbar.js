@@ -28,7 +28,7 @@ function Navbar() {
             </Link>
           </li>
           <li>
-            <Link to="/" className={styles.nav_menu}>
+            <Link to="/cart" className={styles.nav_menu}>
               장바구니
             </Link>
           </li>

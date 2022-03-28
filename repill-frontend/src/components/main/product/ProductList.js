@@ -6,9 +6,9 @@ import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { CardActionArea } from '@mui/material';
-import styles from './Product.module.css';
 import { useMediaQuery } from 'react-responsive';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { Link } from "react-router-dom"
 
 function ProductList({ list }) {
 
@@ -30,24 +30,26 @@ function ProductList({ list }) {
           {isMiddle ? (
             <>
               {list.map((item, index) => (
-                <Card sx={{ maxWidth: "30%", minWidth: "30%", margin: "5px" }} key={index} >
-                  <CardActionArea >
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={item.url}
-                      alt="green iguana"
-                    />
-                    <CardContent style={{ height: "120px" }}>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {item.id}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {item.title}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                  <CardActions style={{ justifyContent: "end" }} >
+                <Card sx={{ maxWidth: "30%", minWidth: "30%", marginRight: "2%", marginBottom: "2%" }} key={index} >
+                  <Link to={`/product/${item.id}`}>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={item.url}
+                        alt="green iguana"
+                      />
+                      <CardContent style={{ height: "120px" }}>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {item.id}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {item.title}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Link>
+                  <CardActions CardActions style={{ justifyContent: "end" }} >
                     <Button sx={{ borderRadius: "20px" }} style={{ backgroundColor: "#E8E8A6" }}>
                       <AddShoppingCartIcon sx={{ color: "rgb(87, 87, 87)" }}>
                       </AddShoppingCartIcon>
@@ -59,23 +61,25 @@ function ProductList({ list }) {
           ) : (
             <>
               {list.map((item, index) => (
-                <Card sx={{ maxWidth: "23%", minWidth: "23%", margin: "1%" }} key={index} >
-                  <CardActionArea >
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={item.url}
-                      alt="green iguana"
-                    />
-                    <CardContent style={{ height: "120px" }}>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {item.id}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {item.title}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
+                <Card sx={{ maxWidth: "23%", minWidth: "23%", marginRight: "2%", marginBottom: "2%" }} key={index} >
+                  <Link to={`/product/${item.id}`}>
+                    <CardActionArea >
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={item.url}
+                        alt="green iguana"
+                      />
+                      <CardContent style={{ height: "120px" }}>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {item.id}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {item.title}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Link>
                   <CardActions style={{ justifyContent: "end" }} >
                     <Button sx={{ borderRadius: "20px" }} style={{ backgroundColor: "#E8E8A6" }}>
                       <AddShoppingCartIcon sx={{ color: "rgb(87, 87, 87)" }}>
@@ -85,7 +89,8 @@ function ProductList({ list }) {
                 </Card>
               ))}
             </>
-          )}
+          )
+          }
         </>
       )
       }

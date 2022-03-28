@@ -113,3 +113,48 @@
   display: flex;
   justify-content: center;
 }
+
+/* address */
+.address_left {
+  border-right: 1px solid #e0e0e0;
+  background-color: #f2f5c8;
+  font-size: 14px;
+}
+.address_right {
+  font-size: 14px;
+}
+.address_input {
+  border: 1px solid #cfcfcf;
+  border-radius: 3px;
+  height: 35px;
+  width: 210px;
+  padding: 10px;
+  vertical-align: middle;
+  margin-left: 20px;
+}
+.button_search {
+  /* 이 스타일이 갑자기 안먹음 */
+  background-color: #f2f5c8;
+  padding: 10px 15px;
+  color: rgb(87, 87, 87);
+  font-size: 110px;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+.button_search:hover {
+  background-color: #f3f3f3;
+}
+.button_search p {
+  margin: 0px;
+}
+.address_selector {
+  border-radius: 3px;
+  border-color: #cfcfcf;
+  height: 35px;
+  width: 250px;
+  padding: 10px;
+  vertical-align: middle;
+  margin-left: 10px;
+}

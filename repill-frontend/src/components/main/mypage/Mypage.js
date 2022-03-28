@@ -128,7 +128,7 @@ export default function PersistentDrawerLeft() {
             <ListItemIcon>
               <HomeWorkIcon />
             </ListItemIcon>
-            <Link to="/">배송지 관리</Link>
+            <Link to="/mypage/address">배송지 관리</Link>
           </ListItem>
         </List>
       </Drawer>

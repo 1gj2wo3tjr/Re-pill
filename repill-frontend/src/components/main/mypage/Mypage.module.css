@@ -97,6 +97,30 @@
   margin-top: 5%;
 }
 
+/* ReviewModal.js */
+
+/* 리뷰 등록 버튼 */
+.order_add_reviewModal_button {
+  padding: 10px;
+  width: 5rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #F2F5C8;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+}
+
+/* 리뷰 취소 버튼 */
+.order_cancleModal_review_button {
+  padding: 10px;
+  width: 5rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #C1DEAE;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-left: 10px;
+}
 
 /* mobile */
 
@@ -208,4 +232,29 @@
   cursor: pointer;
   box-shadow: 0px 5px 10px rgb(207 206 206);
   margin-top: 10%;
+}
+
+/* ReviewModal.js */
+
+/* 리뷰 등록 버튼 */
+.order_add_reviewModal_button_mob {
+  padding: 7px;
+  width: 5rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #F2F5C8;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+}
+
+/* 리뷰 취소 버튼 */
+.order_cancleModal_review_button_mob {
+  padding: 5px;
+  width: 5rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #C1DEAE;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-left: 5px;
 }

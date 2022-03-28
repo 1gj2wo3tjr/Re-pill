@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Container } from "@mui/material";
 import { useMediaQuery } from 'react-responsive';
 import styles from "../Mypage.module.css"
+import ReviewModal from './ReviewModal';
 // import axios from 'axios';
 
 function MyorderTab() {
@@ -43,6 +44,10 @@ function MyorderTab() {
   //   setList(response.data)
   // }
 
+  const cancleOrder = () => {
+    alert("삭제")
+  }
+
   // useEffect(() => {
   //   getOrder()
   // }, [])
@@ -72,10 +77,11 @@ function MyorderTab() {
                 </div>
               </div>
               <div style={{ width: "25%", display: "flex", flexDirection: "column" }}>
-                <button className={styles.order_review_button_mob}>리뷰쓰기</button>
-                <button className={styles.order_cancle_order_button_mob}>구매취소</button>
+                <button className={styles.order_review_button_mob} onClick={handleReviewModal}>리뷰쓰기</button>
+                <button className={styles.order_cancle_order_button_mob} onClick={cancleOrder}>구매취소</button>
               </div>
             </div>)}
+            <ReviewModal open={open} setOpen={setOpen} />
         </Container>
       </>) : (
       <>
@@ -101,9 +107,10 @@ function MyorderTab() {
               </div>
               <div style={{ width: "20%", marginLeft: "auto", display: "flex", flexDirection: "column" }}>
                 <button className={styles.order_review_button} onClick={handleReviewModal}>리뷰쓰기</button>
-                <button className={styles.order_cancle_order_button}>구매취소</button>
+                <button className={styles.order_cancle_order_button} onClick={cancleOrder}>구매취소</button>
               </div>
             </div>)}
+            <ReviewModal open={open} setOpen={setOpen} />
         </Container>
       </> 
       )}

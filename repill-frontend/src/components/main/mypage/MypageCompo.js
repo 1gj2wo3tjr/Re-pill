@@ -1,5 +1,4 @@
 import * as React from "react";
-import "./style_mycompo.css";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";

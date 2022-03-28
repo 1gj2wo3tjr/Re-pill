@@ -10,9 +10,10 @@ import Footer from "./components/common/Footer";
 import KakaoLogin from "./components/main/login/KakaoLogin";
 import Auth from "./components/main/login/Auth";
 import Mypage from "./components/main/mypage/Mypage";
-import AddressTab from "./components/main/mypage/AddressTab";
+import AddressTab from "./components/main/mypage/address/AddressTab";
 import Recommend from "./components/main/recommend/Recommend";
 import Cart from "./components/main/cart/Cart";
+import MyorderTab from "./components/main/mypage/myorder/MyorderTab"
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/recommend" element={<Recommend />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/mypage/myorder" element={<MyorderTab />} />
         </Routes>
       </div>
       <Footer />

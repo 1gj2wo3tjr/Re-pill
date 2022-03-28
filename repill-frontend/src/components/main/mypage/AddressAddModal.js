@@ -21,16 +21,6 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
     query: "(max-width : 768px)"
   });
 
-
-  const postCodeStyle = {
-    display: "block",
-    width: "100%",
-    height: "480px",
-    zIndex: 100, 
-    margin: "auto",
-    position: "absolute"
-  };
-
   const openPopup = () => {
     setPopUp((prev) => !prev)
   }
@@ -90,13 +80,13 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
                 </TableCell>
               </TableRow>
               <div style={{ display: "flex", justifyContent: "center" ,marginTop: "5%" }}>
-                <button onClick={registerAddress} className={styles.add_button_mob} >등록</button>
-                <button onClick={cancleModal} className={styles.cancle_button_mob}>취소</button>
+                <button onClick={registerAddress} className={styles.address_add_button_mob} >등록</button>
+                <button onClick={cancleModal} className={styles.address_cancle_button_mob}>취소</button>
               </div>
             </Modal.Content>
             {popup && <div>
               <DaumPostcode
-                style={postCodeStyle}
+                className={styles.search_address_modal}
                 autoClose
                 onComplete={onCompletePost}
               /></div>}
@@ -134,13 +124,13 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
             </Modal.Content>
             {popup && <div>
               <DaumPostcode
-                style={postCodeStyle}
+                className={styles.address_search_address_modal}
                 autoClose
                 onComplete={onCompletePost}
               /></div>}
             <Modal.Actions>
-              <button onClick={registerAddress} className={styles.register_button}>등록</button>
-              <button onClick={cancleModal} className={styles.cancle_button}>취소</button>
+              <button onClick={registerAddress} className={styles.address_register_button}>등록</button>
+              <button onClick={cancleModal} className={styles.address_cancle_button}>취소</button>
             </Modal.Actions>
           </Modal>
         </div>

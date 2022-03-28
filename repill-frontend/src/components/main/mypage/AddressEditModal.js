@@ -79,13 +79,13 @@ function AddressEditModal({ address, setAddress, open, setOpen }) {
                 </TableCell>
               </TableRow>
               <div style={{ display: "flex", justifyContent: "center" ,marginTop: "5%" }}>
-                <button onClick={registerAddress} className={styles.edit_check_button_mob}>수정</button>
-                <button onClick={cancleModal} className={styles.edit_cancle_button_mob}>취소</button>
+                <button onClick={registerAddress} className={styles.address_edit_check_button_mob}>수정</button>
+                <button onClick={cancleModal} className={styles.address_edit_cancle_button_mob}>취소</button>
               </div>
             </Modal.Content>
             {popup && <div>
               <DaumPostcode
-                className={styles.search_address_modal}
+                className={styles.address_search_address_modal}
                 autoClose
                 onComplete={onCompletePost}
               /></div>}
@@ -123,13 +123,13 @@ function AddressEditModal({ address, setAddress, open, setOpen }) {
             </Modal.Content>
             {popup && <div>
               <DaumPostcode
-                className={styles.search_address_modal}
+                className={styles.address_search_address_modal}
                 autoClose
                 onComplete={onCompletePost}
               /></div>}
             <Modal.Actions>
-              <button onClick={registerAddress}>등록</button>
-              <button onClick={cancleModal}>취소</button>
+              <button onClick={registerAddress} className={styles.address_register_button}>등록</button>
+              <button onClick={cancleModal} className={styles.address_cancle_button}>취소</button>
             </Modal.Actions>
           </Modal>
         </div>

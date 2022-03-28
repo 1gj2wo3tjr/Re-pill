@@ -1,4 +1,9 @@
-.add_button {
+/* pc 버전 */
+
+/* AddressTab.js */
+
+/* 배송지 등록 버튼 */
+.address_add_button {
   margin-top: 1rem;
   padding: 1rem;
   width: 9rem;
@@ -9,7 +14,8 @@
   box-shadow: 0px 5px 10px rgb(207 206 206);
 }
 
-.edit_button {
+/* 수정 버튼 */
+.address_edit_button {
   padding: 1rem;
   width: 7rem;
   border-radius: 30px;
@@ -19,7 +25,8 @@
   box-shadow: 0px 5px 10px rgb(207 206 206);
 }
 
-.delete_button {
+/* 삭제 버튼 */
+.address_delete_button {
   padding: 1rem;
   width: 7rem;
   border-radius: 30px;
@@ -29,7 +36,10 @@
   box-shadow: 0px 5px 10px rgb(207 206 206);
 }
 
-.search_address_modal {
+/* AddressAddModal.js */
+
+/* 우편번호 검색 모달 스타일 */
+.address_search_address_modal {
   display: block;
   width: 100%;
   height: 480px;
@@ -38,7 +48,8 @@
   position: absolute;
 }
 
-.register_button {
+/* 등록 버튼 스타일 */
+.address_register_button {
   padding: 5px;
   width: 5rem;
   border-radius: 30px;
@@ -48,7 +59,8 @@
   box-shadow: 0px 5px 10px rgb(207 206 206);
 }
 
-.cancle_button {
+/* 취소 버튼 스타일 */
+.address_cancle_button {
   padding: 5px;
   width: 5rem;
   border-radius: 30px;
@@ -63,7 +75,7 @@
 
 /* AddressTab.js */
 
-.add_button_mob {
+.address_add_button_mob {
   padding: 9px;
   width: 5rem;
   border-radius: 30px;
@@ -74,7 +86,7 @@
   margin-right: 15px;
 }
 
-.edit_button_mob {
+.address_edit_button_mob {
   padding: 0.5rem;
   width: 4rem;
   border-radius: 30px;
@@ -84,7 +96,7 @@
   box-shadow: 0px 5px 10px rgb(207 206 206);
 }
 
-.delete_button_mob {
+.address_delete_button_mob {
   padding: 0.5rem;
   width: 4rem;
   border-radius: 30px;
@@ -95,7 +107,11 @@
   margin-left: 5px;
 }
 
-.edit_check_button_mob {
+
+/* AddressEditModal.js */
+
+/* 수정 버튼 */
+.address_edit_check_button_mob {
   padding: 5px;
   width: 5rem;
   border-radius: 30px;
@@ -105,7 +121,8 @@
   box-shadow: 0px 5px 10px rgb(207 206 206);
 }
 
-.edit_cancle_button_mob {
+/* 취소 버튼 */
+.address_edit_cancle_button_mob {
   padding: 5px;
   width: 5rem;
   border-radius: 30px;
@@ -116,8 +133,11 @@
   margin-left: 5px;
 }
 
-.add_button_mob {
-  padding: 5px;
+/* AddressAddModal.js */
+
+/* 등록 버튼 */
+.address_add_button_mob {
+  padding: 7px;
   width: 5rem;
   border-radius: 30px;
   border: 0;
@@ -126,7 +146,8 @@
   box-shadow: 0px 5px 10px rgb(207 206 206);
 }
 
-.cancle_button_mob {
+/* 취소 버튼 */
+.address_cancle_button_mob {
   padding: 5px;
   width: 5rem;
   border-radius: 30px;

@@ -26,6 +26,7 @@ import Checkbox from "@mui/material/Checkbox";
 
 function Order() {
   const [radio, setRadio] = useState("existing");
+  const [radioPay, setRadioPay] = useState("kakaopay");
   const [selector, setSelector] = useState(1);
 
   const isMobile = useMediaQuery({
@@ -37,12 +38,14 @@ function Order() {
   };
 
   const handleChange = (e) => {
-    // console.log(e.target.value);
     setRadio(e.target.value);
   };
 
+  const checkPay = (e) => {
+    setRadioPay(e.target.value);
+  };
+
   const handleRequest = (e) => {
-    console.log(e.target.value);
     setSelector(e.target.value);
   };
 
@@ -177,6 +180,7 @@ function Order() {
                 {breadcrumbs}
               </Breadcrumbs>
             </div>
+
             <div className={styles.order_main}>
               <p style={{ fontSize: "17px", fontWeight: "bold" }}>
                 주문 상세 내역
@@ -241,8 +245,17 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
-            <div>
-              <p style={{ fontSize: "17px", fontWeight: "bold" }}>배송 정보</p>
+
+            <div className={styles.address_div}>
+              <p
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  marginBottom: "30px",
+                }}
+              >
+                배송 정보
+              </p>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -415,10 +428,82 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
-            <div>
-              <p style={{ fontSize: "17px", fontWeight: "bold" }}>
+            <div className={styles.pay_div}>
+              <p
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  marginBottom: "30px",
+                }}
+              >
                 결제수단 선택
               </p>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      style={{ width: "20%", padding: "0px" }}
+                    ></TableCell>
+                    <TableCell style={{ padding: "0px" }}></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell
+                      className={styles.address_left}
+                      style={{ textAlign: "center" }}
+                    >
+                      결제 수단
+                    </TableCell>
+                    <TableCell className={styles.address_right}>
+                      <FormControl>
+                        <RadioGroup
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                          style={{ fontSize: "14px", marginLeft: "20px" }}
+                          value={radioPay}
+                          onChange={checkPay}
+                          sx={{
+                            "& .MuiSvgIcon-root": {
+                              fontSize: "14px",
+                            },
+                          }}
+                        >
+                          <FormControlLabel
+                            value="kakaopay"
+                            control={
+                              <Radio
+                                sx={{
+                                  color: "#cfcfcf",
+                                  "&.Mui-checked": {
+                                    color: "#219F94",
+                                  },
+                                }}
+                              />
+                            }
+                            label="카카오페이"
+                          />
+                          {/* <FormControlLabel
+                            value="new"
+                            control={
+                              <Radio
+                                sx={{
+                                  color: "#cfcfcf",
+                                  "&.Mui-checked": {
+                                    color: "#219F94",
+                                  },
+                                }}
+                              />
+                            }
+                            label="신규 배송지"
+                          /> */}
+                        </RadioGroup>
+                      </FormControl>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
             </div>
             <div className={styles.order_bottom}>
               <div className={styles.final_pay}>

@@ -7,11 +7,9 @@ import styles from "./Product.module.css";
 import ProductReview from "./ProductReview";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import PaymentIcon from "@mui/icons-material/Payment";
-import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { Link } from "react-router-dom";
-import Cart from "../cart/Cart";
 
 function ProductDetail() {
   let params = useParams();
@@ -66,7 +64,7 @@ function ProductDetail() {
   useEffect(() => {
     getDetail();
     getReview();
-  }, []);
+  }, [params.id]);
 
   const settings = {
     dots: true,
@@ -78,7 +76,125 @@ function ProductDetail() {
 
   return (
     <>
-      {isMobile ? null : (
+      {isMobile ? (
+        <Container className={styles.mob_container}>
+          <div className={styles.mob_top}>
+            <div className={styles.mob_name}>
+              <p className={styles.mob_id}>회사이름: {detail.id}</p>
+              <p className={styles.mob_title}>{detail.title}</p>
+            </div>
+            <div className={styles.mob_img}>
+              <img src={detail.url} alt="" />
+            </div>
+            <div className={styles.mob_view}>
+              <p className={styles.mob_short_info}>간단한 제품 소개</p>
+              <div className={styles.mob_qty}>
+                <div>
+                  <p
+                    style={{
+                      fontSize: "18px",
+                      verticalAlign: "bottom",
+                      lineHeight: "40px",
+                    }}
+                  >
+                    구매 수량
+                  </p>
+                </div>
+                <div>
+                  <button
+                    className={styles.mob_qty_btn}
+                    onClick={() => quantitySub()}
+                    style={{ marginRight: "10px" }}
+                  >
+                    <RemoveIcon></RemoveIcon>
+                  </button>
+                  <input
+                    type="text"
+                    value={quantity}
+                    title="상품개수"
+                    className={styles.qty_input}
+                    onChange={onChange}
+                    disabled
+                  />
+                  <button
+                    className={styles.mob_qty_btn}
+                    onClick={() => quantityAdd()}
+                  >
+                    <AddIcon></AddIcon>
+                  </button>
+                </div>
+              </div>
+              <div className={styles.mob_price}>
+                <p
+                  style={{
+                    fontSize: "18px",
+                    verticalAlign: "bottom",
+                    lineHeight: "40px",
+                  }}
+                >
+                  총 상품 금액
+                </p>
+                <p>{(15000 * quantity).toLocaleString()}원</p>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                {/* 회원 토큰 */}
+                <Link to={`/cart`}>
+                  <button className={styles.mob_cart}>
+                    <div style={{ display: "block", justifyContent: "center" }}>
+                      <AddShoppingCartIcon
+                        sx={{ color: "rgb(87, 87, 87)" }}
+                      ></AddShoppingCartIcon>{" "}
+                      <p> 장바구니 담기</p>
+                    </div>
+                  </button>
+                </Link>
+                <button className={styles.mob_buy}>
+                  <div style={{ display: "block", justifyContent: "center" }}>
+                    <PaymentIcon
+                      sx={{ color: "rgb(87, 87, 87)" }}
+                    ></PaymentIcon>{" "}
+                    <p>바로 구매하기</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+          {/* 상품 성분 및 정보  */}
+          <hr></hr>
+          <div className={styles.mob_main}>
+            {/* 다른 이미지 많이 필요할 것 같은 */}
+            <div className={styles.mob_img}>
+              <img src={detail.url} alt="" />
+            </div>
+            {/* ingrediants */}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <table
+                style={{
+                  width: "100%",
+                  margin: "20px 0",
+                }}
+              >
+                <thead>
+                  <tr style={{ backgroundColor: "#C1DEAE" }}>
+                    <td style={{ textAlign: "left" }}>영양 성분</td>
+                    <td style={{ textAlign: "right" }}>1회 복용 함유량</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style={{ textAlign: "left" }}>비타민 C</td>
+                    <td style={{ textAlign: "right" }}>2000mg</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div style={{ margin: "30px 0" }}>
+            <p style={{ fontSize: "16px", fontWeight: "bold" }}>상품 리뷰</p>
+            <ProductReview list={review} />
+          </div>
+        </Container>
+      ) : (
         <Container className={styles.container}>
           <div
             className={styles.detail_top}

@@ -10,6 +10,7 @@ import Footer from "./components/common/Footer";
 import KakaoLogin from "./components/main/login/KakaoLogin";
 import Auth from "./components/main/login/Auth";
 import Mypage from "./components/main/mypage/Mypage";
+import Cart from "./components/main/cart/Cart";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/oauth/callback/kakao" element={<Auth />} />
           <Route path="/notice/:id" element={<NoticeDetail />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </div>
       <Footer />

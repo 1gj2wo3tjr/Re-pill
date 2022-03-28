@@ -90,7 +90,7 @@ function AddressTab() {
             </TableBody>
           </Table>
           <AddressAddModal open={open} setOpen={setOpen} address={address} setAddress={setAddress} />
-          <AddressEditModal open={open} setOpen={setOpen} address={address} setAddress={setAddress} />
+          <AddressEditModal open={openEdit} setOpen={setOpenEdit} address={address} setAddress={setAddress} />
         </Container>
       </>)}
     </div>

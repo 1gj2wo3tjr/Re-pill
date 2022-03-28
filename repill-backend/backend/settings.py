@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,6 +35,7 @@ INSTALLED_APPS = [
     # Re:pill이 사용하는 앱
     'accounts',
     'community',
+    'products',
 
     # Third-party apps
     'corsheaders',
@@ -168,3 +170,8 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+# 카카오 로그인을 위한 환경설정값
+REACT_APP_REST_API_KEY = os.environ.get("REACT_APP_REST_API_KEY")
+REACT_APP_REDIRECT_URI = os.environ.get("REACT_APP_REDIRECT_URI")
+REACT_APP_JS_KEY = os.environ.get("REACT_APP_JS_KEY")

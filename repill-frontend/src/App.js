@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Main from "./pages/main/Main";
 import Notice from "./components/main/notice/Notice";
 import Product from "./components/main/product/Product";
+import ProductDetail from "./components/main/product/ProductDetail";
 import NoticeDetail from "./components/main/notice/NoticeDetail";
 import "./index.css";
 import Navbar from "./components/common/Navbar";
@@ -9,7 +10,9 @@ import Footer from "./components/common/Footer";
 import KakaoLogin from "./components/main/login/KakaoLogin";
 import Auth from "./components/main/login/Auth";
 import Mypage from "./components/main/mypage/Mypage";
+import AddressTab from "./components/main/mypage/AddressTab";
 import Recommend from "./components/main/recommend/Recommend";
+import Cart from "./components/main/cart/Cart";
 
 function App() {
   return (
@@ -24,7 +27,10 @@ function App() {
           <Route path="/kakaologin" exact element={<KakaoLogin />} />
           <Route path="/oauth/callback/kakao" element={<Auth />} />
           <Route path="/notice/:id" element={<NoticeDetail />} />
+          <Route path="/mypage/address" element={<AddressTab />} />
           <Route path="/recommend" element={<Recommend />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </div>
       <Footer />

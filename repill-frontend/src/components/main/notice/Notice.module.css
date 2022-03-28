@@ -1,3 +1,4 @@
+/* pc */
 .search_content {
   border-radius: 5px;
 
@@ -59,10 +60,22 @@
   background-color: #F2F5C8;
 }
 
+.add_button {
+  color: black;
+  padding: .375rem .75rem;
+  background: #F2F5C8;
+  border: 0;
+  border-radius: 25px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0px 5px 12px rgb(207 206 206);
+  cursor: pointer;
+}
+
 .close_button {
   color: black;
   padding: .375rem .75rem;
-  background: "#F2F5C8";
+  background: #C1DEAE;
   border: 0;
   border-radius: 25px;
   font-size: 1rem;
@@ -128,4 +141,142 @@
   box-shadow: 0px 5px 10px rgb(207 206 206);
   margin-left: 10px;
   cursor: pointer;
+}
+
+/* mobile */
+
+/* Notice */
+
+/* 검색 input */
+.search_content_mob {
+  border-radius: 5px;
+  width: 80%;
+}
+
+/* NoticeDetail */
+
+/* TableHeader 제목 스타일 */
+.notice_title_mob {
+  font-size: 18px;
+  text-align: center;
+  margin: auto;
+}
+
+/* TableHeader 날짜 스타일 */
+.notice_date_mob {
+  font-size: 11px;
+  text-align: end;
+}
+
+/* 수정하기 버튼 */
+.edit_notice_button_mob {
+  color: black;
+  background: #C1DEAE;
+  padding: .375rem .75rem;
+  border: 0;
+  border-radius: 25px;
+  font-size: 0.5rem;
+  line-height: 1.5;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  width: 5rem;
+  height: 2rem;
+  cursor: pointer;
+}
+
+/* 삭제하기 버튼 */
+.delete_notice_button_mob {
+  color: black;
+  background: #F2F5C8;
+  padding: .375rem .75rem;
+  border: 0;
+  border-radius: 25px;
+  font-size: 0.5rem;
+  line-height: 1.5;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  width: 5rem;
+  height: 2rem;
+  cursor: pointer;
+  margin-left: 1%;
+}
+
+/* 공지사항 목록으로 돌아가기 버튼 */
+.goNotice_button_mob {
+  margin-top: 1rem;
+  padding: 1rem;
+  width: 6rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #F2F5C8;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-bottom: 5%;
+  font-size: 0.85rem;
+}
+
+/* AddNoticeModal */
+
+/* 삭제 버튼 */
+.add_notice_button_modal_mob {
+  color: black;
+  padding: .375rem .75rem;
+  background: #F2F5C8;
+  border: 0;
+  border-radius: 25px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0px 5px 12px rgb(207 206 206);
+  cursor: pointer;
+  width: 50px;
+}
+
+/* 취소 버튼 */
+.close_button_mob {
+  color: black;
+  padding: .375rem .75rem;
+  background: #C1DEAE;
+  border: 0;
+  border-radius: 25px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-left: 10px;
+  cursor: pointer;
+  width: 50px;
+}
+
+/* EditNoticeModal */
+
+/* 등록 버튼 */
+.add_button_mob {
+  color: black;
+  padding: .375rem .75rem;
+  background: #F2F5C8;
+  border: 0;
+  border-radius: 25px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0px 5px 12px rgb(207 206 206);
+  cursor: pointer;
+  width: 50px;
+}
+
+/* 취소 버튼 */
+.close_button_mob {
+  color: black;
+  padding: .375rem .75rem;
+  background: #C1DEAE;
+  border: 0;
+  border-radius: 25px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-left: 10px;
+  cursor: pointer;
+  width: 50px;
+}
+
+/* content 입력하는 TextArea */
+.edit_content_mob {
+  font-size: 1.2rem;
+  text-align: center;
 }

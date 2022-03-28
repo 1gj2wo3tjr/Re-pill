@@ -17,6 +17,7 @@ class Product(models.Model):
     price = models.PositiveIntegerField()       # 가격
     content = models.TextField()                # 제품 설명
     ingrediants = models.ManyToManyField(Ingrediant, through='Included')
+    thumbnail_url = models.URLField(max_length=200, blank=True)    # 제품 이미지 URL
 
     def __str__(self):
         return f'{self.name}'

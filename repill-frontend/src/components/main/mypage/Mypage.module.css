@@ -71,6 +71,33 @@
   margin-left: 5px;
 }
 
+/* MyorderTab.js */
+
+/* 리뷰쓰기 버튼 */
+.order_review_button {
+  padding: 1rem;
+  width: 9rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #F2F5C8;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-top: 5%;
+}
+
+/* 구매취소 버튼 */
+.order_cancle_order_button {
+  padding: 1rem;
+  width: 9rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #C1DEAE;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-top: 5%;
+}
+
+
 /* mobile */
 
 /* AddressTab.js */
@@ -156,4 +183,29 @@
   cursor: pointer;
   box-shadow: 0px 5px 10px rgb(207 206 206);
   margin-left: 5px;
+}
+
+/* MyorderTab.js */
+
+/* 리뷰쓰기 버튼 */
+.order_review_button_mob {
+  padding: 5px;
+  width: 6rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #F2F5C8;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+}
+
+/* 구매취소 버튼 */
+.order_cancle_order_button_mob {
+  padding: 5px;
+  width: 6rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #C1DEAE;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-top: 10%;
 }

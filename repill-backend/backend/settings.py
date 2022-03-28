@@ -149,7 +149,6 @@ JWT_AUTH = {
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        
         # 기본값: 로그인 사용자
         'rest_framework.permissions.IsAuthenticated',
     ),

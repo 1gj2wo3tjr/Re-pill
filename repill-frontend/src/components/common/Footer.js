@@ -5,7 +5,7 @@ import {
   List,
   Segment,
 } from 'semantic-ui-react'
-import styles from './footer.module.css';
+import styles from './Footer.module.css';
 
 function Footer() {
   return (

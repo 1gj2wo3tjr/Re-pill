@@ -1,0 +1,46 @@
+.container {
+  margin: 50px 0;
+}
+
+.search_div {
+  display: flex;
+  justify-content: flex-end;
+  height: 35px;
+}
+
+.search_input {
+  border: 1px solid rgb(201, 201, 201);
+  border-radius: 20px;
+  padding: 1rem;
+
+  /* mobile에선 따로 적용해주기 */
+  width: 30%;
+}
+
+/* input click  */
+input:focus {
+  /* outline: none; */
+  outline: 1px solid #e8e8a6;
+}
+
+::placeholder {
+  font-size: 10px;
+  opacity: 1; /* Firefox */
+  /* 수직 정렬;; */
+}
+
+.search_btn {
+  border: 0px;
+  border-radius: 20px;
+  background-color: #e8e8a6;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.product_lists {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  /* justify-content: space-evenly; */
+  margin-top: 30px;
+}

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
-import styles from "./navbar.module.css";
+import styles from "./Navbar.module.css";
 
 function Navbar() {
   const [isToggled, setIsToggled] = useState(false);

@@ -1,9 +1,9 @@
 import React from 'react'
 
-function mainpage() {
+function MainPage() {
   return (
     <div>mainpage</div>
   )
 }
 
-export default mainpage
+export default MainPage

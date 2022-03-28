@@ -6,14 +6,15 @@ const Auth = () => {
   const [checkLogin, setCheckLogin] = useState(false);
   const code = new URL(window.location.href).searchParams.get("code");
   const navigate = useNavigate();
+
   useEffect(() => {
+    console.log(code);
     axios({
-      url: "/api/v1/accounts/login",
+      url: "http://localhost:8000/api/v1/accounts/login",
       method: "get",
-      data: {
-        code,
+      params: {
+        code: code,
       },
-      baseURL: "http://localhost:8110",
     })
       .then((res) => {
         console.log(res);
@@ -24,9 +25,10 @@ const Auth = () => {
         console.log(checkLogin);
       })
       .catch(({ err }) => {
+        console.log(err);
         // console.log("소셜로그인 에러", err);
-        alert("로그인에 실패하였습니다.");
-        navigate("/kakaologin");
+        // alert("로그인에 실패하였습니다.");
+        // navigate("/KakaoLogin");
       });
   }, []);
   return (

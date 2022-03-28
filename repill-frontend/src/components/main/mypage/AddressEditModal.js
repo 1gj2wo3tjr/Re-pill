@@ -57,11 +57,11 @@ function AddressEditModal({ address, setAddress, open, setOpen }) {
             style={{ position: "relative", width: "100%" }}
           >
             <Modal.Content>
-              <TableRow style={{ display: "flex", height: "50px", alignItems: "center", border: "1px solid black", height: "5rem", textAlign: "center" }}>
+              <TableRow style={{ display: "flex", alignItems: "center", border: "1px solid black", height: "5rem", textAlign: "center" }}>
                 <div style={{ fontSize: "1rem", width: "40%" }}>받는사람이름</div>
                 <div style={{ fontSize: "1rem", width: "60%" }}><input type="text" onChange={onChange} value={form.name} name="name" style={{ width: "82%" }} /></div>
               </TableRow>
-              <TableRow style={{ display: "flex", height: "50px", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem", textAlign: "center" }}>
+              <TableRow style={{ display: "flex", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem", textAlign: "center" }}>
                 <div style={{ fontSize: "1rem", width: "40%" }}>연락처</div>
                 <div style={{ fontSize: "1rem", width: "60%" }}><input type="text" onChange={onChange} value={form.phoneNum} name="phoneNum" style={{ width: "82%" }} /></div>
               </TableRow>
@@ -79,13 +79,13 @@ function AddressEditModal({ address, setAddress, open, setOpen }) {
                 </TableCell>
               </TableRow>
               <div style={{ display: "flex", justifyContent: "center" ,marginTop: "5%" }}>
-                <button onClick={registerAddress} className={styles.edit_check_button_mob}>수정</button>
-                <button onClick={cancleModal} className={styles.edit_cancle_button_mob}>취소</button>
+                <button onClick={registerAddress} className={styles.address_edit_check_button_mob}>수정</button>
+                <button onClick={cancleModal} className={styles.address_edit_cancle_button_mob}>취소</button>
               </div>
             </Modal.Content>
             {popup && <div>
               <DaumPostcode
-                className={styles.search_address_modal}
+                className={styles.address_search_address_modal}
                 autoClose
                 onComplete={onCompletePost}
               /></div>}
@@ -99,11 +99,11 @@ function AddressEditModal({ address, setAddress, open, setOpen }) {
             style={{ position: "relative", width: "470px" }}
           >
             <Modal.Content>
-              <TableRow style={{ display: "flex", justifyContent: "space-between", height: "50px", alignItems: "center", border: "1px solid black", height: "5rem" }}>
+              <TableRow style={{ display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid black", height: "5rem" }}>
                 <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>받는사람이름</TableCell>
                 <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.name} name="name" /></TableCell>
               </TableRow>
-              <TableRow style={{ display: "flex", justifyContent: "space-between", height: "50px", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem" }}>
+              <TableRow style={{ display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem" }}>
                 <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>연락처</TableCell>
                 <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.phoneNum} name="phoneNum" /></TableCell>
               </TableRow>
@@ -123,13 +123,13 @@ function AddressEditModal({ address, setAddress, open, setOpen }) {
             </Modal.Content>
             {popup && <div>
               <DaumPostcode
-                className={styles.search_address_modal}
+                className={styles.address_search_address_modal}
                 autoClose
                 onComplete={onCompletePost}
               /></div>}
             <Modal.Actions>
-              <button onClick={registerAddress}>등록</button>
-              <button onClick={cancleModal}>취소</button>
+              <button onClick={registerAddress} className={styles.address_register_button}>등록</button>
+              <button onClick={cancleModal} className={styles.address_cancle_button}>취소</button>
             </Modal.Actions>
           </Modal>
         </div>

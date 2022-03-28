@@ -36,7 +36,7 @@ function AddressTab() {
         <Container style={{ marginTop: "5%" }}>
           <h2>배송지 목록</h2>
           <div style={{ display: 'flex', justifyContent: "end" }}>
-            <button onClick={handleModal} className={styles.add_button_mob}>등록</button>
+            <button onClick={handleModal} className={styles.address_add_button_mob}>등록</button>
           </div>
           <Table style={{ marginTop: '5%' }}>
             <TableBody>
@@ -45,8 +45,8 @@ function AddressTab() {
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <div style={{ textAlign: 'center', lineHeight: '30px' }}>우리집</div>
                     <div style={{ display: 'flex' }}>
-                      <div style={{ textAlign: 'center' }}><button className={styles.edit_button_mob} onClick={handleEditModal}>수정</button></div>
-                      <div style={{ textAlign: 'center' }}><button className={styles.delete_button_mob} onClick={deleteAddress}>삭제</button></div>
+                      <div style={{ textAlign: 'center' }}><button className={styles.address_edit_button_mob} onClick={handleEditModal}>수정</button></div>
+                      <div style={{ textAlign: 'center' }}><button className={styles.address_delete_button_mob} onClick={deleteAddress}>삭제</button></div>
                     </div>
                   </div>
                   <div style={{ marginTop: "2%" }}>
@@ -67,7 +67,7 @@ function AddressTab() {
           <h1>배송지 목록</h1>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <h2 style={{ marginTop: "auto" }} >자주 쓰는 배송지를 편리하게 통합 관리 하세요!</h2>
-            <button onClick={handleModal} className={styles.add_button}>배송지 등록</button>
+            <button onClick={handleModal} className={styles.address_add_button}>배송지 등록</button>
           </div>
           <Table style={{ marginTop: '2%' }}>
             <TableHead style={{ boxShadow: "0px 5px 10px rgb(207 206 206)" }}>
@@ -84,8 +84,8 @@ function AddressTab() {
                 <TableCell style={{ textAlign: 'center' }}>우리집</TableCell>
                 <TableCell style={{ textAlign: 'center' }}>서울특별시</TableCell>
                 <TableCell style={{ textAlign: 'center' }}>010-1234-5678</TableCell>
-                <TableCell style={{ textAlign: 'center' }}><button className={styles.edit_button} onClick={handleModal}>수정</button></TableCell>
-                <TableCell style={{ textAlign: 'center' }}><button className={styles.delete_button} onClick={deleteAddress}>삭제</button></TableCell>
+                <TableCell style={{ textAlign: 'center' }}><button className={styles.address_edit_button} onClick={handleEditModal}>수정</button></TableCell>
+                <TableCell style={{ textAlign: 'center' }}><button className={styles.address_delete_button} onClick={deleteAddress}>삭제</button></TableCell>
               </TableRow>
             </TableBody>
           </Table>

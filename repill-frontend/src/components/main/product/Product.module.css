@@ -9,12 +9,17 @@
   height: 35px;
 }
 
+.mob_input {
+  border: 1px solid rgb(201, 201, 201);
+  border-radius: 20px;
+  padding: 1rem;
+  width: 60%;
+}
+
 .search_input {
   border: 1px solid rgb(201, 201, 201);
   border-radius: 20px;
   padding: 1rem;
-
-  /* mobile에선 따로 적용해주기 */
   width: 30%;
 }
 
@@ -25,9 +30,8 @@ input:focus {
 }
 
 ::placeholder {
-  font-size: 10px;
+  font-size: 12px;
   opacity: 1; /* Firefox */
-  /* 수직 정렬;; */
 }
 
 .search_btn {

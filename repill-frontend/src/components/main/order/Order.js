@@ -100,6 +100,15 @@ function Order() {
               <h3>주문/결제</h3>
             </div>
             <div className={styles.mob_order_main}>
+              <p
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  marginBottom: "20px",
+                }}
+              >
+                주문 상세 내역
+              </p>
               <Table>
                 <TableHead>
                   <TableCell style={{ padding: "0px" }}></TableCell>
@@ -120,7 +129,254 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
-            <div></div>
+
+            <div className={styles.mob_address_div}>
+              <p
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  marginBottom: "20px",
+                }}
+              >
+                배송 정보
+              </p>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      style={{ width: "50px", padding: "0px" }}
+                    ></TableCell>
+                    <TableCell style={{ padding: "0px" }}></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell
+                      className={styles.mob_address_left}
+                      style={{ textAlign: "center" }}
+                    >
+                      <p>배송지 확인</p>
+                    </TableCell>
+                    <TableCell className={styles.mob_address_right}>
+                      <FormControl>
+                        <RadioGroup
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                          style={{ fontSize: "12px" }}
+                          value={radio}
+                          onChange={handleChange}
+                          sx={{
+                            "& .MuiSvgIcon-root": {
+                              fontSize: "14px",
+                            },
+                          }}
+                        >
+                          <FormControlLabel
+                            value="existing"
+                            control={
+                              <Radio
+                                sx={{
+                                  color: "#cfcfcf",
+                                  "&.Mui-checked": {
+                                    color: "#219F94",
+                                  },
+                                }}
+                              />
+                            }
+                            label="기존 배송지"
+                          />
+                          <FormControlLabel
+                            value="new"
+                            control={
+                              <Radio
+                                sx={{
+                                  color: "#cfcfcf",
+                                  "&.Mui-checked": {
+                                    color: "#219F94",
+                                  },
+                                }}
+                              />
+                            }
+                            label="신규 배송지"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell
+                      className={styles.mob_address_left}
+                      style={{ textAlign: "center" }}
+                    >
+                      <p>받는 분</p>
+                    </TableCell>
+                    <TableCell className={styles.mob_address_right}>
+                      <input
+                        type="text"
+                        // value={quantity}
+                        title="받는분"
+                        className={styles.mob_address_input}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell
+                      className={styles.mob_address_left}
+                      style={{ textAlign: "center" }}
+                    >
+                      <p>주소</p>
+                    </TableCell>
+                    <TableCell className={styles.mob_address_right}>
+                      <div style={{ marginBottom: "15px" }}>
+                        <input
+                          type="text"
+                          // value={quantity}
+                          title="우편번호"
+                          className={styles.mob_address_input}
+                          disabled
+                        />
+                        <Button className={styles.mob_button_search}>
+                          <p>우편번호 검색</p>
+                        </Button>
+                      </div>
+                      <input
+                        type="text"
+                        // value={quantity}
+                        title="주소"
+                        className={styles.mob_address_input}
+                        style={{ width: "100%", marginBottom: "15px" }}
+                      />
+                      <input
+                        type="text"
+                        // value={quantity}
+                        title="상세주소"
+                        className={styles.mob_address_input}
+                        style={{ width: "100%" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell
+                      className={styles.mob_address_left}
+                      style={{ textAlign: "center" }}
+                    >
+                      <p>휴대폰 번호</p>
+                    </TableCell>
+                    <TableCell className={styles.mob_address_right}>
+                      <input
+                        type="number"
+                        // value={quantity}
+                        title="휴대폰번호"
+                        className={styles.mob_address_input}
+                        style={{ width: "100%" }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell
+                      className={styles.mob_address_left}
+                      style={{ textAlign: "center" }}
+                    >
+                      <p>배송 요청사항</p>
+                    </TableCell>
+                    <TableCell className={styles.mob_address_right}>
+                      <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <Select
+                          value={selector}
+                          onChange={handleRequest}
+                          displayEmpty
+                          inputProps={{ "aria-label": "Without label" }}
+                          className={styles.mob_address_selector}
+                          sx={{
+                            "&.Mui-selected": {
+                              // 색상 변경 안돼ㅠㅠ
+                              border: "1px solid #f2f5c8",
+                            },
+                          }}
+                          style={{ width: "100%", margin: "0px" }}
+                        >
+                          <MenuItem value="1">
+                            배송 메세지를 선택해주세요.
+                          </MenuItem>
+                          <MenuItem value="2">
+                            부재시 경비실에 맡겨주세요.
+                          </MenuItem>
+                          <MenuItem value="3">
+                            부재시 문 앞에 놓아주세요.
+                          </MenuItem>
+                          <MenuItem value="4">배송 전에 연락주세요.</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+
+            <div className={styles.mob_pay_div}>
+              <p
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  marginBottom: "30px",
+                }}
+              >
+                결제수단 선택
+              </p>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      style={{ width: "20%", padding: "0px" }}
+                    ></TableCell>
+                    <TableCell style={{ padding: "0px" }}></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell
+                      className={styles.address_left}
+                      style={{ textAlign: "center" }}
+                    >
+                      <p>결제 수단</p>
+                    </TableCell>
+                    <TableCell className={styles.address_right}>
+                      <FormControl>
+                        <RadioGroup
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                          style={{ fontSize: "14px", marginLeft: "20px" }}
+                          value={radioPay}
+                          onChange={checkPay}
+                          sx={{
+                            "& .MuiSvgIcon-root": {
+                              fontSize: "14px",
+                            },
+                          }}
+                        >
+                          <FormControlLabel
+                            value="kakaopay"
+                            control={
+                              <Radio
+                                sx={{
+                                  color: "#cfcfcf",
+                                  "&.Mui-checked": {
+                                    color: "#219F94",
+                                  },
+                                }}
+                              />
+                            }
+                            label="카카오페이"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+
             <div className={styles.mob_order_bottom}>
               <div className={styles.mob_final_pay}>
                 <p>최종 결제 금액</p>
@@ -427,6 +683,7 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
+
             <div className={styles.pay_div}>
               <p
                 style={{
@@ -504,6 +761,7 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
+
             <div className={styles.order_bottom}>
               <div className={styles.final_pay}>
                 <p>최종 결제 금액</p>

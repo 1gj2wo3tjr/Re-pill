@@ -6,7 +6,7 @@
 .mob_top {
 }
 .mob_order_main {
-  margin: 30px 0;
+  margin-top: 50px;
 }
 .mob_order_list {
   display: table;
@@ -57,6 +57,60 @@
   display: flex;
   justify-content: center;
 }
+
+/* mob_address */
+.mob_address_div {
+  margin: 80px 0;
+}
+.mob_address_left {
+  border-right: 1px solid #e0e0e0;
+  background-color: #f2f5c8;
+}
+.mob_address_left p {
+  font-size: 12px;
+}
+.mob_address_right {
+  font-size: 12px;
+}
+.mob_address_input {
+  border: 1px solid #cfcfcf;
+  border-radius: 3px;
+  height: 35px;
+  width: 130px;
+  padding: 10px;
+  vertical-align: middle;
+}
+.mob_button_search {
+  background-color: #f2f5c8;
+  padding: 10px 15px;
+  color: rgb(87, 87, 87);
+  font-size: 110px;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+.mob_button_search:hover {
+  background-color: #f3f3f3;
+}
+.mob_button_search p {
+  margin: 0px;
+}
+.mob_address_selector {
+  border-radius: 3px;
+  border-color: #cfcfcf;
+  height: 35px;
+  width: 80px;
+  padding: 10px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+/* 결제수단 */
+.mob_pay_div {
+  margin: 80px 0;
+}
+
+/* pc */
 
 .container {
   margin-top: 100px;

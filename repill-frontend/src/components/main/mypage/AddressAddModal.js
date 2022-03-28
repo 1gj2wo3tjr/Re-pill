@@ -68,11 +68,11 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
             style={{ position: "relative", width: "100%" }}
           >
             <Modal.Content>
-              <TableRow style={{ display: "flex", height: "50px", alignItems: "center", border: "1px solid black", height: "5rem", textAlign: "center" }}>
+              <TableRow style={{ display: "flex", alignItems: "center", border: "1px solid black", height: "5rem", textAlign: "center" }}>
                 <div style={{ fontSize: "1rem", width: "40%" }}>받는사람이름</div>
                 <div style={{ fontSize: "1rem", width: "60%" }}><input type="text" onChange={onChange} value={form.name} name="name" style={{ width: "82%" }} /></div>
               </TableRow>
-              <TableRow style={{ display: "flex", height: "50px", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem", textAlign: "center" }}>
+              <TableRow style={{ display: "flex", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem", textAlign: "center" }}>
                 <div style={{ fontSize: "1rem", width: "40%" }}>연락처</div>
                 <div style={{ fontSize: "1rem", width: "60%" }}><input type="text" onChange={onChange} value={form.phoneNum} name="phoneNum" style={{ width: "82%" }} /></div>
               </TableRow>
@@ -110,11 +110,11 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
             style={{ position: "relative", width: "470px" }}
           >
             <Modal.Content>
-              <TableRow style={{ display: "flex", justifyContent: "space-between", height: "50px", alignItems: "center", border: "1px solid black", height: "5rem" }}>
+              <TableRow style={{ display: "flex", justifyContent: "space-between", height: "5rem", alignItems: "center", border: "1px solid black" }}>
                 <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>받는사람이름</TableCell>
                 <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.name} name="name" /></TableCell>
               </TableRow>
-              <TableRow style={{ display: "flex", justifyContent: "space-between", height: "50px", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem" }}>
+              <TableRow style={{ display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem" }}>
                 <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>연락처</TableCell>
                 <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.phoneNum} name="phoneNum" /></TableCell>
               </TableRow>
@@ -139,54 +139,13 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
                 onComplete={onCompletePost}
               /></div>}
             <Modal.Actions>
-              <button onClick={registerAddress}>등록</button>
-              <button onClick={cancleModal}>취소</button>
+              <button onClick={registerAddress} className={styles.register_button}>등록</button>
+              <button onClick={cancleModal} className={styles.cancle_button}>취소</button>
             </Modal.Actions>
           </Modal>
         </div>
       )}
     </>
-    // <div>
-    //   <Modal
-    //     centered={false}
-    //     open={open}
-    //     style={{ position: "relative", width: "470px" }}
-    //   >
-    //     <Modal.Content>
-    //       <TableRow style={{ display: "flex", justifyContent: "space-between", height: "50px", alignItems: "center", border: "1px solid black", height: "5rem" }}>
-    //         <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>받는사람이름</TableCell>
-    //         <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.name} name="name" /></TableCell>
-    //       </TableRow>
-    //       <TableRow style={{ display: "flex", justifyContent: "space-between", height: "50px", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem" }}>
-    //         <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>연락처</TableCell>
-    //         <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.phoneNum} name="phoneNum" /></TableCell>
-    //       </TableRow>
-    //       <TableRow style={{ display: "flex", justifyContent: "space-between", border: "1px solid black", marginTop: "1%" }}>
-    //         <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>주소</TableCell>
-    //           <TableCell style={{ fontSize: "1.3rem", width: "60%" }}>
-    //             <div style={{ display: "flex", justifyContent: "end", flexDirection: "column" }}>
-    //               <div style={{ display: "flex" }}>
-    //                 <div style={{ border: "2px solid black", textAlign: "center", width: "59%", fontSize: "1rem" }} >{address.zonecode}</div>
-    //                 <button onClick={openPopup} style={{ marginLeft: "1%" }} >주소검색</button>
-    //               </div>
-    //               <input value={address.address || ""} style={{ border: "2px solid black", textAlign: "center", marginTop: "2%", fontSize: "1rem", width: "100%", }} readOnly />
-    //               <input type="text" style={{ marginTop: "2%", textAlign: "center", fontSize: "1rem" }} onChange={onChange} value={form.subAddress} name="subAddress" />
-    //             </div>
-    //           </TableCell>
-    //       </TableRow>
-    //     </Modal.Content>
-    //     {popup && <div>
-    //       <DaumPostcode
-    //         style={postCodeStyle}
-    //         autoClose
-    //         onComplete={onCompletePost}
-    //       /></div>}
-    //     <Modal.Actions>
-    //       <button onClick={registerAddress}>등록</button>
-    //       <button onClick={cancleModal}>취소</button>
-    //     </Modal.Actions>
-    //   </Modal>
-    // </div>
   )
 }
 

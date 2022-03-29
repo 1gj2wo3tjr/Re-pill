@@ -4,7 +4,13 @@ import styles from './Notice.module.css';
 import axios from "axios";
 import { useMediaQuery } from 'react-responsive';
 
-function ModalCompo({setOpen, open }) {
+function AddNoticeModal({setOpen, open }) {
+  let token = localStorage.getItem('token')
+  console.log(token)
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  }
+
   const [form, setForm] = useState({
     title: "",
     content: ""
@@ -31,10 +37,16 @@ function ModalCompo({setOpen, open }) {
     } else if (!form.title && !form.content) {
       alert("제목과 내용을 입력해주세요")
     } else {
-      axios
-        .post('http://127.0.0.1:8000/api/v1/community/notice/', { title: form.title, content: form.content })
-      setOpen((prev) => !prev)
-      window.location.reload(true)
+      axios.post('http://127.0.0.1:8000/api/v1/community/notice/', {
+        headers: headers
+      }, { 
+          title: form.title, 
+          content: form.content 
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
+      // setOpen((prev) => !prev)
+      // window.location.reload(true)
     }
   }
 
@@ -94,4 +106,4 @@ function ModalCompo({setOpen, open }) {
   )
 }
 
-export default ModalCompo
+export default AddNoticeModal

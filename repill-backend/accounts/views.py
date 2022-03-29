@@ -3,19 +3,30 @@ from django.shortcuts import get_object_or_404
 from django.views import View
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 
 from .models import User, DeliveryAddress
 from .serializers import DeliveryAddressSerializer
 
 import os
-import jwt
 import requests
+
+
+# SimpleJWT 토큰 생성
+def get_tokens(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token)
+    }
 
 
 # Create your views here.
 class KakaoLogin(View):
     def get(self, request):
+        # frontend에서 받은 인가 코드와 함께 카카오 API로 요청을 보내 access token 받기
         auth_code = request.GET.get("code")
         kakao_token_api = "https://kauth.kakao.com/oauth/token"
         data = {
@@ -25,6 +36,7 @@ class KakaoLogin(View):
             "code": auth_code,
         }
 
+        # 받은 access token을 활용해 카카오 API로부터 사용자 정보를 가져오기
         token_response = requests.post(kakao_token_api, data = data).json()
 
         kakao_access_token = token_response.get("access_token")
@@ -34,7 +46,7 @@ class KakaoLogin(View):
 
         if User.objects.filter(uid = social_user.get("id")).exists():  # DB에 회원정보 있으면 로그인
             user_info = User.objects.get(uid = social_user["id"])
-            jwt_token = jwt.encode({"uid": social_user["id"]}, "secret_key")  # JWT 발행
+            jwt_token = get_tokens(user_info)['access']  # JWT 발행
 
         else:  # DB에 회원정보 없으면 회원가입
             user_info = User(uid = social_user["id"],
@@ -43,10 +55,10 @@ class KakaoLogin(View):
                 profile_img = social_user["properties"].get("profile_image", None)
             )
             user_info.save()
-            jwt_token = jwt.encode({"uid": user_info.id}, "secret_key")
+            jwt_token = get_tokens(user_info)['access']
 
         # access_token과 함께 필요한 회원 정보 반환
-        return JsonResponse({"access_token": jwt_token.decode("UTF-8"),
+        return JsonResponse({"access_token": jwt_token,
             "uid": user_info.uid,
             "name": user_info.name,
             "email": user_info.email,
@@ -72,17 +84,19 @@ class AddressList(APIView):
     
 
 class AddressDetail(APIView):
+    # 특정 배송지 조회
     def get(self, request, address_pk):
         try:
-            address = get_object_or_404(DeliveryAddress.objects.get(pk=address_pk))
+            address = get_object_or_404(DeliveryAddress, pk=address_pk)
             serializer = DeliveryAddressSerializer(address)
             if address.user == request.user:
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
-        except DeliveryAddress.DoesNotExist():
+        except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    # 배송지 정보 수정
     def put(self, request, address_pk):
         address = DeliveryAddress.objects.get(pk=address_pk)
         serializer = DeliveryAddressSerializer(address, data=request.data)
@@ -91,6 +105,7 @@ class AddressDetail(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    # 배송지 삭제
     def delete(self, request, address_pk):
         address = DeliveryAddress.objects.get(pk=address_pk)
         if address.user == request.user:

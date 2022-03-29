@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
@@ -14,3 +15,14 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.uid}'
+
+
+class DeliveryAddress(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    address_name = models.CharField(max_length=30, default="기본 배송지")
+    address = models.CharField(max_length=50, null=True)
+    detailed_address = models.TextField(null=True)
+    zipcode = models.CharField(max_length=30)
+
+    def __str__(self):
+        return f'{self.user}님의 배송지 {self.address_name}: {self.address} {self.detailed_address}'

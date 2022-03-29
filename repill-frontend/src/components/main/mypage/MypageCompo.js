@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -7,6 +8,7 @@ import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import axios from "axios";
 
 function MypageCompo() {
   const useStyles = makeStyles((theme) => ({
@@ -21,6 +23,23 @@ function MypageCompo() {
   }));
   const classes = useStyles();
 
+  const [form, setForm] = useState([]);
+  useEffect(() => {
+    axios
+      .post("https://kapi.kakao.com/v2/user/me", {})
+      .then((res) => {
+        console.log(res.data);
+        setForm(res.data);
+      })
+      .catch(({ response }) => {
+        if (response.status === 500) {
+          alert("만료된 토큰입니다.");
+          localStorage.removeItem("jwt");
+          window.location.href = "/";
+        }
+      });
+  });
+
   return (
     <>
       <div className={classes.root}>
@@ -31,11 +50,12 @@ function MypageCompo() {
                 <div class="container">
                   <div class="row">
                     <div class="profile">
-                      <Avatar
+                      {/* <Avatar
                         alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
+                        src=""
                         sx={{ width: 200, height: 200 }}
-                      />
+                      /> */}
+
                       <Grid container spacing={3}>
                         <Grid item xs={12} key={2}>
                           <Box

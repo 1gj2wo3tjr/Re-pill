@@ -5,8 +5,11 @@ import { useMediaQuery } from 'react-responsive';
 import axios from "axios";
 
 function EditNoticeModal({ setOpen, open, id }) {
+  let token = localStorage.getItem('token')
+  const headers = {
+    Authorization: `Bearer ${token}`
+  }
   const [form, setForm] = useState()
-
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)"
   });
@@ -31,10 +34,14 @@ function EditNoticeModal({ setOpen, open, id }) {
       axios.put(`http://127.0.0.1:8000/api/v1/community/notice/${id}`, {
         title: form.title,
         content: form.content
+      },
+      {
+        headers: headers
       })
       .then((res) => console.log(res))
       .catch((err) => console.log(err))
       setOpen((prev) => !prev)
+      window.location.reload(true)
     }
   }
 
@@ -45,8 +52,12 @@ function EditNoticeModal({ setOpen, open, id }) {
   }
 
   const getForm = async () => {
-    const response = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${id}`)
-    setForm(response.data)
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${id}`)
+      setForm(response.data)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   useEffect(() => {

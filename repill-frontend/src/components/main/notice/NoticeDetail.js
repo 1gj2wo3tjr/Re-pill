@@ -9,6 +9,10 @@ import { useMediaQuery } from 'react-responsive';
 
 function NoticeDetail() {
   let params = useParams()
+  let token = localStorage.getItem('token')
+  const headers = {
+    Authorization: `Bearer ${token}`
+  }
   const navigate = useNavigate()
   const goNotice = () => {
     navigate('/notice/')
@@ -73,7 +77,12 @@ function NoticeDetail() {
   const checkDelete = () => {
     setRemove(false)
     // axios delete 요청 코드
-    axios.delete(`http://127.0.0.1:8000/api/v1/community/notice/${params.id}`)
+    axios.delete(`http://127.0.0.1:8000/api/v1/community/notice/${params.id}`, {
+      id: params.id
+    },
+    {
+      headers: headers
+    })
     .then((res) => console.log(res))
     .catch((err) => console.log(err))
     navigate('/notice')
@@ -217,10 +226,10 @@ function NoticeDetail() {
             <Header icon='archive' content='공지사항을 삭제하시겠습니까?' />
             <Modal.Actions>
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <Button color='green' onClick={() => setRemove(false)}>
+                <Button color='green' onClick={checkDelete}>
                   <Icon name='checkmark' /> 삭제
                 </Button>
-                <Button color='red' onClick={() => setRemove(false)}>
+                <Button color='red' onClick={checkCancle}>
                   <Icon name='remove' /> 취소
                 </Button>
               </div>

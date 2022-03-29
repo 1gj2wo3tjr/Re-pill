@@ -6,9 +6,8 @@ import { useMediaQuery } from 'react-responsive';
 
 function AddNoticeModal({setOpen, open }) {
   let token = localStorage.getItem('token')
-  console.log(token)
   const headers = {
-    'Authorization': `Bearer ${token}`
+    Authorization: `Bearer ${token}`
   }
 
   const [form, setForm] = useState({
@@ -37,16 +36,18 @@ function AddNoticeModal({setOpen, open }) {
     } else if (!form.title && !form.content) {
       alert("제목과 내용을 입력해주세요")
     } else {
-      axios.post('http://127.0.0.1:8000/api/v1/community/notice/', {
-        headers: headers
-      }, { 
+      axios.post('http://127.0.0.1:8000/api/v1/community/notice/', 
+        { 
           title: form.title, 
           content: form.content 
+        },
+        {
+          headers: headers
         })
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
-      // setOpen((prev) => !prev)
-      // window.location.reload(true)
+      setOpen((prev) => !prev)
+      window.location.reload(true)
     }
   }
 

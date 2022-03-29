@@ -23,11 +23,14 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import Linked from "@mui/material/Link";
 import Checkbox from "@mui/material/Checkbox";
+import AddressModal from "./AddressModal";
 
 function Order() {
   const [radio, setRadio] = useState("existing");
   const [radioPay, setRadioPay] = useState("kakaopay");
   const [selector, setSelector] = useState(1);
+  const [modal, setModal] = useState(false);
+  const [address, setAdderss] = useState("");
 
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
@@ -47,6 +50,10 @@ function Order() {
 
   const handleRequest = (e) => {
     setSelector(e.target.value);
+  };
+
+  const openModal = () => {
+    setModal((prev) => !prev);
   };
 
   const breadcrumbs = [
@@ -235,7 +242,10 @@ function Order() {
                           className={styles.mob_address_input}
                           disabled
                         />
-                        <Button className={styles.mob_button_search}>
+                        <Button
+                          className={styles.mob_button_search}
+                          onClick={openModal}
+                        >
                           <p>우편번호 검색</p>
                         </Button>
                       </div>
@@ -435,7 +445,6 @@ function Order() {
                 {breadcrumbs}
               </Breadcrumbs>
             </div>
-
             <div className={styles.order_main}>
               <p style={{ fontSize: "17px", fontWeight: "bold" }}>
                 주문 상세 내역
@@ -500,7 +509,6 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
-
             <div className={styles.address_div}>
               <p
                 style={{
@@ -602,20 +610,24 @@ function Order() {
                       <div>
                         <input
                           type="text"
-                          // value={quantity}
+                          value={address.zonecode}
                           title="우편번호"
                           className={styles.address_input}
                           disabled
                         />
-                        <Button className={styles.button_search}>
+                        <Button
+                          className={styles.button_search}
+                          onClick={openModal}
+                        >
                           <p>우편번호 검색</p>
                         </Button>
                       </div>
                       <div style={{ marginTop: "15px" }}>
                         <input
                           type="text"
-                          // value={quantity}
+                          value={address.address}
                           title="주소"
+                          disabled
                           className={styles.address_input}
                           style={{ width: "330px" }}
                         />
@@ -683,7 +695,6 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
-
             <div className={styles.pay_div}>
               <p
                 style={{
@@ -761,7 +772,6 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
-
             <div className={styles.order_bottom}>
               <div className={styles.final_pay}>
                 <p>최종 결제 금액</p>
@@ -802,6 +812,15 @@ function Order() {
                 </button>
               </Link>
             </div>
+            {console.log(modal)}
+            {modal ? (
+              <AddressModal
+                open={modal}
+                setOpen={setModal}
+                address={address}
+                setAdderss={setAdderss}
+              />
+            ) : null}
           </Container>
         </div>
       )}

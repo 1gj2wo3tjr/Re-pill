@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import {
   Table,
@@ -12,8 +13,6 @@ import axios from "axios";
 import styles from "./Cart.module.css";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -152,12 +151,16 @@ function Cart() {
               <p>합계</p>
             </div>
             <div className={styles.cart_btn}>
-              <button className={styles.button_check}>
-                <p>선택 상품 주문</p>
-              </button>
-              <button className={styles.button_all}>
-                <p>전체 상품 주문</p>
-              </button>
+              <Link to={`/order`}>
+                <button className={styles.button_check}>
+                  <p>선택 상품 주문</p>
+                </button>
+              </Link>
+              <Link to={`/order`}>
+                <button className={styles.button_all}>
+                  <p>전체 상품 주문</p>
+                </button>
+              </Link>
             </div>
           </Container>
         </div>

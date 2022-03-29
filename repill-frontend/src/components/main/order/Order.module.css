@@ -1,0 +1,223 @@
+/* mobile */
+.mob_container {
+  margin: 50px 0;
+  padding: 0 20px;
+}
+.mob_top {
+}
+.mob_order_main {
+  margin-top: 50px;
+}
+.mob_order_list {
+  display: table;
+  justify-content: start;
+}
+.mob_order_list img {
+  width: 90px;
+  border: 1px solid #cfcfcf;
+}
+.mob_order_view {
+  font-weight: bold;
+  display: table-cell;
+  vertical-align: middle;
+}
+.mob_order_view p {
+  font-size: 12px;
+  color: rgb(87, 87, 87);
+  margin-bottom: 5px;
+  margin-left: 30px;
+}
+.mob_order_bottom {
+  margin: 70px 0;
+  text-align: center;
+}
+
+.mob_button_buy {
+  background-color: #219f94;
+  padding: 12px 40px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin: 20px 0;
+}
+.mob_button_buy:hover {
+  background-color: rgb(87, 87, 87);
+}
+.mob_final_pay {
+  display: flex;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.mob_agreement {
+  display: flex;
+  justify-content: center;
+}
+
+/* mob_address */
+.mob_address_div {
+  margin: 80px 0;
+}
+.mob_address_left {
+  border-right: 1px solid #e0e0e0;
+  background-color: #f2f5c8;
+}
+.mob_address_left p {
+  font-size: 12px;
+}
+.mob_address_right {
+  font-size: 12px;
+}
+.mob_address_input {
+  border: 1px solid #cfcfcf;
+  border-radius: 3px;
+  height: 35px;
+  width: 130px;
+  padding: 10px;
+  vertical-align: middle;
+}
+.mob_button_search {
+  background-color: #f2f5c8;
+  padding: 10px 15px;
+  color: rgb(87, 87, 87);
+  font-size: 110px;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+.mob_button_search:hover {
+  background-color: #f3f3f3;
+}
+.mob_button_search p {
+  margin: 0px;
+}
+.mob_address_selector {
+  border-radius: 3px;
+  border-color: #cfcfcf;
+  height: 35px;
+  width: 80px;
+  padding: 10px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+/* 결제수단 */
+.mob_pay_div {
+  margin: 80px 0;
+}
+
+/* pc */
+
+.container {
+  margin-top: 100px;
+}
+
+.order_top {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* main */
+.order_main {
+  margin: 50px 0;
+}
+.qty_input {
+  border: 0px solid #cfcfcf;
+  border-radius: 3px;
+  height: 35px;
+  width: 60px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* bottom */
+.order_bottom {
+  margin: 120px 0;
+  text-align: center;
+}
+
+.button_buy {
+  background-color: #219f94;
+  padding: 12px 50px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin: 50px 0;
+}
+.button_buy:hover {
+  background-color: rgb(87, 87, 87);
+}
+
+/* address */
+.address_div {
+  margin: 100px 0;
+}
+.address_left {
+  border-right: 1px solid #e0e0e0;
+  background-color: #f2f5c8;
+}
+.address_left p {
+  font-size: 14px;
+}
+.address_right {
+  font-size: 14px;
+}
+.address_input {
+  border: 1px solid #cfcfcf;
+  border-radius: 3px;
+  height: 35px;
+  width: 210px;
+  padding: 10px;
+  vertical-align: middle;
+  margin-left: 20px;
+}
+.button_search {
+  background-color: #f2f5c8;
+  padding: 10px 15px;
+  color: rgb(87, 87, 87);
+  font-size: 110px;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+.button_search:hover {
+  background-color: #f3f3f3;
+}
+.button_search p {
+  margin: 0px;
+}
+.address_selector {
+  border-radius: 3px;
+  border-color: #cfcfcf;
+  height: 35px;
+  width: 250px;
+  padding: 10px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+/* 결제수단 */
+.pay_div {
+  margin: 50px 0;
+}
+
+/* bottom */
+.final_pay {
+  display: flex;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.agreement {
+  display: flex;
+  justify-content: center;
+}

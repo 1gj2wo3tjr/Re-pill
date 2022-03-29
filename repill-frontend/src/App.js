@@ -13,6 +13,8 @@ import Mypage from "./components/main/mypage/Mypage";
 import AddressTab from "./components/main/mypage/AddressTab";
 import Recommend from "./components/main/recommend/Recommend";
 import Cart from "./components/main/cart/Cart";
+import Order from "./components/main/order/Order";
+import OrderCompleted from "./components/main/order/OrderCompleted";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           <Route path="/recommend" element={<Recommend />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/order" element={<Order />} />
+          <Route path="/orderCompleted" element={<OrderCompleted />} />
         </Routes>
       </div>
       <Footer />

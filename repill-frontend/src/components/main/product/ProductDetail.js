@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Container } from "semantic-ui-react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import styles from "./Product.module.css";
 import ProductReview from "./ProductReview";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
@@ -10,8 +10,6 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Link } from "react-router-dom";
-import Cart from "../cart/Cart";
 
 function ProductDetail() {
   let params = useParams();
@@ -153,14 +151,16 @@ function ProductDetail() {
                     </div>
                   </button>
                 </Link>
-                <button className={styles.button_buy}>
-                  <div style={{ display: "flex", justifyContent: "start" }}>
-                    <PaymentIcon
-                      sx={{ color: "rgb(87, 87, 87)", marginRight: "10px" }}
-                    ></PaymentIcon>{" "}
-                    <p>바로 구매하기</p>
-                  </div>
-                </button>
+                <Link to={`/order`}>
+                  <button className={styles.button_buy}>
+                    <div style={{ display: "flex", justifyContent: "start" }}>
+                      <PaymentIcon
+                        sx={{ color: "rgb(87, 87, 87)", marginRight: "10px" }}
+                      ></PaymentIcon>{" "}
+                      <p>바로 구매하기</p>
+                    </div>
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

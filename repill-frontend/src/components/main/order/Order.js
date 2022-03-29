@@ -24,6 +24,7 @@ import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import Linked from "@mui/material/Link";
 import Checkbox from "@mui/material/Checkbox";
 import AddressModal from "./AddressModal";
+import PayReady from "./PayReady";
 
 function Order() {
   const [radio, setRadio] = useState("existing");
@@ -31,10 +32,16 @@ function Order() {
   const [selector, setSelector] = useState(1);
   const [modal, setModal] = useState(false);
   const [address, setAdderss] = useState("");
+  const [pay, setPay] = useState(false);
+  const [agreement, setAgreement] = useState(false);
 
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });
+
+  const agreementCheck = () => {
+    setAgreement((prev) => !prev);
+  };
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -54,6 +61,14 @@ function Order() {
 
   const openModal = () => {
     setModal((prev) => !prev);
+  };
+
+  const openPay = () => {
+    if (agreement) {
+      setPay((prev) => !prev);
+    } else {
+      alert("동의해주세요");
+    }
   };
 
   const breadcrumbs = [
@@ -789,6 +804,8 @@ function Order() {
               <div className={styles.agreement}>
                 <Checkbox
                   aria-label="a"
+                  value={agreement}
+                  onChange={agreementCheck}
                   sx={{
                     color: "#cfcfcf",
                     "&.Mui-checked": {
@@ -801,18 +818,18 @@ function Order() {
                   상품의 결제정보를 확인하였으며, 구매진행에 동의합니다.
                 </p>
               </div>
-              <Link to={`/orderCompleted`}>
-                <button className={styles.button_buy}>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <CreditScoreIcon
-                      style={{ marginRight: "10px" }}
-                    ></CreditScoreIcon>
-                    <p>결제하기</p>
-                  </div>
-                </button>
-              </Link>
+              {/* <Link to={`/orderCompleted`}> */}
+              {/* <Link to={`/payReady`}> */}
+              <button className={styles.button_buy} onClick={openPay}>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <CreditScoreIcon
+                    style={{ marginRight: "10px" }}
+                  ></CreditScoreIcon>
+                  <p>결제하기</p>
+                </div>
+              </button>
+              {/* </Link> */}
             </div>
-            {console.log(modal)}
             {modal ? (
               <AddressModal
                 open={modal}
@@ -821,6 +838,7 @@ function Order() {
                 setAdderss={setAdderss}
               />
             ) : null}
+            {pay ? <PayReady open={pay} setOpen={setPay} /> : null}
           </Container>
         </div>
       )}

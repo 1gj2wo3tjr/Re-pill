@@ -13,9 +13,10 @@ import Mypage from "./components/main/mypage/Mypage";
 import AddressTab from "./components/main/mypage/address/AddressTab";
 import Recommend from "./components/main/recommend/Recommend";
 import Cart from "./components/main/cart/Cart";
-import MyorderTab from "./components/main/mypage/myorder/MyorderTab"
+import MyorderTab from "./components/main/mypage/myorder/MyorderTab";
 import Order from "./components/main/order/Order";
 import OrderCompleted from "./components/main/order/OrderCompleted";
+import PayReady from "./components/main/order/PayReady";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="/mypage/myorder" element={<MyorderTab />} />
           <Route path="/order" element={<Order />} />
           <Route path="/orderCompleted" element={<OrderCompleted />} />
+          <Route path="/payReady" element={<PayReady />} />
         </Routes>
       </div>
       <Footer />

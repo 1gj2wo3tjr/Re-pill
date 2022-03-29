@@ -29,24 +29,37 @@ function NoticeDetail() {
   });
 
   const getDetail = async () => {
-    const response = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${params.id}`)
-    console.log(response.data)
-    setDetail(response.data)
-    console.log(detail)
-    if (response.data.cursor.previous !== null) {
-      setPreviousId(response.data.cursor.previous.id)
-      setPreviousTitle(response.data.cursor.previous.title)
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/v1/community/notice/${params.id}`)
+      console.log(response.data)
+      setDetail(response.data)
+      if (response.data.cursor.previous !== null) {
+        setPreviousId(response.data.cursor.previous.id)
+        setPreviousTitle(response.data.cursor.previous.title)
+      } else {
+        setPreviousId(null)
+        setPreviousTitle(null)
+      }
+      if (response.data.cursor.next !== null) {
+        setNextId(response.data.cursor.next.id)
+        setNextTitle(response.data.cursor.next.title)
+      } else {
+        setNextId(null)
+        setNextTitle(null)
+      }
+      setSlicedDate(response.data.created_at.slice(0, 10))
+    } catch (err) {
+      console.log(err)
     }
-    if (response.data.cursor.next !== null) {
-      setNextId(response.data.cursor.next.id)
-      setNextTitle(response.data.cursor.next.title)
-    }
-    setSlicedDate(response.data.created_at.slice(0, 10))
   }
 
   const getLength = async () => {
-    const notices = await axios.get("http://127.0.0.1:8000/api/v1/community/notice/")
-    setList(notices.data.length)
+    try {
+      const notices = await axios.get("http://127.0.0.1:8000/api/v1/community/notice/")
+      setList(notices.data.length)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const openModal = () => {
@@ -103,7 +116,7 @@ function NoticeDetail() {
                     {detail.content}
                   </TableCell>
                 </TableRow>
-                {params.id==="1000" ? (null) : (
+                {previousId===null ? (null) : (
                   <>
                     <TableRow className={styles.notice_link}>
                       <TableCell style={{ display: "flex" }}>
@@ -112,7 +125,7 @@ function NoticeDetail() {
                       </TableCell>
                     </TableRow>
                   </>)}
-                {params.id==="1000" ? (null) : (
+                {nextId===null ? (null) : (
                   <>
                     <TableRow className={styles.notice_link}>
                       <TableCell style={{ display: "flex"}}>
@@ -171,7 +184,7 @@ function NoticeDetail() {
                     {detail.content}
                   </TableCell>
                 </TableRow>
-                {params.id==="1000" ? (null) : (
+                {previousId===null ? (null) : (
                   <>
                     <TableRow className={styles.notice_link}>
                       <TableCell style={{ display: "flex" }}>
@@ -180,7 +193,7 @@ function NoticeDetail() {
                       </TableCell>
                     </TableRow>
                   </>)}
-                {params.id==="1000" ? (null) : (
+                {nextId===null ? (null) : (
                   <>
                     <TableRow className={styles.notice_link}>
                       <TableCell style={{ display: "flex"}}>

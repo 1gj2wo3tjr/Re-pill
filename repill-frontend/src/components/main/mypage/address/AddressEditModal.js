@@ -3,9 +3,9 @@ import DaumPostcode from "react-daum-postcode";
 import { Modal } from 'semantic-ui-react'
 import { TableRow, TableCell } from "@mui/material";
 import { useMediaQuery } from 'react-responsive';
-import styles from "./Mypage.module.css"
+import styles from "../Mypage.module.css"
 
-function AddressAddModal({ address, setAddress, open, setOpen }) {
+function AddressEditModal({ address, setAddress, open, setOpen }) {
   const [popup, setPopUp] = useState(false)
   const [form, setForm] = useState({
     name: "",
@@ -47,7 +47,6 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
     alert("hi")
     // axios post 요청 코드
   }
-
   return (
     <>
       {isMobile ? (
@@ -69,7 +68,7 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
               <TableRow style={{ display: "flex", justifyContent: "space-between", border: "1px solid black", marginTop: "1%" }}>
                 <TableCell style={{ fontSize: "1rem", width: "40%", textAlign: "center" }}>주소</TableCell>
                 <TableCell style={{ fontSize: "1rem", width: "60%" }}>
-                  <div style={{ display: "flex", justifyContent: "end", flexDirection: "column" }}>
+                  <div style={{ display: "flex", flexDirection: "column", textAlign: "end" }}>
                     <div style={{ display: "flex" }}>
                       <div style={{ border: "2px solid black", textAlign: "center", width: "68%", fontSize: "1rem" }} >{address.zonecode}</div>
                       <button onClick={openPopup} style={{ marginLeft: "3%" }} >검색</button>
@@ -80,13 +79,13 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
                 </TableCell>
               </TableRow>
               <div style={{ display: "flex", justifyContent: "center" ,marginTop: "5%" }}>
-                <button onClick={registerAddress} className={styles.address_add_button_mob} >등록</button>
-                <button onClick={cancleModal} className={styles.address_cancle_button_mob}>취소</button>
+                <button onClick={registerAddress} className={styles.address_edit_check_button_mob}>수정</button>
+                <button onClick={cancleModal} className={styles.address_edit_cancle_button_mob}>취소</button>
               </div>
             </Modal.Content>
             {popup && <div>
               <DaumPostcode
-                className={styles.search_address_modal}
+                className={styles.address_search_address_modal}
                 autoClose
                 onComplete={onCompletePost}
               /></div>}
@@ -100,7 +99,7 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
             style={{ position: "relative", width: "470px" }}
           >
             <Modal.Content>
-              <TableRow style={{ display: "flex", justifyContent: "space-between", height: "5rem", alignItems: "center", border: "1px solid black" }}>
+              <TableRow style={{ display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid black", height: "5rem" }}>
                 <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>받는사람이름</TableCell>
                 <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.name} name="name" /></TableCell>
               </TableRow>
@@ -139,4 +138,4 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
   )
 }
 
-export default AddressAddModal
+export default AddressEditModal

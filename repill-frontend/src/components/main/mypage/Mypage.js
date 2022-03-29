@@ -116,7 +116,7 @@ export default function PersistentDrawerLeft() {
             <ListItemIcon>
               <ReceiptTwoToneIcon />
             </ListItemIcon>
-            <Link to="/">결제 내역</Link>
+            <Link to="/mypage/myorder">결제 내역</Link>
           </ListItem>
           <ListItem>
             <ListItemIcon>

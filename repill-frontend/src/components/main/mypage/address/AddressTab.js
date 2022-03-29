@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Container, Table, TableCell, TableHead, TableRow, TableBody } from "@mui/material";
 import AddressAddModal from "./AddressAddModal"
 import AddressEditModal from "./AddressEditModal"
-import styles from "./Mypage.module.css"
+import styles from "../Mypage.module.css"
 import { useMediaQuery } from 'react-responsive';
 
 function AddressTab() {

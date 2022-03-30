@@ -79,7 +79,7 @@ function AddressTab() {
                     </div>
                     <div style={{ marginTop: "2%" }}>
                       <div style={{ textAlign: 'start', marginTop: "2%" }}>{item.address}{item.detailed_address}</div>
-                      <div style={{ textAlign: 'start', marginTop: "2%" }}>010-1234-5678</div>
+                      <div style={{ textAlign: 'start', marginTop: "2%" }}>{item.phone_number}</div>
                     </div>         
                   </TableCell>
                 </TableRow>)}
@@ -111,7 +111,7 @@ function AddressTab() {
                 <TableRow key={item.id}>
                   <TableCell style={{ textAlign: 'center' }}>{item.address_name}</TableCell>
                   <TableCell style={{ textAlign: 'center' }}>{item.address}{item.detailed_address}</TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>010-1234-5678</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>{item.phone_number}</TableCell>
                   <TableCell style={{ textAlign: 'center' }}><button className={styles.address_edit_button} onClick={() => handleEditModal(item)}>수정</button></TableCell>
                   <TableCell style={{ textAlign: 'center' }}><button className={styles.address_delete_button} onClick={() => deleteAddress(item)}>삭제</button></TableCell>
                 </TableRow>)}

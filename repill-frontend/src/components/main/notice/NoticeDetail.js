@@ -77,9 +77,7 @@ function NoticeDetail() {
   const checkDelete = () => {
     setRemove(false)
     // axios delete 요청 코드
-    axios.delete(`http://127.0.0.1:8000/api/v1/community/notice/${params.id}`, {
-      id: params.id
-    },
+    axios.delete(`http://127.0.0.1:8000/api/v1/community/notice/${params.id}`, 
     {
       headers: headers
     })

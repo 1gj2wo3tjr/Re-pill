@@ -24,7 +24,7 @@ class DeliveryAddress(models.Model):
     address = models.CharField(max_length=50, null=True)
     # 0으로 시작하는 2~3자리 + 3~4자리 + 3~4자리, 하이픈은 추가/무시 상관 없음
     phone_number = models.CharField(max_length=13,
-        validators=[RegexValidator(regex='^(0)\d{1,2}-?\d{3,4}-?\d{3,4}')],
+        validators=[RegexValidator(regex='^(0)\d{1,2}-?\d{3,4}-?\d{4}')],
         default="000-0000-0000"
     )
     detailed_address = models.TextField(null=True)

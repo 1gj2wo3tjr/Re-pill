@@ -44,7 +44,7 @@ function Product() {
 
   const filter = (keyword) => {
     if (keyword !== "") {
-      setResult(products.filter((item) => item.title.includes(keyword)));
+      setResult(products.filter((item) => item.name.includes(keyword)));
     }
   };
 

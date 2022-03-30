@@ -1,16 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container, Table, TableCell, TableHead, TableRow, TableBody } from "@mui/material";
 import AddressAddModal from "./AddressAddModal"
 import AddressEditModal from "./AddressEditModal"
 import styles from "../Mypage.module.css"
 import { useMediaQuery } from 'react-responsive';
+import axios from "axios"
 
 function AddressTab() {
+  let token = localStorage.getItem('token')
+  const headers = {
+    Authorization: `Bearer ${token}`
+  }
   const [open, setOpen] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
   const [address, setAddress] = useState("")
-  // axios 로 배송지 받아와 담는 list
-  // const [addressList, setAddressList] = useState([])
+  const [addressList, setAddressList] = useState([])
+  const [data, setData] = useState("")
 
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)"
@@ -20,14 +25,36 @@ function AddressTab() {
     setOpen((prev) => !prev)
   }
 
-  const handleEditModal = () => {
+  const handleEditModal = (item) => {
+    setData(item)
     setOpenEdit((prev) => !prev)
   }
 
   // 삭제 함수
-  const deleteAddress = () => {
-    alert("삭제")
+  const deleteAddress = (item) => {
+    axios.delete(`http://127.0.0.1:8000/api/v1/accounts/address/${item.id}`, {
+      headers: headers
+    })
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err))
+    window.location.reload(true)
   }
+
+  const getAddress = async() => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/v1/accounts/address/", {
+        headers: headers
+      })
+      setAddressList(response.data)
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    getAddress()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div>
@@ -40,26 +67,26 @@ function AddressTab() {
           </div>
           <Table style={{ marginTop: '5%' }}>
             <TableBody>
-              <TableRow>
-                <TableCell>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <div style={{ textAlign: 'center', lineHeight: '30px' }}>우리집</div>
-                    <div style={{ display: 'flex' }}>
-                      <div style={{ textAlign: 'center' }}><button className={styles.address_edit_button_mob} onClick={handleEditModal}>수정</button></div>
-                      <div style={{ textAlign: 'center' }}><button className={styles.address_delete_button_mob} onClick={deleteAddress}>삭제</button></div>
+              {addressList.map((item) =>
+                <TableRow>
+                  <TableCell>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <div style={{ textAlign: 'center', lineHeight: '30px' }}>{item.address_name}</div>
+                      <div style={{ display: 'flex' }}>
+                        <div style={{ textAlign: 'center' }}><button className={styles.address_edit_button_mob} onClick={() => handleEditModal(item)}>수정</button></div>
+                        <div style={{ textAlign: 'center' }}><button className={styles.address_delete_button_mob} onClick={() => deleteAddress(item)}>삭제</button></div>
+                      </div>
                     </div>
-                  </div>
-                  <div style={{ marginTop: "2%" }}>
-                    <div style={{ textAlign: 'start', marginTop: "2%" }}>서울특별시 가나다라구 마바사동 어디어디아파트가나다라마바사</div>
-                    <div style={{ textAlign: 'start', marginTop: "2%" }}>010-1234-5678</div>
-                  </div>         
-
-                </TableCell>
-              </TableRow>
+                    <div style={{ marginTop: "2%" }}>
+                      <div style={{ textAlign: 'start', marginTop: "2%" }}>{item.address}{item.detailed_address}</div>
+                      <div style={{ textAlign: 'start', marginTop: "2%" }}>{item.phone_number}</div>
+                    </div>         
+                  </TableCell>
+                </TableRow>)}
             </TableBody>
           </Table>
           <AddressAddModal open={open} setOpen={setOpen} address={address} setAddress={setAddress} />
-          <AddressEditModal open={openEdit} setOpen={setOpenEdit} address={address} setAddress={setAddress} />
+          <AddressEditModal open={openEdit} setOpen={setOpenEdit} address={address} setAddress={setAddress} data={data} />
         </Container>
       </>) : (
       <>
@@ -80,17 +107,18 @@ function AddressTab() {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell style={{ textAlign: 'center' }}>우리집</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>서울특별시</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>010-1234-5678</TableCell>
-                <TableCell style={{ textAlign: 'center' }}><button className={styles.address_edit_button} onClick={handleEditModal}>수정</button></TableCell>
-                <TableCell style={{ textAlign: 'center' }}><button className={styles.address_delete_button} onClick={deleteAddress}>삭제</button></TableCell>
-              </TableRow>
+              {addressList.map((item) =>
+                <TableRow key={item.id}>
+                  <TableCell style={{ textAlign: 'center' }}>{item.address_name}</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>{item.address}{item.detailed_address}</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>{item.phone_number}</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}><button className={styles.address_edit_button} onClick={() => handleEditModal(item)}>수정</button></TableCell>
+                  <TableCell style={{ textAlign: 'center' }}><button className={styles.address_delete_button} onClick={() => deleteAddress(item)}>삭제</button></TableCell>
+                </TableRow>)}
             </TableBody>
           </Table>
           <AddressAddModal open={open} setOpen={setOpen} address={address} setAddress={setAddress} />
-          <AddressEditModal open={openEdit} setOpen={setOpenEdit} address={address} setAddress={setAddress} />
+          <AddressEditModal open={openEdit} setOpen={setOpenEdit} address={address} setAddress={setAddress} data={data} />
         </Container>
       </>)}
     </div>

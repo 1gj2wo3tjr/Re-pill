@@ -19,14 +19,15 @@ function ProductDetail() {
   const getDetail = async () => {
     window.scrollTo({ top: 0 });
     const response = await axios.get(
-      `https://jsonplaceholder.typicode.com/photos/${params.id}`
+      `http://127.0.0.1:8000/api/v1/products/items/${params.id}`
     );
+    console.log(response.data);
     setDetail(response.data);
   };
 
   const getReview = async () => {
     const response = await axios.get(
-      `https://jsonplaceholder.typicode.com/comments/?postId=${params.id}`
+      `http://127.0.0.1:8000/api/v1/products/reviews/${params.id}`
     );
     setReview(response.data);
   };
@@ -79,14 +80,14 @@ function ProductDetail() {
         <Container className={styles.mob_container}>
           <div className={styles.mob_top}>
             <div className={styles.mob_name}>
-              <p className={styles.mob_id}>회사이름: {detail.id}</p>
-              <p className={styles.mob_title}>{detail.title}</p>
+              <p className={styles.mob_id}>회사이름: {detail.company}</p>
+              <p className={styles.mob_title}>{detail.name}</p>
             </div>
             <div className={styles.mob_img}>
-              <img src={detail.url} alt="" />
+              <img src={detail.thumbnail_url} alt="" />
             </div>
             <div className={styles.mob_view}>
-              <p className={styles.mob_short_info}>간단한 제품 소개</p>
+              <p className={styles.mob_short_info}>{detail.content}</p>
               <div className={styles.mob_qty}>
                 <div>
                   <p
@@ -163,7 +164,7 @@ function ProductDetail() {
           <div className={styles.mob_main}>
             {/* 다른 이미지 많이 필요할 것 같은 */}
             <div className={styles.mob_img}>
-              <img src={detail.url} alt="" />
+              <img src={detail.thumbnail_url} alt="" />
             </div>
             {/* ingrediants */}
             <div style={{ display: "flex", justifyContent: "center" }}>
@@ -200,12 +201,12 @@ function ProductDetail() {
             style={{ display: "flex", justifyContent: "center" }}
           >
             <div className={styles.detail_img}>
-              <img src={detail.url} alt="" />
+              <img src={detail.thumbnail_url} alt="" />
             </div>
             <div className={styles.detail_view}>
-              <p className={styles.detail_id}>회사이름: {detail.id}</p>
-              <p className={styles.detail_title}>{detail.title}</p>
-              <p className={styles.detail_short_info}>간단한 제품 소개</p>
+              <p className={styles.detail_id}>회사이름: {detail.company}</p>
+              <p className={styles.detail_title}>{detail.name}</p>
+              <p className={styles.detail_short_info}>{detail.content}</p>
               <div className={styles.product_qty}>
                 <div>
                   <p
@@ -283,9 +284,8 @@ function ProductDetail() {
           </div>
           {/* 상품 성분 및 정보  */}
           <div className={styles.detail_main}>
-            <p>뭘 넣어야할지 모르겠어요</p>
             {/* 다른 이미지 많이 필요할 것 같은 */}
-            <img src={detail.url} alt="" style={{ width: "400px" }} />
+            <img src={detail.thumbnail_url} alt="" style={{ width: "400px" }} />
             {/* ingrediants */}
             <div style={{ display: "flex", justifyContent: "center" }}>
               <table

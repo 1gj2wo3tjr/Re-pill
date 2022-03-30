@@ -135,9 +135,15 @@ function ProductList({ list }) {
                         height="200"
                         image={item.thumbnail_url}
                         alt="thumbnail_url"
+                        sx={{ objectFit: "contain", padding: "10px" }}
                       />
                       <CardContent style={{ height: "120px" }}>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography
+                          gutterBottom
+                          variant="h5"
+                          component="div"
+                          sx={{ color: "#219f94", fontWeight: "bold" }}
+                        >
                           {item.company}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">

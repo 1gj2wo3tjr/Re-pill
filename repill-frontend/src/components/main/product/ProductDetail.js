@@ -21,7 +21,7 @@ function ProductDetail() {
     const response = await axios.get(
       `http://127.0.0.1:8000/api/v1/products/items/${params.id}`
     );
-    console.log(response.data);
+
     setDetail(response.data);
   };
 
@@ -80,7 +80,7 @@ function ProductDetail() {
         <Container className={styles.mob_container}>
           <div className={styles.mob_top}>
             <div className={styles.mob_name}>
-              <p className={styles.mob_id}>회사이름: {detail.company}</p>
+              <p className={styles.mob_id}>{detail.company}</p>
               <p className={styles.mob_title}>{detail.name}</p>
             </div>
             <div className={styles.mob_img}>
@@ -134,7 +134,7 @@ function ProductDetail() {
                 >
                   총 상품 금액
                 </p>
-                <p>{(15000 * quantity).toLocaleString()}원</p>
+                <p>{(detail.price * quantity).toLocaleString()} 원</p>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 {/* 회원 토큰 */}
@@ -204,7 +204,7 @@ function ProductDetail() {
               <img src={detail.thumbnail_url} alt="" />
             </div>
             <div className={styles.detail_view}>
-              <p className={styles.detail_id}>회사이름: {detail.company}</p>
+              <p className={styles.detail_id}>{detail.company}</p>
               <p className={styles.detail_title}>{detail.name}</p>
               <p className={styles.detail_short_info}>{detail.content}</p>
               <div className={styles.product_qty}>
@@ -252,7 +252,7 @@ function ProductDetail() {
                 >
                   총 상품 금액
                 </p>
-                <p>{(15000 * quantity).toLocaleString()}원</p>
+                <p>{(detail.price * quantity).toLocaleString()} 원</p>
               </div>
               <div style={{ float: "right", marginTop: "20px" }}>
                 {/* 회원 토큰 */}

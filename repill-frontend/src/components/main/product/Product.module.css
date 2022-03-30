@@ -169,9 +169,11 @@ input:focus {
   float: left;
   position: relative;
   width: 50%;
+  /* text-align: center; */
 }
 .detail_img img {
   width: 80%;
+  margin: 0 10px;
 }
 .detail_view {
   float: right;
@@ -180,7 +182,7 @@ input:focus {
 .detail_id {
   font-size: 18px;
   font-weight: bold;
-  color: #656962;
+  color: #585858;
 }
 .detail_title {
   font-size: 25px;
@@ -190,7 +192,7 @@ input:focus {
   font-size: 18px;
   font-weight: bold;
   color: #585858;
-  margin: 10px 0 50px 0;
+  margin: 30px 0 50px 0;
   height: 35px;
 }
 .product_qty {

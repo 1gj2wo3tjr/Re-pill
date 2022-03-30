@@ -45,7 +45,6 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
       ...form,
       [name] : value
     })
-    console.log(form)
   }
 
   const registerAddress = () => {
@@ -55,6 +54,7 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
       address: address.address,
       detailed_address: form.subAddress,
       zipcode: address.zonecode,
+      phone_number: form.phoneNum
     },
     {
       headers: headers

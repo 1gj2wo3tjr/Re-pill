@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MypageCompo from "./MypageCompo";
 import { styled, useTheme } from "@mui/material/styles";
@@ -60,9 +61,20 @@ export default function PersistentDrawerLeft() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const [login, setLogin] = useState();
+
+  useEffect(() => {
+    if (sessionStorage.getItem("token") === null) {
+      setLogin(false);
+    } else {
+      setLogin(true);
+    }
+  });
 
   return (
-    <Box sx={{ display: "flex", height: "700px", color: "grey" }}>
+    <Box
+      sx={{ display: "flex", height: "700px", color: "rgba(245,254,192,50%)" }}
+    >
       <CssBaseline />
       <IconButton
         color="inherit"
@@ -122,7 +134,7 @@ export default function PersistentDrawerLeft() {
             <ListItemIcon>
               <CardMembershipTwoToneIcon />
             </ListItemIcon>
-            <Link to="/">구독관리</Link>
+            <Link to="/mypage/subscriptions">구독관리</Link>
           </ListItem>
           <ListItem>
             <ListItemIcon>
@@ -133,17 +145,7 @@ export default function PersistentDrawerLeft() {
         </List>
       </Drawer>
       <Main open={open}>
-        {/* <DrawerHeader />
-        <Typography paragraph>
-          <h1>Mypage</h1>
-        </Typography>
-        <Typography paragraph>
-          <MypageCompo />
-        </Typography>
-        <Typography paragraph>
-          <h1>마이페이지</h1>
-        </Typography> */}
-        <MypageCompo />
+        {login ? <MypageCompo /> : <h1>로그인 하고 들어와라</h1>}
       </Main>
     </Box>
   );

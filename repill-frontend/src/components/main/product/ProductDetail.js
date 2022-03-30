@@ -136,7 +136,13 @@ function ProductDetail() {
                 </p>
                 <p>{(detail.price * quantity).toLocaleString()} 원</p>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  marginTop: "20px",
+                }}
+              >
                 {/* 회원 토큰 */}
                 <Link to={`/cart`}>
                   <button className={styles.mob_cart}>

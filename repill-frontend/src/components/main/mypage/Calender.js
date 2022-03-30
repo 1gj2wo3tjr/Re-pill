@@ -7,10 +7,6 @@ import CancelIcon from "@mui/icons-material/Cancel";
 function SubscriptionsCalender({ handleCancel }) {
   const [value, onChange] = useState(new Date());
 
-  const onCancel = () => {
-    handleCancel();
-  };
-
   return (
     <div>
       <div>

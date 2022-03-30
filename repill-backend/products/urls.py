@@ -22,4 +22,7 @@ urlpatterns = [
 
     path('reviews/', views.ReviewList.as_view()),
     path('reviews/<int:pk>', views.ReviewDetail.as_view()),
+    
+    path('cart/', views.CartList.as_view()),
+    path('cart/<int:pk>', views.CartDetail.as_view()),
 ]

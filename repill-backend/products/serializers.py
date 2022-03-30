@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Included, Product, Ingrediant, Review
+from .models import Included, Product, Ingrediant, Review, Cart
 
 
 class IngrediantSerializer(serializers.ModelSerializer):
@@ -44,4 +44,16 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
+        
+class CartSerializer(serializers.ModelSerializer):
+    """
+    장바구니를 직렬화하는 serializer입니다.
+
+    장바구니 모델의 특성상 List, Detail이 별개의 serializer를 필요로 하지 않습니다.
+    """
+    user = serializers.StringRelatedField(read_only=True)
+    delivery_fee = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Cart
         fields = '__all__'

@@ -21,7 +21,7 @@ function Product() {
 
   const getProducts = async () => {
     const response = await axios.get(
-      "https://jsonplaceholder.typicode.com/photos"
+      "http://127.0.0.1:8000/api/v1/products/items/"
     );
     setProducts(response.data);
     setResult(response.data);

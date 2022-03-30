@@ -21,6 +21,14 @@ function ProductList({ list }) {
 
   return (
     <>
+      <style>
+        {`
+        .css-h93ljk-MuiTypography-root,.css-r40f8v-MuiTypography-root{
+          font-family: "Noto Sans KR";
+        }
+
+      `}
+      </style>
       {isMobile ? (
         <>
           {list.map((item, index) => (
@@ -37,15 +45,15 @@ function ProductList({ list }) {
                   <CardMedia
                     component="img"
                     height="140"
-                    image={item.url}
-                    alt="green iguana"
+                    image={item.thumbnail_url}
+                    alt="thumbnail_url"
                   />
                   <CardContent style={{ height: "120px" }}>
                     <Typography gutterBottom variant="h5" component="div">
-                      {item.id}
+                      {item.company}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {item.title}
+                      {item.name}
                     </Typography>
                   </CardContent>
                 </CardActionArea>
@@ -82,15 +90,15 @@ function ProductList({ list }) {
                       <CardMedia
                         component="img"
                         height="140"
-                        image={item.url}
-                        alt="green iguana"
+                        image={item.thumbnail_url}
+                        alt="thumbnail_url"
                       />
                       <CardContent style={{ height: "120px" }}>
                         <Typography gutterBottom variant="h5" component="div">
-                          {item.id}
+                          {item.company}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          {item.title}
+                          {item.name}
                         </Typography>
                       </CardContent>
                     </CardActionArea>
@@ -124,16 +132,16 @@ function ProductList({ list }) {
                     <CardActionArea>
                       <CardMedia
                         component="img"
-                        height="140"
-                        image={item.url}
-                        alt="green iguana"
+                        height="200"
+                        image={item.thumbnail_url}
+                        alt="thumbnail_url"
                       />
                       <CardContent style={{ height: "120px" }}>
                         <Typography gutterBottom variant="h5" component="div">
-                          {item.id}
+                          {item.company}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          {item.title}
+                          {item.name}
                         </Typography>
                       </CardContent>
                     </CardActionArea>

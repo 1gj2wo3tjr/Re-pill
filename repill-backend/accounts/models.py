@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
@@ -21,8 +22,13 @@ class DeliveryAddress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     address_name = models.CharField(max_length=30, default="기본 배송지")
     address = models.CharField(max_length=50, null=True)
+    # 0으로 시작하는 2~3자리 + 3~4자리 + 3~4자리, 하이픈은 추가/무시 상관 없음
+    phone_number = models.CharField(max_length=13,
+        validators=[RegexValidator(regex='^(0)\d{1,2}-?\d{3,4}-?\d{3,4}')],
+        default="000-0000-0000"
+    )
     detailed_address = models.TextField(null=True)
     zipcode = models.CharField(max_length=30)
 
     def __str__(self):
-        return f'{self.user}님의 배송지 {self.address_name}: {self.address} {self.detailed_address}'
+        return f'{self.user}님 ({self.phone_number})의 배송지 {self.address_name}: {self.address} {self.detailed_address}'

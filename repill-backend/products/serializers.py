@@ -44,6 +44,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
+        fields = '__all__'
         
 class CartSerializer(serializers.ModelSerializer):
     """

@@ -1,7 +1,8 @@
 from django.db import models
+from django.conf import settings
+from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
-from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 class User(AbstractUser):
@@ -18,9 +19,25 @@ class User(AbstractUser):
         return f'{self.uid}'
 
 
+class DeliveryAddress(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    address_name = models.CharField(max_length=30, default="기본 배송지")
+    address = models.CharField(max_length=50, null=True)
+    # 0으로 시작하는 2~3자리 + 3~4자리 + 3~4자리, 하이픈은 추가/무시 상관 없음
+    phone_number = models.CharField(max_length=13,
+        validators=[RegexValidator(regex='^(0)\d{1,2}-?\d{3,4}-?\d{4}')],
+        default="000-0000-0000"
+    )
+    detailed_address = models.TextField(null=True)
+    zipcode = models.CharField(max_length=30)
+
+    def __str__(self):
+        return f'{self.user}님 ({self.phone_number})의 배송지 {self.address_name}: {self.address} {self.detailed_address}'
+
+
 # 주문 모델
 class Order(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True, default=timezone.now)
     address = models.CharField(max_length=80)
     # 0: 주문 취소, 1: 결제 완료, 2: 배송준비중, 3: 배송중, 4: 배송 완료

@@ -1,0 +1,146 @@
+/* mobile */
+.mob_container {
+  margin: 50px 0;
+  padding: 0 20px;
+}
+.mob_cart_main {
+  margin: 30px 0;
+}
+.mob_top {
+}
+.mob_cart_list {
+  display: table;
+  justify-content: start;
+}
+.mob_cart_list img {
+  width: 110px;
+  border: 1px solid #cfcfcf;
+}
+.mob_cart_view {
+  font-weight: bold;
+  display: table-cell;
+  vertical-align: middle;
+}
+.mob_cart_view p {
+  font-size: 12px;
+  color: rgb(87, 87, 87);
+  margin-bottom: 5px;
+  margin-left: 10px;
+}
+.button_delete {
+  border: 1px solid #ebebeb;
+  border-radius: 8px;
+  background-color: #ffffff;
+  font-size: 12px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.button_delete:hover {
+  background-color: #ebebeb;
+}
+.mob_add_icon {
+  color: rgb(87, 87, 87);
+  font-weight: bold;
+  border: 0px;
+  border-radius: 50%;
+  background-color: #e8e8a6;
+  margin: 0 20px;
+  height: 25px;
+  width: 25px;
+  vertical-align: middle;
+  padding: 5px;
+}
+.mob_cart_btn {
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  margin-top: 100px;
+}
+
+.cart_top {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* main */
+.cart_main {
+  margin: 50px 0;
+}
+.qty_input {
+  border: 0px solid #cfcfcf;
+  border-radius: 3px;
+  height: 35px;
+  width: 60px;
+  text-align: center;
+  vertical-align: middle;
+}
+.qty_icon {
+  color: rgb(87, 87, 87);
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  background-color: #e8e8a6;
+  margin: 0 10px;
+  height: 30px;
+  width: 30px;
+  vertical-align: middle;
+  padding: 5px;
+  cursor: pointer;
+}
+.qty_icon:hover {
+  background-color: #f3f3f3;
+}
+
+/* bottom */
+.cart_bottom {
+  margin: 50px 0;
+  display: flex;
+  justify-content: end;
+}
+.add_icon {
+  color: rgb(87, 87, 87);
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  background-color: #e8e8a6;
+  margin: 0 30px;
+  height: 30px;
+  width: 30px;
+  vertical-align: middle;
+  padding: 5px;
+}
+
+/* btn */
+.cart_btn {
+  display: flex;
+  justify-content: end;
+}
+.button_check {
+  background-color: #e8e8a6;
+  padding: 12px 33px;
+  color: rgb(87, 87, 87);
+  font-size: 15px;
+  font-weight: bold;
+  margin-right: 20px;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.button_check:hover {
+  background-color: #f3f3f3;
+}
+.button_all {
+  background-color: #c1deae;
+  padding: 12px 33px;
+  color: rgb(87, 87, 87);
+  font-size: 15px;
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.button_all:hover {
+  background-color: #f3f3f3;
+}

@@ -1,0 +1,15 @@
+.slider {
+  height: 250px;
+  /* justify-content: center; */
+}
+
+.review_div {
+  width: 90%;
+  height: 220px;
+  margin-top: 10px;
+  margin-left: 18px;
+  display: flex;
+  justify-content: space-around;
+  border: 1px solid #adadad;
+  border-radius: 10px;
+}

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -157,8 +158,17 @@ REST_FRAMEWORK = {
         # 기본값: JWT 토큰 확인
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',        # BasicAuth로 동작 확인: 추후 끌 것
+        # 'rest_framework.authentication.BasicAuthentication',        # BasicAuth로 동작 확인: 추후 끌 것
     ),
+}
+
+# SimpleJWT 관련 추가 설정
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=14),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'TOKEN_USER_CLASS': 'accounts.User'
 }
 
 # Swagger에서 인증을 Basic으로 사용하도록 정의: 추후 바꿀 것
@@ -169,3 +179,8 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+# 카카오 로그인을 위한 환경설정값
+REACT_APP_REST_API_KEY = os.environ.get("REACT_APP_REST_API_KEY")
+REACT_APP_REDIRECT_URI = os.environ.get("REACT_APP_REDIRECT_URI")
+REACT_APP_JS_KEY = os.environ.get("REACT_APP_JS_KEY")

@@ -11,7 +11,7 @@ const style = {
   bgcolor: 'background.paper',
   float: 'left',
   margin: '0px 20px 0 100px',
-  paddingTop: '70px',
+  paddingTop: '62px',
   position: "sticky",
   top: "0"
 };
@@ -28,7 +28,7 @@ function Category() {
         <></>
       ) : (
         <List sx={style} component="nav" aria-label="mailbox folders" >
-          <h2 style={{ padding: "16px 0 0 8px " }}>카테고리</h2>
+          <h2 style={{ padding: "0px 0 0 8px " }}>카테고리</h2>
           <ListItem button>
             <ListItemText primary="Inbox" />
           </ListItem>

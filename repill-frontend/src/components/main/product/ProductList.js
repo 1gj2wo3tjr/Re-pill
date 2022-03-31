@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -9,6 +9,8 @@ import { CardActionArea } from "@mui/material";
 import { useMediaQuery } from "react-responsive";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import CartModal from "./CartModal";
 
 function ProductList({ list }) {
   const isMobile = useMediaQuery({
@@ -18,6 +20,32 @@ function ProductList({ list }) {
   const isMiddle = useMediaQuery({
     query: "(max-width: 1200px)",
   });
+
+  let token = sessionStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  const [open, setOpen] = useState(false);
+
+  const goCart = (productId) => {
+    axios
+      .post(
+        `http://127.0.0.1:8000/api/v1/products/cart/`,
+        {
+          quantity: 1,
+          product: productId,
+        },
+        {
+          headers: headers,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setOpen((prev) => !prev);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -48,15 +76,14 @@ function ProductList({ list }) {
                 <CardActionArea
                   sx={{ display: "flex", justifyContent: "start" }}
                 >
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={item.thumbnail_url}
-                    alt="thumbnail_url"
-                    sx={{
-                      objectFit: "scale-down",
-                      paddingTop: "20px",
+                  <img
+                    src={item.thumbnail_url}
+                    style={{
+                      width: "120px",
+                      margin: "20px",
+                      objectFit: "contain",
                     }}
+                    alt={item.name}
                   />
                   <CardContent style={{ height: "120px" }}>
                     <Typography
@@ -93,6 +120,7 @@ function ProductList({ list }) {
                 <Button
                   sx={{ borderRadius: "20px" }}
                   style={{ backgroundColor: "#E8E8A6" }}
+                  onClick={() => goCart(item.id)}
                 >
                   <AddShoppingCartIcon
                     sx={{ color: "rgb(87, 87, 87)" }}
@@ -160,6 +188,7 @@ function ProductList({ list }) {
                     <Button
                       sx={{ borderRadius: "20px" }}
                       style={{ backgroundColor: "#E8E8A6" }}
+                      onClick={() => goCart(item.id)}
                     >
                       <AddShoppingCartIcon
                         sx={{ color: "rgb(87, 87, 87)" }}
@@ -229,6 +258,7 @@ function ProductList({ list }) {
                     <Button
                       sx={{ borderRadius: "20px" }}
                       style={{ backgroundColor: "#E8E8A6" }}
+                      onClick={() => goCart(item.id)}
                     >
                       <AddShoppingCartIcon
                         sx={{ color: "rgb(87, 87, 87)" }}
@@ -241,6 +271,7 @@ function ProductList({ list }) {
           )}
         </>
       )}
+      {open ? <CartModal open={open} setOpen={setOpen} /> : null}
     </>
   );
 }

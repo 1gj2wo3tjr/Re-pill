@@ -8,14 +8,14 @@ function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("token") === null) {
+    if (sessionStorage.getItem("token") === null) {
       setLogin(false);
     } else {
       setLogin(true);
     }
   });
   const clickLogout = () => {
-    localStorage.clear();
+    sessionStorage.clear();
     setLogin(false);
     navigate("/");
   };

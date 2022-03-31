@@ -10,10 +10,11 @@ import Footer from "./components/common/Footer";
 import KakaoLogin from "./components/main/login/KakaoLogin";
 import Auth from "./components/main/login/Auth";
 import Mypage from "./components/main/mypage/Mypage";
+import Subscriptions from "./components/main/mypage/Subscriptions";
 import AddressTab from "./components/main/mypage/address/AddressTab";
 import Recommend from "./components/main/recommend/Recommend";
 import Cart from "./components/main/cart/Cart";
-import MyorderTab from "./components/main/mypage/myorder/MyorderTab"
+import MyorderTab from "./components/main/mypage/myorder/MyorderTab";
 import Order from "./components/main/order/Order";
 import OrderCompleted from "./components/main/order/OrderCompleted";
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="/mypage/myorder" element={<MyorderTab />} />
           <Route path="/order" element={<Order />} />
           <Route path="/orderCompleted" element={<OrderCompleted />} />
+          <Route path="/mypage/subscriptions" element={<Subscriptions />} />
         </Routes>
       </div>
       <Footer />

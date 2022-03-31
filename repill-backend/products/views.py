@@ -2,7 +2,7 @@ from django.shortcuts import render, get_list_or_404, get_object_or_404
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView
@@ -12,6 +12,7 @@ from .serializers import ProductListSerializer, ProductSerializer, ReviewListSer
 from backend.permissions import IsOwnerOrReadOnly, IsOwnerOnly
 
 from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 class ProductList(ListCreateAPIView):
     """
@@ -61,6 +62,9 @@ class ReviewList(ListCreateAPIView):
     permission_classes = [AllowAny]
     queryset = Review.objects.all()
     serializer_class = ReviewListSerializer
+    
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['product']
 
     def post(self, request):
         if not request.user.is_authenticated:
@@ -92,16 +96,21 @@ class CartList(ListCreateAPIView):
         return Cart.objects.filter(user=user)
 
     def post(self, request):
-        # 장바구니 내역을 생성할 때, 이미 사용자 장바구니에 해당 상품이 존재하는지 체크하고 이미 존재한다면 400 에러를 반환합니다.
-        cart = Cart.objects.filter(user=request.user, product=request.data.product)
+        cart = Cart.objects.get(user=request.user, product=request.data.get('product'))
         if cart:
-            # 이미 장바구니에 있는 상품
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            serializer = CartSerializer(instance=cart, data=request.data)
+        else:
+            serializer = CartSerializer(data=request.data)
 
-        serializer = CartSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            if cart:
+                # 장바구니에 이미 존재하는 상품이라면 상품 개수를 새 요청의 개수만큼 증가시킵니다.
+                new_quantity = cart.quantity + int(request.data.get('quantity'))
+                serializer.save(user=request.user, quantity=new_quantity)
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            else:
+                serializer.save(user=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class CartDetail(RetrieveUpdateDestroyAPIView):
     """

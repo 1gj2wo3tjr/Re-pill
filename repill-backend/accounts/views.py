@@ -62,7 +62,9 @@ class KakaoLogin(View):
             "uid": user_info.uid,
             "name": user_info.name,
             "email": user_info.email,
-            "profile_img": user_info.profile_img
+            "profile_img": user_info.profile_img,
+            "is_admin": user_info.is_admin,
+            "is_staff": user_info.is_staff
         }, status=200)
 
 

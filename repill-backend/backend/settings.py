@@ -36,11 +36,13 @@ INSTALLED_APPS = [
     'accounts',
     'community',
     'products',
+    'survey',
 
     # Third-party apps
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_filters',
 
     'django.contrib.admin',
     'django.contrib.auth',

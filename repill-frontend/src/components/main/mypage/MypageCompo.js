@@ -8,7 +8,7 @@ import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import axios from "axios";
+import Calender from "./Calender";
 
 function MypageCompo() {
   const useStyles = makeStyles((theme) => ({
@@ -22,61 +22,71 @@ function MypageCompo() {
     },
   }));
   const classes = useStyles();
-
-  const [form, setForm] = useState([]);
-  useEffect(() => {
-    axios
-      .post("https://kapi.kakao.com/v2/user/me", {})
-      .then((res) => {
-        console.log(res.data);
-        setForm(res.data);
-      })
-      .catch(({ response }) => {
-        if (response.status === 500) {
-          alert("만료된 토큰입니다.");
-          localStorage.removeItem("jwt");
-          window.location.href = "/";
-        }
-      });
-  });
+  const userName = sessionStorage.getItem("name");
+  const userEmail = sessionStorage.getItem("email");
+  const userProfile = sessionStorage.getItem("img");
 
   return (
     <>
       <div className={classes.root}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <div style={{ margin: "0 auto" }}>
-              <Paper className={classes.paper}>
+            <div
+              style={{
+                margin: "0 auto",
+              }}
+            >
+              <Paper
+                className={classes.paper}
+                style={{ backgroundColor: "rgba(245,254,192,50%)" }}
+              >
                 <div class="container">
                   <div class="row">
                     <div class="profile">
-                      {/* <Avatar
-                        alt="Remy Sharp"
-                        src=""
-                        sx={{ width: 200, height: 200 }}
-                      /> */}
-
                       <Grid container spacing={3}>
-                        <Grid item xs={12} key={2}>
+                        <Grid item xs={5} key={2}>
+                          <Avatar
+                            src={userProfile}
+                            sx={{ width: 200, height: 200, marginLeft: 10 }}
+                          />
+                        </Grid>
+                        <Grid item xs={7} key={2}>
                           <Box
                             sx={{
                               width: "100%",
                               maxWidth: 360,
-                              bgcolor: "background.paper",
+                              marginTop: 7,
                             }}
+                            style={{ backgroundColor: "rgba(245,254,192,50%)" }}
                           >
-                            <Box sx={{ my: 3, mx: 2 }}>
+                            <Box
+                              sx={{ my: 3, mx: 2 }}
+                              style={{
+                                backgroundColor: "rgba(245,254,192,50%)",
+                              }}
+                            >
                               <Grid container alignItems="center">
-                                <Grid item xs>
+                                <Grid
+                                  item
+                                  xs
+                                  style={{
+                                    backgroundColor: "rgba(245,254,192,50%)",
+                                  }}
+                                >
                                   <Typography
                                     gutterBottom
                                     variant="h4"
                                     component="div"
                                   >
-                                    사용자명
+                                    {userName}
                                   </Typography>
                                 </Grid>
-                                <Grid item>
+                                <Grid
+                                  item
+                                  style={{
+                                    backgroundColor: "rgba(245,254,192,50%)",
+                                  }}
+                                >
                                   <Typography
                                     gutterBottom
                                     variant="h6"
@@ -93,7 +103,7 @@ function MypageCompo() {
                               variant="h6"
                               component="div"
                             >
-                              카카오톡 이메일 주소
+                              E-mail : {userEmail}
                             </Typography>
                           </Box>
                         </Grid>
@@ -113,19 +123,41 @@ function MypageCompo() {
             </div>
           </Grid>
           <Grid item xs={6}>
-            <Paper className={classes.paper}>내 영양분석</Paper>
+            <Paper
+              className={classes.paper}
+              style={{ backgroundColor: "rgba(245,254,192,50%)" }}
+            >
+              내 영양분석
+            </Paper>
           </Grid>
           <Grid item xs={6}>
-            <Paper className={classes.paper}>내 구독정보</Paper>
+            <Paper
+              className={classes.paper}
+              style={{ backgroundColor: "rgba(245,254,192,50%)" }}
+            >
+              내 구독정보
+              <hr></hr>
+              <Calender className="flex justify-center items-center" />
+            </Paper>
           </Grid>
           <Grid item xs={12}>
             <h3 style={{ textAlign: "center" }}>맞춤형 케어</h3>
           </Grid>
           <Grid item xs={6}>
-            <Paper className={classes.paper}>무릎 관절염</Paper>
+            <Paper
+              className={classes.paper}
+              style={{ backgroundColor: "rgba(245,254,192,50%)" }}
+            >
+              무릎 관절염
+            </Paper>
           </Grid>
           <Grid item xs={6}>
-            <Paper className={classes.paper}>안구 건조증</Paper>
+            <Paper
+              className={classes.paper}
+              style={{ backgroundColor: "rgba(245,254,192,50%)" }}
+            >
+              안구 건조증
+            </Paper>
           </Grid>
         </Grid>
       </div>

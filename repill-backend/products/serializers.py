@@ -35,7 +35,7 @@ class ReviewListSerializer(serializers.ModelSerializer):
     content = serializers.CharField(allow_blank=True, trim_whitespace=False, write_only=True)
     class Meta:
         model = Review
-        fields = ('id', 'user', 'product', 'title', 'content', 'rating')
+        fields = ('id', 'user', 'product', 'content', 'rating')
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -44,6 +44,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
+        fields = '__all__'
         
 class CartSerializer(serializers.ModelSerializer):
     """
@@ -52,7 +53,7 @@ class CartSerializer(serializers.ModelSerializer):
     장바구니 모델의 특성상 List, Detail이 별개의 serializer를 필요로 하지 않습니다.
     """
     user = serializers.StringRelatedField(read_only=True)
-    delivery_fee = serializers.ReadOnlyField()
+    # delivery_fee = serializers.ReadOnlyField()
 
     class Meta:
         model = Cart

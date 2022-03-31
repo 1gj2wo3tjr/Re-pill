@@ -74,7 +74,43 @@
 /* MyorderTab.js */
 
 /* 리뷰쓰기 버튼 */
-.order_review_button {
+.order_review_register_button {
+  padding: 1rem;
+  width: 9rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #F2F5C8;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-top: 5%;
+}
+
+/* 리뷰 보기 버튼 */
+.order_review_detail_button {
+  padding: 1rem;
+  width: 9rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #F2F5C8;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-top: 5%;
+}
+
+/* 리뷰 수정 버튼 */
+.order_review_edit_button {
+  padding: 1rem;
+  width: 9rem;
+  border-radius: 30px;
+  border: 0;
+  background-color: #F2F5C8;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(207 206 206);
+  margin-top: 5%;
+}
+
+/* 리뷰 삭제 버튼 */
+.order_review_delete_button {
   padding: 1rem;
   width: 9rem;
   border-radius: 30px;

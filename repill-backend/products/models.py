@@ -39,8 +39,23 @@ class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    title = models.CharField(max_length=100)
     content = models.TextField()
 
     RATING_CHOICES = [(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')]
     rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES)
+
+class Cart(models.Model):
+    """
+    장바구니 모델입니다.
+    
+    user: 사용자
+    product: 대상 상품
+    quantity: 수량
+    delivery_fee: 배송료
+
+    한 사용자의 전체 장바구니 == user.id가 같은 모든 장바구니 목록
+    """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveSmallIntegerField()
+    delivery_fee = models.PositiveIntegerField()

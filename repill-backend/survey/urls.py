@@ -17,12 +17,6 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('items/', views.ProductList.as_view()),
-    path('items/<int:pk>/', views.ProductDetail.as_view()),
-
-    path('reviews/', views.ReviewList.as_view()),
-    path('reviews/<int:pk>', views.ReviewDetail.as_view()),
-    
-    path('cart/', views.CartList.as_view()),
-    path('cart/<int:pk>', views.CartDetail.as_view()),
+    path('report/', views.SurveyList.as_view()),
+    path('report/<str:uuid>', views.Survey.as_view()),
 ]

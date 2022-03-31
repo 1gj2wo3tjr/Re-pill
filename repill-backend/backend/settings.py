@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'accounts',
     'community',
     'products',
+    'survey',
 
     # Third-party apps
     'corsheaders',
@@ -158,8 +159,17 @@ REST_FRAMEWORK = {
         # 기본값: JWT 토큰 확인
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',        # BasicAuth로 동작 확인: 추후 끌 것
+        # 'rest_framework.authentication.BasicAuthentication',        # BasicAuth로 동작 확인: 추후 끌 것
     ),
+}
+
+# SimpleJWT 관련 추가 설정
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=14),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'TOKEN_USER_CLASS': 'accounts.User'
 }
 
 # Swagger에서 인증을 Basic으로 사용하도록 정의: 추후 바꿀 것

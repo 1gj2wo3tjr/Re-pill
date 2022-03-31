@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/v1/accounts/', include('accounts.urls')),
     path('api/v1/community/', include('community.urls')),
     path('api/v1/products/', include('products.urls')),
+    path('api/v1/survey/', include('survey.urls')),
 ] + yasg.schema_url_patterns

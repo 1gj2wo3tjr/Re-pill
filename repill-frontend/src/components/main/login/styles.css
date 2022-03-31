@@ -15,7 +15,7 @@ html {
     padding: 40px;
     transform: translate(-50%, -50%);
     background:
-    #94ff97
+    rgba(245,254,192,50%)
     ;
     box-sizing: border-box;
     box-shadow: 0 15px 25px rgba(0,0,0,.6);
@@ -25,7 +25,7 @@ html {
   .login-box h2 {
     margin: 0 0 30px;
     padding: 0;
-    color: #fff;
+    color: black;
     text-align: center;
   }
   
@@ -54,14 +54,7 @@ html {
     pointer-events: none;
     transition: .5s;
   }
-  
-  .login-box .user-box input:focus ~ label,
-  .login-box .user-box input:valid ~ label {
-    top: -20px;
-    left: 0;
-    color: #03e9f4;
-    font-size: 12px;
-  }
+
   
   .login-box form a {
     position: relative;
@@ -74,7 +67,6 @@ html {
     transition: .5s;
     margin-top: 40px;
     letter-spacing: 4px;
-    /* margin-left: 30%; */
   }
   
   

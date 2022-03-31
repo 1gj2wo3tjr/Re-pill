@@ -3,9 +3,14 @@ import DaumPostcode from "react-daum-postcode";
 import { Modal } from 'semantic-ui-react'
 import { TableRow, TableCell } from "@mui/material";
 import { useMediaQuery } from 'react-responsive';
-import styles from "./Mypage.module.css"
+import styles from "../Mypage.module.css"
+import axios from "axios"
 
 function AddressAddModal({ address, setAddress, open, setOpen }) {
+  let token = localStorage.getItem('token')
+  const headers = {
+    Authorization: `Bearer ${token}`
+  }
   const [popup, setPopUp] = useState(false)
   const [form, setForm] = useState({
     name: "",
@@ -40,12 +45,26 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
       ...form,
       [name] : value
     })
-    console.log(form)
   }
 
   const registerAddress = () => {
-    alert("hi")
     // axios post 요청 코드
+    axios.post("http://127.0.0.1:8000/api/v1/accounts/address/", {
+      address_name: form.name,
+      address: address.address,
+      detailed_address: form.subAddress,
+      zipcode: address.zonecode,
+      phone_number: form.phoneNum
+    },
+    {
+      headers: headers
+    })
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err))
+    setForm("")
+    address.address = ""
+    address.zonecode = ""
+    window.location.reload(true)
   }
 
   return (
@@ -64,7 +83,7 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
               </TableRow>
               <TableRow style={{ display: "flex", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem", textAlign: "center" }}>
                 <div style={{ fontSize: "1rem", width: "40%" }}>연락처</div>
-                <div style={{ fontSize: "1rem", width: "60%" }}><input type="text" onChange={onChange} value={form.phoneNum} name="phoneNum" style={{ width: "82%" }} /></div>
+                <div style={{ fontSize: "1rem", width: "60%" }}><input type="text" onChange={onChange} value={form.phoneNum} name="phoneNum" style={{ width: "82%" }} maxlength="13" /></div>
               </TableRow>
               <TableRow style={{ display: "flex", justifyContent: "space-between", border: "1px solid black", marginTop: "1%" }}>
                 <TableCell style={{ fontSize: "1rem", width: "40%", textAlign: "center" }}>주소</TableCell>
@@ -106,7 +125,7 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
               </TableRow>
               <TableRow style={{ display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem" }}>
                 <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>연락처</TableCell>
-                <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.phoneNum} name="phoneNum" /></TableCell>
+                <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.phoneNum} name="phoneNum" maxlength="13" /></TableCell>
               </TableRow>
               <TableRow style={{ display: "flex", justifyContent: "space-between", border: "1px solid black", marginTop: "1%" }}>
                 <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>주소</TableCell>

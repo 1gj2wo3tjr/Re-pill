@@ -45,26 +45,51 @@ function ProductReview({ list }) {
         }
       `}
       </style>
-      {isMobile ? (
-        <Slider {...mobile_settings} className={styles.slider}>
-          {list.map((item, index) => (
-            <div key={index}>
-              <div className={styles.review_div}>
-                {item.postId}, {item.id}
-              </div>
-            </div>
-          ))}
-        </Slider>
+      {list.length > 0 ? (
+        <>
+          {isMobile ? (
+            <Slider {...mobile_settings} className={styles.slider}>
+              {list.map((item, index) => (
+                <div key={index}>
+                  <div className={styles.review_div}>
+                    {item.postId}, {item.id}
+                  </div>
+                </div>
+              ))}
+            </Slider>
+          ) : (
+            <Slider {...settings} className={styles.slider}>
+              {list.map((item, index) => (
+                <div key={index}>
+                  <div className={styles.review_div}>
+                    {item.postId}, {item.id}
+                  </div>
+                </div>
+              ))}
+            </Slider>
+          )}
+        </>
       ) : (
-        <Slider {...settings} className={styles.slider}>
-          {list.map((item, index) => (
-            <div key={index}>
-              <div className={styles.review_div}>
-                {item.postId}, {item.id}
-              </div>
-            </div>
-          ))}
-        </Slider>
+        <div
+          style={{
+            width: "100%",
+            height: "100px",
+            backgroundColor: "rgb(241 241 241)",
+            borderRadius: "10px",
+            textAlign: "center",
+            display: "table",
+          }}
+        >
+          <p
+            style={{
+              fontSize: "15px",
+              display: "table-cell",
+              verticalAlign: "middle",
+            }}
+          >
+            등록된 리뷰가 없습니다. 😥
+          </p>
+        </div>
       )}
     </>
   );

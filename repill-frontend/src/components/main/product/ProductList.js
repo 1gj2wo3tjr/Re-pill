@@ -21,31 +21,70 @@ function ProductList({ list }) {
 
   return (
     <>
+      <style>
+        {`
+        .css-h93ljk-MuiTypography-root,.css-r40f8v-MuiTypography-root,
+        .css-pxfymf-MuiTypography-root,.css-1tt4jnm-MuiTypography-root,
+        .css-kxbeit-MuiTypography-root,.css-tn2rp-MuiTypography-root,
+        .css-3gthtk-MuiTypography-root, .css-162xqhf-MuiTypography-root,
+        .css-1ef4pj9-MuiTypography-root{
+          font-family: "Noto Sans KR";
+        }
+
+      `}
+      </style>
       {isMobile ? (
         <>
           {list.map((item, index) => (
             <Card
               sx={{
-                maxWidth: "48%",
-                minWidth: "48%",
-                margin: "1%",
+                maxWidth: "100%",
+                minWidth: "100%",
+                marginBottom: "15px",
               }}
               key={index}
             >
               <Link to={`/product/${item.id}`}>
-                <CardActionArea>
+                <CardActionArea
+                  sx={{ display: "flex", justifyContent: "start" }}
+                >
                   <CardMedia
                     component="img"
                     height="140"
-                    image={item.url}
-                    alt="green iguana"
+                    image={item.thumbnail_url}
+                    alt="thumbnail_url"
+                    sx={{
+                      objectFit: "scale-down",
+                      paddingTop: "20px",
+                    }}
                   />
                   <CardContent style={{ height: "120px" }}>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {item.id}
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      sx={{
+                        color: "#219f94",
+                        fontWeight: "bold",
+                        fontSize: "16px",
+                      }}
+                    >
+                      {item.company}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {item.title}
+                      {item.name}
+                    </Typography>
+                    <Typography
+                      variant="h5"
+                      color="text.secondary"
+                      sx={{
+                        float: "right",
+                        paddingTop: "10px",
+                        fontWeight: "bold",
+                        color: "#219f94",
+                      }}
+                    >
+                      {item.price.toLocaleString()}원
                     </Typography>
                   </CardContent>
                 </CardActionArea>
@@ -82,15 +121,37 @@ function ProductList({ list }) {
                       <CardMedia
                         component="img"
                         height="140"
-                        image={item.url}
-                        alt="green iguana"
+                        image={item.thumbnail_url}
+                        alt="thumbnail_url"
+                        sx={{ objectFit: "contain", padding: "10px" }}
                       />
                       <CardContent style={{ height: "120px" }}>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {item.id}
+                        <Typography
+                          gutterBottom
+                          variant="h5"
+                          component="div"
+                          sx={{
+                            color: "rgba(0, 0, 0, 0.6)",
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                          }}
+                        >
+                          {item.company}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          {item.title}
+                          {item.name}
+                        </Typography>
+                        <Typography
+                          variant="h5"
+                          color="text.secondary"
+                          sx={{
+                            float: "right",
+                            paddingTop: "10px",
+                            fontWeight: "bold",
+                            color: "#219f94",
+                          }}
+                        >
+                          {item.price.toLocaleString()}원
                         </Typography>
                       </CardContent>
                     </CardActionArea>
@@ -124,16 +185,42 @@ function ProductList({ list }) {
                     <CardActionArea>
                       <CardMedia
                         component="img"
-                        height="140"
-                        image={item.url}
-                        alt="green iguana"
+                        height="200"
+                        image={item.thumbnail_url}
+                        alt="thumbnail_url"
+                        sx={{ objectFit: "contain", padding: "10px" }}
                       />
-                      <CardContent style={{ height: "120px" }}>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {item.id}
+                      <CardContent style={{ height: "130px" }}>
+                        <Typography
+                          gutterBottom
+                          variant="h5"
+                          component="div"
+                          sx={{
+                            color: "rgba(0, 0, 0, 0.6)",
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                          }}
+                        >
+                          {item.company}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {item.title}
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ fontSize: "13px" }}
+                        >
+                          {item.name}
+                        </Typography>
+                        <Typography
+                          variant="h5"
+                          color="text.secondary"
+                          sx={{
+                            float: "right",
+                            paddingTop: "10px",
+                            fontWeight: "bold",
+                            color: "#219f94",
+                          }}
+                        >
+                          {item.price.toLocaleString()}원
                         </Typography>
                       </CardContent>
                     </CardActionArea>

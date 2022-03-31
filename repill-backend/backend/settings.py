@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'accounts',
     'community',
     'products',
+    'survey',
 
     # Third-party apps
     'corsheaders',

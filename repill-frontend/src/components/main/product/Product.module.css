@@ -142,6 +142,7 @@ input:focus {
   background-color: #e8e8a6;
   margin: 0 10px;
   cursor: pointer;
+  width: 50px;
 }
 
 .search_num {
@@ -204,17 +205,16 @@ input:focus {
 }
 .qty_btn {
   color: rgb(87, 87, 87);
-  font-size: 20px;
   font-weight: bold;
   border: 0px;
   border-radius: 20px;
   background-color: #e8e8a6;
   margin: 0 10px;
-  cursor: pointer;
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   vertical-align: middle;
-  padding: 10px;
+  padding: 5px;
+  cursor: pointer;
 }
 .qty_btn:hover {
   background-color: #f3f3f3;

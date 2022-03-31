@@ -9,12 +9,18 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import PaymentIcon from "@mui/icons-material/Payment";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import CartModal from "./CartModal";
 
 function ProductDetail() {
   let params = useParams();
+  let token = sessionStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
   const [detail, setDetail] = useState([]);
   const [review, setReview] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [open, setOpen] = useState(false);
 
   const getDetail = async () => {
     window.scrollTo({ top: 0 });
@@ -37,13 +43,12 @@ function ProductDetail() {
   });
 
   const onChange = (e) => {
-    // console.log(e.target.value);
+    console.log(e.target.value);
     setQuantity(e.target.value);
   };
 
   const quantitySub = () => {
     let a = quantity;
-    console.log(a);
     if (quantity > 1) {
       a--;
       setQuantity(a);
@@ -52,13 +57,30 @@ function ProductDetail() {
 
   const quantityAdd = () => {
     let a = quantity;
-    console.log(a);
     if (quantity < 999) {
       a++;
       setQuantity(a);
     }
-    // setQuantity(a++);
-    // console.log(a);
+  };
+
+  const goCart = () => {
+    axios
+      .post(
+        `http://127.0.0.1:8000/api/v1/products/cart/`,
+        {
+          quantity: quantity,
+          product: detail.id,
+        },
+        {
+          headers: headers,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setOpen(true);
+        console.log(open);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -76,6 +98,14 @@ function ProductDetail() {
 
   return (
     <>
+      <style>
+        {`
+        .css-i4bv87-MuiSvgIcon-root{
+          width: 30px;
+          height: 30px;
+        }
+      `}
+      </style>
       {isMobile ? (
         <Container className={styles.mob_container}>
           <div className={styles.mob_top}>
@@ -100,7 +130,7 @@ function ProductDetail() {
                     구매 수량
                   </p>
                 </div>
-                <div>
+                <div style={{ alignItem: "center" }}>
                   <button
                     className={styles.mob_qty_btn}
                     onClick={() => quantitySub()}
@@ -143,17 +173,14 @@ function ProductDetail() {
                   marginTop: "20px",
                 }}
               >
-                {/* 회원 토큰 */}
-                <Link to={`/cart`}>
-                  <button className={styles.mob_cart}>
-                    <div style={{ display: "block", justifyContent: "center" }}>
-                      <AddShoppingCartIcon
-                        sx={{ color: "rgb(87, 87, 87)" }}
-                      ></AddShoppingCartIcon>{" "}
-                      <p> 장바구니 담기</p>
-                    </div>
-                  </button>
-                </Link>
+                <button className={styles.mob_cart} onClick={goCart}>
+                  <div style={{ display: "block", justifyContent: "center" }}>
+                    <AddShoppingCartIcon
+                      sx={{ color: "rgb(87, 87, 87)" }}
+                    ></AddShoppingCartIcon>{" "}
+                    <p> 장바구니 담기</p>
+                  </div>
+                </button>
                 <button className={styles.mob_buy}>
                   <div style={{ display: "block", justifyContent: "center" }}>
                     <PaymentIcon
@@ -225,13 +252,18 @@ function ProductDetail() {
                     구매 수량
                   </p>
                 </div>
-                <div style={{ margin: "3px 0 0 80px" }}>
-                  <button
+                <div
+                  style={{
+                    margin: "3px 0 0 80px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <RemoveIcon
                     className={styles.qty_btn}
                     onClick={() => quantitySub()}
-                  >
-                    <RemoveIcon></RemoveIcon>
-                  </button>
+                  ></RemoveIcon>
                   <input
                     type="text"
                     value={quantity}
@@ -240,12 +272,10 @@ function ProductDetail() {
                     onChange={onChange}
                     disabled
                   />
-                  <button
+                  <AddIcon
                     className={styles.qty_btn}
                     onClick={() => quantityAdd()}
-                  >
-                    <AddIcon></AddIcon>
-                  </button>
+                  ></AddIcon>
                 </div>
               </div>
               <div className={styles.detail_price}>
@@ -261,20 +291,19 @@ function ProductDetail() {
                 <p>{(detail.price * quantity).toLocaleString()} 원</p>
               </div>
               <div style={{ float: "right", marginTop: "20px" }}>
-                {/* 회원 토큰 */}
-                <Link to={`/cart`}>
-                  <button className={styles.button_cart}>
-                    <div style={{ display: "flex", justifyContent: "start" }}>
-                      <AddShoppingCartIcon
-                        sx={{
-                          color: "rgb(87, 87, 87)",
-                          marginRight: "10px",
-                        }}
-                      ></AddShoppingCartIcon>{" "}
-                      <p> 장바구니 담기</p>
-                    </div>
-                  </button>
-                </Link>
+                {/* <Link to={`/cart`}> */}
+                <button className={styles.button_cart} onClick={goCart}>
+                  <div style={{ display: "flex", justifyContent: "start" }}>
+                    <AddShoppingCartIcon
+                      sx={{
+                        color: "rgb(87, 87, 87)",
+                        marginRight: "10px",
+                      }}
+                    ></AddShoppingCartIcon>{" "}
+                    <p> 장바구니 담기</p>
+                  </div>
+                </button>
+                {/* </Link> */}
                 <Link to={`/order`}>
                   <button className={styles.button_buy}>
                     <div style={{ display: "flex", justifyContent: "start" }}>
@@ -315,6 +344,7 @@ function ProductDetail() {
             <p style={{ fontSize: "16px", fontWeight: "bold" }}>상품 리뷰</p>
             <ProductReview list={review} />
           </div>
+          {open ? <CartModal /> : null}
         </Container>
       )}
     </>

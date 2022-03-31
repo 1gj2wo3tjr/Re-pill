@@ -53,7 +53,7 @@ class CartSerializer(serializers.ModelSerializer):
     장바구니 모델의 특성상 List, Detail이 별개의 serializer를 필요로 하지 않습니다.
     """
     user = serializers.StringRelatedField(read_only=True)
-    delivery_fee = serializers.ReadOnlyField()
+    # delivery_fee = serializers.ReadOnlyField()
 
     class Meta:
         model = Cart

@@ -2,7 +2,7 @@ from django.shortcuts import render, get_list_or_404, get_object_or_404
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView
@@ -12,6 +12,7 @@ from .serializers import ProductListSerializer, ProductSerializer, ReviewListSer
 from backend.permissions import IsOwnerOrReadOnly, IsOwnerOnly
 
 from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 class ProductList(ListCreateAPIView):
     """
@@ -61,6 +62,9 @@ class ReviewList(ListCreateAPIView):
     permission_classes = [AllowAny]
     queryset = Review.objects.all()
     serializer_class = ReviewListSerializer
+    
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['product']
 
     def post(self, request):
         if not request.user.is_authenticated:

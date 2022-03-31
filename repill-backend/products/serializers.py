@@ -35,7 +35,7 @@ class ReviewListSerializer(serializers.ModelSerializer):
     content = serializers.CharField(allow_blank=True, trim_whitespace=False, write_only=True)
     class Meta:
         model = Review
-        fields = ('id', 'user', 'product', 'title', 'content', 'rating')
+        fields = ('id', 'user', 'product', 'content', 'rating')
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -44,6 +44,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
+        fields = '__all__'
         
 class CartSerializer(serializers.ModelSerializer):
     """

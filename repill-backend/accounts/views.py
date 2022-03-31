@@ -6,10 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User, Order
-
-from .models import User, DeliveryAddress
-from .serializers import DeliveryAddressSerializer
+from .models import User, DeliveryAddress, Order
+from .serializers import DeliveryAddressSerializer, OrderSerializer
 
 import os
 import requests
@@ -64,24 +62,9 @@ class KakaoLogin(View):
             "uid": user_info.uid,
             "name": user_info.name,
             "email": user_info.email,
-            "profile_img": user_info.profile_img
-        }, status)
-
-
-# 주문 관련 API
-class OrderList(APIView):
-    # 특정 사용자의 주문 전체 조회
-    def get(self, request):
-        if request.user.is_authenticated():    
-            orders = Order.objects.filter(user_id=request.user.pk)
-            serializer = OrderSerializer(orders, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-    # 주문 접수
-    def post(self, request):
-        serializer = Order(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
+            "profile_img": user_info.profile_img,
+            "is_admin": user_info.is_admin,
+            "is_staff": user_info.is_staff
         }, status=200)
 
 
@@ -92,6 +75,15 @@ class AddressList(APIView):
         addresses = DeliveryAddress.objects.filter(user=request.user)
         serializer = DeliveryAddressSerializer(addresses, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 배송지 저장
+    def post(self, request):
+        serializer = DeliveryAddressSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class AddressDetail(APIView):
     # 특정 배송지 조회
@@ -122,42 +114,65 @@ class AddressDetail(APIView):
             address.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_403_FORBIDDEN)
-
-
-    # 배송지 저장
-    def post(self, request):
-        serializer = DeliveryAddressSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
 # 주문 관련 API
-class OrderDetail(APIView):
-    def get(self, request, order_pk):
-        try:
-            order = get_object_or_404(Order.objects.get(pk=order_pk))
-            serializer = OrderSerializer(address)
-            if order.user_id == request.user.pk:
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
-        except Order.DoesNotExist():
-            return Response(status=status.HTTP_404_NOT_FOUND)
+class OrderList(APIView):
+    # 특정 사용자의 주문 전체 조회
+    def get(self, request):
+        if request.user.is_authenticated:    
+            orders = Order.objects.filter(user=request.user)
+            serializer = OrderSerializer(orders, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
-    def put(self, request, order_pk):
-        try:
-            order = get_object_or_404(Order.objects.get(pk=order_pk))
-            serializer = OrderSerializer(Order, data=request.data)
+    # 주문 접수
+    def post(self, request):
+        if request.user.is_authenticated:
+            serializer = OrderSerializer(data=request.data)
             if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                serializer.save(user=request.user, order_status=1)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Order.DoesNotExist():
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
+
+class OrderDetail(APIView):
+    # 특정 주문 조회
+    def get(self, request, order_pk):
+        if request.user.is_authenticated:
+            try:
+                order = get_object_or_404(Order, pk=order_pk)
+                serializer = OrderSerializer(order)
+                if order.user == request.user:
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
+    '''
+    주문 수정 (배송지 변경, 주문 상태 변경 등)
+    주문 취소도 PUT 요청으로 (order_status를 0으로 변경)
+    '''
+    def put(self, request, order_pk):
+        if request.user.is_authenticated:
+            try:
+                order = get_object_or_404(Order, pk=order_pk)
+                serializer = OrderSerializer(order, data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
+    # 주문 기록 삭제 (관리자)
     def delete(self, request, order_pk):
-        order = get_object_or_404(Order.objects.get(pk=order_pk))
-        if order.user_id == request.user.pk:
+        if request.user.is_staff:
+            order = get_object_or_404(Order, pk=order_pk)
             order.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_403_FORBIDDEN)

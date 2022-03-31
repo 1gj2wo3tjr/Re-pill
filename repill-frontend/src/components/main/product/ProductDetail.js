@@ -77,8 +77,7 @@ function ProductDetail() {
       )
       .then((res) => {
         console.log(res);
-        setOpen(true);
-        console.log(open);
+        setOpen((prev) => !prev);
       })
       .catch((err) => console.log(err));
   };
@@ -100,10 +99,7 @@ function ProductDetail() {
     <>
       <style>
         {`
-        .css-i4bv87-MuiSvgIcon-root{
-          width: 30px;
-          height: 30px;
-        }
+        
       `}
       </style>
       {isMobile ? (
@@ -131,13 +127,11 @@ function ProductDetail() {
                   </p>
                 </div>
                 <div style={{ alignItem: "center" }}>
-                  <button
+                  <RemoveIcon
                     className={styles.mob_qty_btn}
-                    onClick={() => quantitySub()}
                     style={{ marginRight: "10px" }}
-                  >
-                    <RemoveIcon></RemoveIcon>
-                  </button>
+                    onClick={() => quantitySub()}
+                  ></RemoveIcon>
                   <input
                     type="text"
                     value={quantity}
@@ -146,12 +140,11 @@ function ProductDetail() {
                     onChange={onChange}
                     disabled
                   />
-                  <button
+
+                  <AddIcon
                     className={styles.mob_qty_btn}
                     onClick={() => quantityAdd()}
-                  >
-                    <AddIcon></AddIcon>
-                  </button>
+                  ></AddIcon>
                 </div>
               </div>
               <div className={styles.mob_price}>
@@ -173,7 +166,7 @@ function ProductDetail() {
                   marginTop: "20px",
                 }}
               >
-                <button className={styles.mob_cart} onClick={goCart}>
+                <button className={styles.mob_cart} onClick={() => goCart()}>
                   <div style={{ display: "block", justifyContent: "center" }}>
                     <AddShoppingCartIcon
                       sx={{ color: "rgb(87, 87, 87)" }}
@@ -292,7 +285,7 @@ function ProductDetail() {
               </div>
               <div style={{ float: "right", marginTop: "20px" }}>
                 {/* <Link to={`/cart`}> */}
-                <button className={styles.button_cart} onClick={goCart}>
+                <button className={styles.button_cart} onClick={() => goCart()}>
                   <div style={{ display: "flex", justifyContent: "start" }}>
                     <AddShoppingCartIcon
                       sx={{
@@ -344,9 +337,9 @@ function ProductDetail() {
             <p style={{ fontSize: "16px", fontWeight: "bold" }}>상품 리뷰</p>
             <ProductReview list={review} />
           </div>
-          {open ? <CartModal /> : null}
         </Container>
       )}
+      {open ? <CartModal open={open} setOpen={setOpen} /> : null}
     </>
   );
 }

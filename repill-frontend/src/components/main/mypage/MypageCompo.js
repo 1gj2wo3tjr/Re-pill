@@ -137,7 +137,7 @@ function MypageCompo() {
             >
               내 구독정보
               <hr></hr>
-              <Calender />
+              <Calender className="flex justify-center items-center" />
             </Paper>
           </Grid>
           <Grid item xs={12}>

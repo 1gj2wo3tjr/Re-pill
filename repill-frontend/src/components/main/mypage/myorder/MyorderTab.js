@@ -2,55 +2,87 @@ import React, { useEffect, useState } from 'react'
 import { Container } from "@mui/material";
 import { useMediaQuery } from 'react-responsive';
 import styles from "../Mypage.module.css"
-import ReviewModal from './ReviewModal';
-// import axios from 'axios';
+import ReviewRegisterModal from './ReviewRegisterModal';
+import ReviewDetailModal from './ReviewDetailModal';
+import ReviewEditModal from './ReviewEditModal';
+import axios from 'axios';
 
 function MyorderTab() {
+  let token = localStorage.getItem('token')
+  const headers = {
+    Authorization: `Bearer ${token}`
+  }
   const [list, setList] = useState([
     {
       id: 1,
       title: "지엔엠라이프 GNM자연의품격 루테인11 30캡슐",
       price: "34,500",
-      date: "2022.01.16"
+      date: "2022.01.16",
+      review: false
     },
     {
       id: 2,
       title: "지엔엠라이프 GNM자연의품격 루테인11 30캡슐",
       price: "34,500",
-      date: "2022.01.10"
+      date: "2022.01.10",
+      review: true
     },
     {
       id: 3,
       title: "지엔엠라이프 GNM자연의품격 루테인11 30캡슐",
       price: "34,500",
-      date: "2022.01.10"
+      date: "2022.01.10",
+      review: true
     }
   ])
-  // const today = new Date()
-  const [open, setOpen] = useState(false)
+  const [review, setReview] = useState([])
 
+  // const [list, setList] = useState([])
+
+  // const today = new Date()
+  const [openRegister, setOpenRegister] = useState(false)
+  const [openDetail, setOpenDetail] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
+  const [productId, setProductId] = useState("")
+  const [reviewId, setReviewId] = useState("")
 
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)"
   });
 
-  const handleReviewModal = () => {
-    setOpen((prev) => !prev)
+  const handleRegisterModal = (item) => {
+    setProductId(item.id)
+    setOpenRegister((prev) => !prev)
   }
 
-  // 결제내역 데이터 받아오는 함수
-  // const getOrder = async () => {
-  //   const response = await axios.get(`주소`)
-  //   setList(response.data)
-  // }
+  const handleDetailModal = (item) => {
+    setReviewId(item.id)
+    setOpenDetail((prev) => !prev)
+  }
+
+  const handleEditModal = (item) => {
+    setOpenEdit((prev) => !prev)
+  }
+
+  // 리뷰 데이터 받아오는 함수
+  const getReview = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/v1/products/reviews/", {
+        headers: headers
+      })
+      setReview(response.data)
+    } catch(err) {
+      console.log(err)
+    }
+  }
 
   const cancleOrder = () => {
     alert("삭제")
   }
 
-  // useEffect(() => {
-  //   getOrder()
-  // }, [])
+  useEffect(() => {
+    getReview()
+  }, [])
 
   return (
     <div>
@@ -77,11 +109,17 @@ function MyorderTab() {
                 </div>
               </div>
               <div style={{ width: "25%", display: "flex", flexDirection: "column" }}>
-                <button className={styles.order_review_button_mob} onClick={handleReviewModal}>리뷰쓰기</button>
+                {item.review===true ? (
+                  <button className={styles.order_review_button_mob} onClick={() => handleDetailModal(item)}>리뷰보기</button>
+                ) : (
+                  <button className={styles.order_review_register_button_mob} onClick={() => handleRegisterModal(item)}>리뷰쓰기</button>
+                )}
                 <button className={styles.order_cancle_order_button_mob} onClick={cancleOrder}>구매취소</button>
               </div>
             </div>)}
-            <ReviewModal open={open} setOpen={setOpen} />
+            <ReviewRegisterModal open={openRegister} setOpen={setOpenRegister} id={setProductId} />
+            <ReviewDetailModal open={openDetail} setOpen={setOpenDetail} />
+            <ReviewEditModal open={openEdit} setOpen={setOpenEdit} />
         </Container>
       </>) : (
       <>
@@ -105,12 +143,21 @@ function MyorderTab() {
                   </div>
                 </div>
               </div>
-              <div style={{ width: "20%", marginLeft: "auto", display: "flex", flexDirection: "column" }}>
-                <button className={styles.order_review_button} onClick={handleReviewModal}>리뷰쓰기</button>
+              <div style={{ width: "20%", display: "flex", flexDirection: "column" }}>
+                {item.review===true ? (
+                  <div style={{ display: "flex", justifyContent: "space-around" }}>
+                    <button className={styles.order_review_detail_button} onClick={() => handleDetailModal(item)}>리뷰보기</button>
+                    <button className={styles.order_review_edit_button} onClick={() => handleEditModal(item)}>리뷰수정</button>
+                  </div>
+                ) : (
+                  <button className={styles.order_review_register_button} onClick={() => handleRegisterModal(item)}>리뷰쓰기</button>
+                )}
                 <button className={styles.order_cancle_order_button} onClick={cancleOrder}>구매취소</button>
               </div>
             </div>)}
-            <ReviewModal open={open} setOpen={setOpen} />
+            <ReviewRegisterModal open={openRegister} setOpen={setOpenRegister} id={setProductId} />
+            <ReviewDetailModal open={openDetail} setOpen={setOpenDetail} id={reviewId} />
+            <ReviewEditModal open={openEdit} setOpen={setOpenEdit} />
         </Container>
       </> 
       )}

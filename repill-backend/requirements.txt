@@ -16,6 +16,7 @@ inflection==0.5.1
 itypes==1.2.0
 Jinja2==3.0.3
 MarkupSafe==2.1.1
+mysqlclient==2.1.0
 numpy==1.22.3
 packaging==21.3
 pandas==1.4.1

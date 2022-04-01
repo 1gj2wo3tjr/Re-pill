@@ -19,18 +19,40 @@ import Checkbox from "@mui/material/Checkbox";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
-import { border } from "@mui/system";
+import CartList from "./CartList";
 
 function Cart() {
+  let token = sessionStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
   const [checked, setChecked] = useState([true, false]);
+  const [cart, setCart] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  const isMobile = useMediaQuery({
+    query: "(max-width : 768px)",
+  });
 
   const handleChange1 = (e) => {
     setChecked([e.target.checked, e.target.checked]);
   };
 
-  const isMobile = useMediaQuery({
-    query: "(max-width : 768px)",
-  });
+  const getCart = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/v1/products/cart/`,
+        {
+          headers: headers,
+        }
+      );
+      console.log(response.data);
+      setCart(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // https://mui.com/components/breadcrumbs/
   const breadcrumbs = [
@@ -45,8 +67,21 @@ function Cart() {
     </Typography>,
   ];
 
+  useEffect(() => {
+    getCart();
+  }, []);
+
+  // console.log(product);
   return (
     <>
+      <style>
+        {`
+        .css-17m3tg-MuiTypography-root, .css-1xmvtmc-MuiTypography-root{
+          font-family:"Noto Sans KR";
+          font-size: 20px;
+        }
+      `}
+      </style>
       {isMobile ? (
         <div>
           <Container className={styles.mob_container}>
@@ -107,7 +142,7 @@ function Cart() {
               </Table>
             </div>
             <div className={styles.cart_bottom}>
-              <p>총 2개의 상품 금액</p>
+              <p>총 {cart.length}개의 상품 금액</p>
               <AddIcon className={styles.mob_add_icon}></AddIcon>
               <p>배송비</p>
               <DragHandleIcon className={styles.mob_add_icon}></DragHandleIcon>
@@ -129,13 +164,9 @@ function Cart() {
             <div className={styles.cart_top}>
               <h2>장바구니</h2>
               <Breadcrumbs
-                separator={
-                  <NavigateNextIcon
-                    style={{ fontWeight: "bold", color: "#BCBCBC" }}
-                  />
-                }
+                separator={<NavigateNextIcon fontSize="20px" />}
                 aria-label="breadcrumb"
-                sx={{ fontSize: "18px" }}
+                sx={{ fontSize: "20px" }}
               >
                 {breadcrumbs}
               </Breadcrumbs>
@@ -201,31 +232,23 @@ function Cart() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableCell style={{ textAlign: "center" }}>
-                    {/* 체크박스 */}
-                  </TableCell>
-                  <TableCell style={{ textAlign: "center" }}>a</TableCell>
-                  <TableCell style={{ textAlign: "center" }}>
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                      <RemoveIcon className={styles.qty_icon}></RemoveIcon>
-                      <input
-                        type="text"
-                        // value={quantity}
-                        title="상품개수"
-                        className={styles.qty_input}
-                        // onChange={onChange}
-                        disabled
+                  <>
+                    {cart.map((item, index) => (
+                      <CartList
+                        index={index}
+                        cart={item}
+                        productId={item.product}
+                        total={total}
+                        setTotal={setTotal}
                       />
-                      <AddIcon className={styles.qty_icon}></AddIcon>
-                    </div>
-                  </TableCell>
-                  <TableCell style={{ textAlign: "center" }}>a</TableCell>
-                  <TableCell style={{ textAlign: "center" }}>a</TableCell>
+                    ))}
+                  </>
                 </TableBody>
               </Table>
             </div>
             <div className={styles.cart_bottom}>
-              <p>총 2개의 상품 금액</p>
+              <p>총 {cart.length}개의 상품 금액</p>
+              <p>total:{total}</p>
               <AddIcon className={styles.add_icon}></AddIcon>
               <p>배송비</p>
               <DragHandleIcon className={styles.add_icon}></DragHandleIcon>

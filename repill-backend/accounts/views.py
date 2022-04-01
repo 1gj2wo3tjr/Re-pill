@@ -44,12 +44,12 @@ class KakaoLogin(View):
         url = "https://kapi.kakao.com/v2/user/me"  # 회원 정보 확인을 위한 카카오 API 주소
         social_user = requests.request("POST", url, headers=headers).json()
 
-        if User.objects.filter(uid = social_user.get("id")).exists():  # DB에 회원정보 있으면 로그인
-            user_info = User.objects.get(uid = social_user["id"])
+        if User.objects.filter(username = social_user.get("id")).exists():  # DB에 회원정보 있으면 로그인
+            user_info = User.objects.get(username = social_user["id"])
             jwt_token = get_tokens(user_info)['access']  # JWT 발행
 
         else:  # DB에 회원정보 없으면 회원가입
-            user_info = User(uid = social_user["id"],
+            user_info = User(username = social_user["id"],
                 name = social_user["properties"]["nickname"],
                 email = social_user["properties"].get("email", "no email"),
                 profile_img = social_user["properties"].get("profile_image", None)
@@ -59,7 +59,7 @@ class KakaoLogin(View):
 
         # access_token과 함께 필요한 회원 정보 반환
         return JsonResponse({"access_token": jwt_token,
-            "uid": user_info.uid,
+            "username": user_info.username,
             "name": user_info.name,
             "email": user_info.email,
             "profile_img": user_info.profile_img,

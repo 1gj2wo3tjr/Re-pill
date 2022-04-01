@@ -74,7 +74,7 @@ class ReviewList(ListCreateAPIView):
             return Response(status=status.HTTP_403_FORBIDDEN)
         
         review = request.data
-        serializer = ReviewSerializer(review)
+        serializer = ReviewSerializer(data=review)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -96,7 +96,9 @@ class CartList(ListCreateAPIView):
         return Cart.objects.filter(user=user)
 
     def post(self, request):
-        cart = Cart.objects.get(user=request.user, product=request.data.get('product'))
+        # cart = get_object_or_404(Cart, user=request.user, product=request.data.get('product'))
+        cart = Cart.objects.filter(user=request.user, product=request.data.get('product')).first()
+
         if cart:
             serializer = CartSerializer(instance=cart, data=request.data)
         else:

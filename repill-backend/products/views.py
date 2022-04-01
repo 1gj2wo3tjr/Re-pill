@@ -74,7 +74,7 @@ class ReviewList(ListCreateAPIView):
             return Response(status=status.HTTP_403_FORBIDDEN)
         
         review = request.data
-        serializer = ReviewSerializer(review)
+        serializer = ReviewSerializer(data=review)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

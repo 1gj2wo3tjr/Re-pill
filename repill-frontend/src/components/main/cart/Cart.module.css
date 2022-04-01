@@ -116,6 +116,7 @@
 .cart_btn {
   display: flex;
   justify-content: end;
+  margin-bottom: 100px;
 }
 .button_check {
   background-color: #e8e8a6;

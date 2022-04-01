@@ -127,11 +127,13 @@ function ProductDetail() {
                   </p>
                 </div>
                 <div style={{ alignItem: "center" }}>
-                  <RemoveIcon
+                  <button
                     className={styles.mob_qty_btn}
                     style={{ marginRight: "10px" }}
                     onClick={() => quantitySub()}
-                  ></RemoveIcon>
+                  >
+                    <RemoveIcon></RemoveIcon>
+                  </button>
                   <input
                     type="text"
                     value={quantity}
@@ -140,11 +142,12 @@ function ProductDetail() {
                     onChange={onChange}
                     disabled
                   />
-
-                  <AddIcon
+                  <button
                     className={styles.mob_qty_btn}
                     onClick={() => quantityAdd()}
-                  ></AddIcon>
+                  >
+                    <AddIcon></AddIcon>
+                  </button>
                 </div>
               </div>
               <div className={styles.mob_price}>
@@ -253,10 +256,12 @@ function ProductDetail() {
                     alignItems: "center",
                   }}
                 >
-                  <RemoveIcon
+                  <button
                     className={styles.qty_btn}
                     onClick={() => quantitySub()}
-                  ></RemoveIcon>
+                  >
+                    <RemoveIcon></RemoveIcon>
+                  </button>
                   <input
                     type="text"
                     value={quantity}
@@ -265,10 +270,12 @@ function ProductDetail() {
                     onChange={onChange}
                     disabled
                   />
-                  <AddIcon
+                  <button
                     className={styles.qty_btn}
                     onClick={() => quantityAdd()}
-                  ></AddIcon>
+                  >
+                    <AddIcon></AddIcon>
+                  </button>
                 </div>
               </div>
               <div className={styles.detail_price}>

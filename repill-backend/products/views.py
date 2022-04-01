@@ -96,7 +96,9 @@ class CartList(ListCreateAPIView):
         return Cart.objects.filter(user=user)
 
     def post(self, request):
-        cart = Cart.objects.get(user=request.user, product=request.data.get('product'))
+        # cart = get_object_or_404(Cart, user=request.user, product=request.data.get('product'))
+        cart = Cart.objects.filter(user=request.user, product=request.data.get('product')).first()
+
         if cart:
             serializer = CartSerializer(instance=cart, data=request.data)
         else:

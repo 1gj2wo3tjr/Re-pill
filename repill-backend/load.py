@@ -18,10 +18,10 @@ try:
             print(product['SellerNick'])
             print(product['ProductPrice'])
             print(int(product['ProductPrice']))
-            print(product['ProductImage'])
+            print(product['ProductImage300'])
 
             sql = "INSERT INTO products_product(name, company, price, content, thumbnail_url) VALUES (%s, %s, %s, '', %s)"
-            val = (product['ProductName'], product['SellerNick'], int(product['ProductPrice']), product['ProductImage'])
+            val = (product['ProductName'], product['SellerNick'], int(product['ProductPrice']), product['ProductImage300'])
             print(val)
             
             try:

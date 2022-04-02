@@ -1,60 +1,107 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableBody,
+  Container,
+} from "@mui/material";
 import axios from "axios";
-import { TableCell, TableRow } from "@mui/material";
+import styles from "./Cart.module.css";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Typography from "@mui/material/Typography";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import styles from "./Cart.module.css";
-import { Link } from "react-router-dom";
+import DragHandleIcon from "@mui/icons-material/DragHandle";
 
-function CartList({ index, cart, productId, total, setTotal }) {
+function CartList({ cart, total, setTotal }) {
   const [product, setProduct] = useState([]);
-  const [quantity, setQuantity] = useState("");
-  const [original, setOriginal] = useState(""); // 상품 금액
-  const [price, setPrice] = useState(""); // 수량에 따른 상품 금액
-  const [finalSum, setFinalSum] = useState(total);
-  const [finalRes, setFinalRes] = useState([]);
+  const [checkList, setCheckList] = useState([]);
+  const [idList, setIdList] = useState([]);
 
   const getProduct = () => {
-    axios
-      .get(`http://127.0.0.1:8000/api/v1/products/items/${productId}`)
-      .then((res) => {
-        console.log(res.data);
-        // console.log(cart);
-        // console.log(index);
-        setProduct(res.data);
-        setOriginal(res.data.price);
-        setQuantity(cart.quantity);
-        setPrice(res.data.price * cart.quantity);
-      })
-      .catch((err) => console.log(err));
+    let ids = [];
+
+    cart.map((item, index) =>
+      axios
+        .get(`http://127.0.0.1:8000/api/v1/products/items/${item.product}`)
+        .then((res) => {
+          console.log(res.data);
+          // setProduct((product) => [res.data, ...product]);
+          setProduct((product) => [
+            {
+              id: res.data.id,
+              name: res.data.name,
+              company: res.data.company,
+              thumbnail_url: res.data.thumbnail_url,
+              original: res.data.price,
+              quantity: item.quantity,
+              price: res.data.price * item.quantity,
+            },
+            ...product,
+          ]);
+
+          ids[index] = res.data.id;
+        })
+        .catch((err) => console.log(err))
+    );
+
+    setIdList(ids);
   };
 
-  const quantitySub = () => {
-    let q = quantity;
-    if (quantity > 1) {
-      q--;
-      setQuantity(q);
-      setPrice(q * original);
+  // checkbox 전체 선택 => checkList에 product id값 다 넣기, 해제하면 빈 배열
+  const onCheckedAll = (e) => {
+    console.log("전체 선택 클릭 : ", e.target.checked);
+    // setCheckList(e.target.checked ? idList : []);
+    if (e.target.checked) {
+      setCheckList(idList);
+      getTotal();
+    } else {
+      setCheckList([]);
+      setTotal(0);
     }
   };
 
-  const quantityAdd = () => {
-    let q = quantity;
-    if (quantity < 999) {
-      q++;
-      setQuantity(q);
-      setPrice(q * original);
+  const getTotal = () => {
+    setTotal(0);
+    product.map((item, index) => setTotal((total) => total + item.price));
+  };
+
+  const onChangeEach = (e, id) => {
+    console.log("onChangeEach: ", e.target.checked);
+    // check되면 checkList에 상품 id 넣기
+    const m = product.find((a) => a.id === id);
+
+    if (e.target.checked) {
+      setCheckList([...checkList, id]);
+      setTotal((total) => total + m.price);
+    } else {
+      // check 해제하면, checkList에 해당 productId 아닌 것만 넣기..
+      setCheckList(checkList.filter((unchecked) => unchecked !== id));
+
+      setTotal((total) => total - m.price);
     }
   };
 
   useEffect(() => {
+    setProduct([]);
     getProduct();
-    setFinalSum(finalSum);
-    setFinalRes(finalRes);
-  }, []);
+  }, [cart]);
+
+  // useEffect(() => {
+  //   checkList.map((list, index) => {
+  //     const m = product.find((a) => a.id === list);
+  //     setTotal((total) => total + m.price);
+  //   });
+  // }, [checkList]);
 
   return (
-    <TableRow>
+    <>
       <style>
         {`
         .css-i4bv87-MuiSvgIcon-root{
@@ -66,75 +113,175 @@ function CartList({ index, cart, productId, total, setTotal }) {
         }
       `}
       </style>
-      <TableCell style={{ textAlign: "center" }}>{/* 체크박스 */}</TableCell>
-      <TableCell style={{ textAlign: "center" }}>
-        {/* <Link to={`/product/${product.id}`}> */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            height: "100px",
-            alignItems: "center",
-          }}
-        >
-          <Link to={`/product/${product.id}`}>
-            <div
+      <Table>
+        <TableHead>
+          <TableRow style={{ backgroundColor: "#F2F5C8" }}>
+            <TableCell
               style={{
-                objectFit: "contain",
-                height: "100px",
-                cursor: "pointer",
+                fontSize: "1rem",
+                width: "5%",
+                textAlign: "center",
               }}
             >
-              <img
-                src={product.thumbnail_url}
-                alt=""
-                style={{
-                  objectFit: "contain",
-                  height: "100%",
-                  cursor: "pointer",
-                }}
+              <input
+                type="checkbox"
+                className={styles.checkbox}
+                onChange={onCheckedAll}
+                checked={checkList.length === idList.length}
               />
-            </div>
-          </Link>
-          <Link to={`/product/${product.id}`}>
-            <p style={{ color: "rgba(0, 0, 0, 0.87)" }}>{product.name}</p>
-          </Link>
-        </div>
-        {/* </Link> */}
-      </TableCell>
-      <TableCell style={{ textAlign: "center" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <RemoveIcon
-            className={styles.qty_icon}
-            onClick={() => quantitySub()}
-          ></RemoveIcon>
-          <input
-            type="text"
-            value={quantity}
-            title="상품개수"
-            className={styles.qty_input}
-            // onChange={onChange}
-            disabled
-          />
-          <AddIcon
-            className={styles.qty_icon}
-            onClick={() => quantityAdd()}
-          ></AddIcon>
-        </div>
-      </TableCell>
-      <TableCell style={{ textAlign: "center" }}>
-        {/* {(product.price * quantity).toLocaleString()} */}
-        <p>{price}</p>
-        {/* <input type="text" value={price} onChange={onChange} /> */}
-      </TableCell>
-      <TableCell style={{ textAlign: "center" }}>무료배송</TableCell>
-    </TableRow>
+            </TableCell>
+            <TableCell
+              style={{
+                fontSize: "1rem",
+                width: "40%",
+                textAlign: "center",
+              }}
+            >
+              상품 정보
+            </TableCell>
+            <TableCell
+              style={{
+                fontSize: "1rem",
+                width: "15%",
+                textAlign: "center",
+              }}
+            >
+              수량
+            </TableCell>
+            <TableCell
+              style={{
+                fontSize: "1rem",
+                width: "10%",
+                textAlign: "center",
+              }}
+            >
+              상품 금액
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <>
+            {cart.length !== 0 ? (
+              <>
+                {product.map((item, index) => (
+                  <TableRow>
+                    <TableCell style={{ textAlign: "center" }}>
+                      <input
+                        type="checkbox"
+                        className={styles.checkbox}
+                        onChange={(e) => onChangeEach(e, item.id)}
+                        checked={checkList.includes(item.id)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <div
+                        style={{
+                          display: "flex",
+                          height: "100px",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Link to={`/product/${item.id}`}>
+                          <div
+                            style={{
+                              objectFit: "contain",
+                              height: "100px",
+                              cursor: "pointer",
+                              marginRight: "70px",
+                            }}
+                          >
+                            <img
+                              src={item.thumbnail_url}
+                              alt=""
+                              style={{
+                                objectFit: "contain",
+                                height: "100%",
+                                cursor: "pointer",
+                              }}
+                            />
+                          </div>
+                        </Link>
+                        <Link to={`/product/${item.id}`}>
+                          <div style={{ fontSize: "13px" }}>
+                            <p
+                              style={{
+                                color: "rgba(0, 0, 0, 0.87)",
+                                fontWeight: "bold",
+                                marginBottom: "8px",
+                              }}
+                            >
+                              {item.company}
+                            </p>
+                            <p style={{ color: "rgba(0, 0, 0, 0.87)" }}>
+                              {item.name}
+                            </p>
+                          </div>
+                        </Link>
+                      </div>
+                    </TableCell>
+                    <TableCell style={{ textAlign: "center" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <RemoveIcon
+                          className={styles.qty_icon}
+                          // onClick={() => quantitySub()}
+                        ></RemoveIcon>
+                        <input
+                          type="text"
+                          value={item.quantity}
+                          title="상품개수"
+                          className={styles.qty_input}
+                          // onChange={onChange}
+                          disabled
+                        />
+                        <AddIcon
+                          className={styles.qty_icon}
+                          // onClick={() => quantityAdd()}
+                        ></AddIcon>
+                      </div>
+                    </TableCell>
+                    <TableCell style={{ textAlign: "center" }}>
+                      <p>{item.price.toLocaleString()} 원</p>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </>
+            ) : (
+              <>
+                <TableRow>
+                  <TableCell colSpan={4}>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "100px",
+                        textAlign: "center",
+                        display: "table",
+                        margin: "30px 0",
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontSize: "15px",
+                          display: "table-cell",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        장바구니 목록이 없습니다. 😥
+                      </p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              </>
+            )}
+          </>
+        </TableBody>
+      </Table>
+    </>
   );
 }
 

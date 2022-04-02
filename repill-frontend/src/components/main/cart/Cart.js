@@ -27,34 +27,39 @@ function Cart() {
     Authorization: `Bearer ${token}`,
   };
 
-  const [checked, setChecked] = useState([true, false]);
+  const [checkList, setCheckList] = useState([]);
+  const [idList, setIdList] = useState([]);
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
-
+  const [product, setProduct] = useState([]);
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });
 
-  const handleChange1 = (e) => {
-    setChecked([e.target.checked, e.target.checked]);
+  const getCart = () => {
+    axios
+      .get(`http://127.0.0.1:8000/api/v1/products/cart/`, {
+        headers: headers,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setCart(res.data);
+        // res.data.map((item, index) => getProduct(item.product));
+      })
+      .catch((err) => console.log(err));
   };
 
-  const getCart = async () => {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/products/cart/`,
-        {
-          headers: headers,
-        }
-      );
-      console.log(response.data);
-      setCart(response.data);
-    } catch (err) {
-      console.log(err);
-    }
+  const getProduct = (productId) => {
+    console.log(productId);
+    axios
+      .get(`http://127.0.0.1:8000/api/v1/products/items/${productId}`)
+      .then((res) => {
+        console.log(res.data);
+        setProduct((product) => [res.data, ...product]);
+      })
+      .catch((err) => console.log(err));
   };
 
-  // https://mui.com/components/breadcrumbs/
   const breadcrumbs = [
     <Typography key="1" color="#219F94" fontSize={"18px"} fontWeight={"bold"}>
       01. 장바구니
@@ -67,10 +72,37 @@ function Cart() {
     </Typography>,
   ];
 
+  // 불러온 cart.에서 상품번호 넣기
+  const getList = () => {
+    let ids = [];
+
+    cart.map((item, idx) => {
+      ids[idx] = item.product;
+    });
+
+    setIdList(ids);
+  };
+
+  // checkbox 전체 선택 => checkList에 product id값 다 넣기, 해제하면 빈 배열
+  const onCheckedAll = (e) => {
+    // console.log("전체 선택 클릭 : ", e.target.checked);
+    console.log(e.target.checked);
+    // setCheckList(e.target.checked ? idList : []);
+    if (e.target.checked) {
+      setCheckList(idList);
+    } else {
+      setCheckList([]);
+      // setTotal(0);
+    }
+  };
+
   useEffect(() => {
     getCart();
   }, []);
 
+  useEffect(() => {
+    getList();
+  }, [cart]);
   // console.log(product);
   return (
     <>
@@ -79,6 +111,13 @@ function Cart() {
         .css-17m3tg-MuiTypography-root, .css-1xmvtmc-MuiTypography-root{
           font-family:"Noto Sans KR";
           font-size: 20px;
+        }
+        .css-i4bv87-MuiSvgIcon-root{
+          width: 30px;
+          height: 30px;
+        }
+        .css-1ex1afd-MuiTableCell-root, .css-1ygcj2i-MuiTableCell-root{
+          font-family:"Noto Sans KR";
         }
       `}
       </style>
@@ -100,15 +139,11 @@ function Cart() {
                         padding: "0px 15px",
                       }}
                     >
-                      <FormControlLabel
-                        label=""
-                        control={
-                          <Checkbox
-                            checked={checked[0] && checked[1]}
-                            indeterminate={checked[0] !== checked[1]}
-                            onChange={handleChange1}
-                          />
-                        }
+                      <input
+                        type="checkbox"
+                        className={styles.checkbox}
+                        onChange={onCheckedAll}
+                        checked={checkList.length === idList.length}
                       />
                     </TableCell>
                     <TableCell
@@ -172,87 +207,36 @@ function Cart() {
               </Breadcrumbs>
             </div>
             <div className={styles.cart_main}>
-              <Table>
-                <TableHead>
-                  <TableRow style={{ backgroundColor: "#F2F5C8" }}>
-                    <TableCell
-                      style={{
-                        fontSize: "1rem",
-                        width: "5%",
-                        textAlign: "center",
-                      }}
-                    >
-                      <FormControlLabel
-                        label=""
-                        control={
-                          <Checkbox
-                            checked={checked[0] && checked[1]}
-                            indeterminate={checked[0] !== checked[1]}
-                            onChange={handleChange1}
-                          />
-                        }
-                      />
-                    </TableCell>
-                    <TableCell
-                      style={{
-                        fontSize: "1rem",
-                        width: "40%",
-                        textAlign: "center",
-                      }}
-                    >
-                      상품 정보
-                    </TableCell>
-                    <TableCell
-                      style={{
-                        fontSize: "1rem",
-                        width: "15%",
-                        textAlign: "center",
-                      }}
-                    >
-                      수량
-                    </TableCell>
-                    <TableCell
-                      style={{
-                        fontSize: "1rem",
-                        width: "10%",
-                        textAlign: "center",
-                      }}
-                    >
-                      상품 금액
-                    </TableCell>
-                    <TableCell
-                      style={{
-                        fontSize: "1rem",
-                        width: "10%",
-                        textAlign: "center",
-                      }}
-                    >
-                      배송비
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <>
-                    {cart.map((item, index) => (
-                      <CartList
-                        index={index}
-                        cart={item}
-                        productId={item.product}
-                        total={total}
-                        setTotal={setTotal}
-                      />
-                    ))}
-                  </>
-                </TableBody>
-              </Table>
+              <CartList cart={cart} total={total} setTotal={setTotal} />
             </div>
             <div className={styles.cart_bottom}>
-              <p>총 {cart.length}개의 상품 금액</p>
-              <p>total:{total}</p>
-              <AddIcon className={styles.add_icon}></AddIcon>
+              <div
+                style={{
+                  width: "300px",
+                  textAlign: "center",
+                  display: "flex",
+                  justifyContent: "space-around",
+                  alignItems: "end",
+                  marginTop: "20px",
+                }}
+              >
+                <p style={{ margin: "0px", fontSize: "15px" }}>
+                  총 {checkList.length}개의 상품 금액
+                </p>
+                <p
+                  style={{
+                    fontSize: "22px",
+                    fontWeight: "bold",
+                    color: "#f27370",
+                  }}
+                >
+                  {total.toLocaleString()} 원
+                </p>
+              </div>
+              {/* <AddIcon className={styles.add_icon}></AddIcon>
               <p>배송비</p>
               <DragHandleIcon className={styles.add_icon}></DragHandleIcon>
-              <p>합계</p>
+              <p>합계</p> */}
             </div>
             <div className={styles.cart_btn}>
               <Link to={`/order`}>

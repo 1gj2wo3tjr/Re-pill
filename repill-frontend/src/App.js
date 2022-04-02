@@ -17,6 +17,7 @@ import Cart from "./components/main/cart/Cart";
 import MyorderTab from "./components/main/mypage/myorder/MyorderTab";
 import Order from "./components/main/order/Order";
 import OrderCompleted from "./components/main/order/OrderCompleted";
+import ProductReview from "./components/main/product/ProductReviewLists";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path="/order" element={<Order />} />
           <Route path="/orderCompleted" element={<OrderCompleted />} />
           <Route path="/mypage/subscriptions" element={<Subscriptions />} />
+          <Route path="/product/:id/reviews" element={<ProductReview />} />
         </Routes>
       </div>
       <Footer />

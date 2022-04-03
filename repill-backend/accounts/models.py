@@ -1,10 +1,6 @@
 from django.db import models
 from django.conf import settings
-<<<<<<< HEAD
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
-=======
-from django.core.validators import RegexValidator
->>>>>>> f6c6f7fb1746395104ca10b1a6189ea9c01f8c6f
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 

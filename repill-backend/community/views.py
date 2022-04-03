@@ -13,6 +13,7 @@ from .serializers import NoticeListSerializer, NoticeSerializer
 
 from django.core.paginator import Paginator
 from rest_framework.pagination import PageNumberPagination
+from django.core.cache import cache
 # from rest_framework.viewsets import ModelViewSet
 
 # class NoticeViewSet(ModelViewSet):
@@ -98,6 +99,8 @@ def notice_list(request):
 def notice_detail(request, pk):
     notice = get_object_or_404(Notice, pk=pk)
     
+    
+
     def get_notice_detail():
 
         next = Notice.objects.filter(pk__gt=notice.pk).order_by('pk').first()
@@ -111,6 +114,16 @@ def notice_detail(request, pk):
         serializer = NoticeSerializer(notice)
         data = serializer.data
         data['cursor'] = cursor
+
+        # 조회수
+        # django의 ip cache를 확인해서 이미 방문이 기록된 ip라면 조회수를 올리지 않습니다.
+        ip = request.META.get('REMOTE_ADDR')
+        has_visited = cache.get(ip)
+        if not has_visited:
+            cache.set(ip, True)
+            notice.views += 1
+            notice.save()
+
         return Response(data, status=status.HTTP_200_OK)
 
     @permission_classes([IsAuthenticated])

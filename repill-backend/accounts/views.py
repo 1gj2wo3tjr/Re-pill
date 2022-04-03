@@ -129,15 +129,22 @@ class OrderList(APIView):
 
     # 주문 접수
     def post(self, request):
+        order_data = []
+
         if request.user.is_authenticated:
-            serializer = OrderSerializer(data=request.data)
-            if serializer.is_valid():
-                if Review.objects.filter(user=request.user, product=request.data.get("product")).exists():
-                    serializer.save(user=request.user, order_status=1, has_review=True)
+            # 한 주문에 여러 제품을 주문할 수 있으므로 각 제품에 대해 serializer를 만들고 DB에 저장
+            for product in request.data.get("products"):
+                updated_data = {**request.data, "product": product["number"], "quantity": product["quantity"]}
+                serializer = OrderSerializer(data=updated_data)
+                if serializer.is_valid():
+                    if Review.objects.filter(user=request.user).filter(product=request.data.get("product")).exists():
+                        serializer.save(user=request.user, order_status=1, has_review=True)
+                    else:
+                        serializer.save(user=request.user, order_status=1, has_review=False)
+                    order_data.append(serializer.data)  # 각 제품에 대한 정보를 order_data에 추가 (최종적으로 order_data를 한 번에 반환)
                 else:
-                    serializer.save(user=request.user, order_status=1, has_review=False)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(order_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 
@@ -146,12 +153,9 @@ class OrderDetail(APIView):
     def get(self, request, order_pk):
         if request.user.is_authenticated:
             try:
-                orders = Order.objects.filter(order_number=order_pk)
+                orders = Order.objects.filter(user=request.user).filter(order_number=order_pk)
                 serializer = OrderSerializer(orders, many=True)
-                if serializer.data[0].get("user") == request.user:
-                    return Response(serializer.data, status=status.HTTP_200_OK)
-                else:
-                    return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
+                return Response(serializer.data, status=status.HTTP_200_OK)
             except:
                 return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
@@ -163,12 +167,17 @@ class OrderDetail(APIView):
     def put(self, request, order_pk):
         if request.user.is_authenticated:
             try:
-                order = get_object_or_404(Order, pk=order_pk, product=request.data.get("product"))
-                serializer = OrderSerializer(order, data=request.data)
-                if serializer.is_valid():
-                    serializer.save()
+                order_part = Order.objects.filter(order_number=order_pk).filter(product=request.data.get("product")).first()
+                if not request.user == order_part.user:
+                    return Response(status=status.HTTP_403_FORBIDDEN)    
+                else:    
+                    serializer = OrderSerializer(order_part, data=request.data)
+                    if serializer.is_valid():
+                        if Review.objects.filter(user=request.user).filter(product=request.data.get("product")).exists():
+                            serializer.save(has_review=True)
+                        else:
+                            serializer.save(has_review=False)
                     return Response(serializer.data, status=status.HTTP_200_OK)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             except:
                 return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
@@ -176,7 +185,8 @@ class OrderDetail(APIView):
     # 주문 기록 삭제 (관리자)
     def delete(self, request, order_pk):
         if request.user.is_staff:
-            order = get_list_or_404(Order, pk=order_pk)
-            order.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            orders = get_list_or_404(Order, pk=order_pk)
+            for order in orders:
+                order.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_403_FORBIDDEN)

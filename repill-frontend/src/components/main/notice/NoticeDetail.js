@@ -9,10 +9,11 @@ import { useMediaQuery } from 'react-responsive';
 
 function NoticeDetail() {
   let params = useParams()
-  let token = localStorage.getItem('token')
+  let token = sessionStorage.getItem('token')
   const headers = {
     Authorization: `Bearer ${token}`
   }
+  let staff = sessionStorage.getItem('staff')
   const navigate = useNavigate()
   const goNotice = () => {
     navigate('/notice/')
@@ -84,6 +85,7 @@ function NoticeDetail() {
     .then((res) => console.log(res))
     .catch((err) => console.log(err))
     navigate('/notice')
+    window.location.reload(true)
   }
 
   const checkCancle = () => {
@@ -102,7 +104,7 @@ function NoticeDetail() {
         <>
           <Container>
             <h3 style={{ marginTop: "5%" }}>공지사항</h3>
-            {user==="admin" ? (
+            {staff ? (
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <button className={styles.edit_notice_button_mob} onClick={openModal}>수정하기</button>
                 <button className={styles.delete_notice_button_mob} onClick={openDeleteModal}>삭제하기</button>
@@ -170,7 +172,7 @@ function NoticeDetail() {
         <>
           <Container>
             <h2 style={{ marginTop: "5%" }}>공지사항</h2>
-            {user==="admin" ? (
+            {staff ? (
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <button className={styles.edit_notice_button} onClick={openModal}>수정하기</button>
                 <button className={styles.delete_notice_button} onClick={openDeleteModal}>삭제하기</button>

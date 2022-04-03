@@ -291,6 +291,30 @@ function Order() {
                           />
                         </RadioGroup>
                       </FormControl>
+                      {radio === "existing" ? (
+                        <div>
+                          <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <Select
+                              value={selectorAddress}
+                              onChange={handleAddress}
+                              displayEmpty
+                              inputProps={{ "aria-label": "Without label" }}
+                              className={styles.address_selector}
+                              sx={{
+                                "&.Mui-selected": {
+                                  border: "1px solid #f2f5c8",
+                                },
+                              }}
+                            >
+                              {addressList.map((item, index) => (
+                                <MenuItem value={index}>
+                                  {item.address_name} ({item.address})
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </div>
+                      ) : null}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -303,10 +327,11 @@ function Order() {
                     <TableCell className={styles.mob_address_right}>
                       <input
                         type="text"
-                        // value={quantity}
+                        value={selectedAddress.address_name}
                         title="받는분"
                         className={styles.mob_address_input}
-                        defaultValue=""
+                        onChange={onChange}
+                        name="address_name"
                       />
                     </TableCell>
                   </TableRow>
@@ -319,13 +344,25 @@ function Order() {
                     </TableCell>
                     <TableCell className={styles.mob_address_right}>
                       <div style={{ marginBottom: "15px" }}>
-                        <input
-                          type="text"
-                          // value={quantity}
-                          title="우편번호"
-                          className={styles.mob_address_input}
-                          defaultValue=""
-                        />
+                        {address ? (
+                          <input
+                            type="text"
+                            value={address.zonecode}
+                            title="우편번호"
+                            className={styles.mob_address_input}
+                            defaultValue=""
+                            disabled
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            value={selectedAddress.zipcode}
+                            title="우편번호"
+                            className={styles.mob_address_input}
+                            defaultValue=""
+                            disabled
+                          />
+                        )}
                         <Button
                           className={styles.mob_button_search}
                           onClick={openModal}
@@ -333,17 +370,30 @@ function Order() {
                           <p>우편번호 검색</p>
                         </Button>
                       </div>
+                      {address ? (
+                        <input
+                          type="text"
+                          value={address.address}
+                          title="주소"
+                          className={styles.mob_address_input}
+                          style={{ width: "100%", marginBottom: "15px" }}
+                          defaultValue=""
+                          disabled
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={selectedAddress.address}
+                          title="주소"
+                          className={styles.mob_address_input}
+                          style={{ width: "100%", marginBottom: "15px" }}
+                          defaultValue=""
+                          disabled
+                        />
+                      )}
                       <input
                         type="text"
-                        // value={quantity}
-                        title="주소"
-                        className={styles.mob_address_input}
-                        style={{ width: "100%", marginBottom: "15px" }}
-                        defaultValue=""
-                      />
-                      <input
-                        type="text"
-                        // value={quantity}
+                        value={selectedAddress.detailed_address}
                         title="상세주소"
                         className={styles.mob_address_input}
                         style={{ width: "100%" }}
@@ -360,8 +410,8 @@ function Order() {
                     </TableCell>
                     <TableCell className={styles.mob_address_right}>
                       <input
-                        type="number"
-                        // value={quantity}
+                        type="text"
+                        value={selectedAddress.phone_number}
                         title="휴대폰번호"
                         className={styles.mob_address_input}
                         style={{ width: "100%" }}
@@ -518,6 +568,16 @@ function Order() {
               </Link>
             </div>
           </Container>
+          {modal ? (
+            <>
+              <AddressModal
+                modal={modal}
+                setModal={setModal}
+                address={address}
+                setAddress={setAddress}
+              />
+            </>
+          ) : null}
         </div>
       ) : (
         <div>
@@ -736,16 +796,14 @@ function Order() {
                     <TableCell className={styles.address_right}>
                       <div>
                         {address ? (
-                          <>
-                            <input
-                              type="text"
-                              value={address.zonecode}
-                              title="우편번호"
-                              className={styles.address_input}
-                              defaultValue=""
-                              disabled
-                            />
-                          </>
+                          <input
+                            type="text"
+                            value={address.zonecode}
+                            title="우편번호"
+                            className={styles.address_input}
+                            defaultValue=""
+                            disabled
+                          />
                         ) : (
                           <input
                             type="text"
@@ -805,7 +863,7 @@ function Order() {
                     <TableCell className={styles.address_right}>
                       <input
                         type="text"
-                        value={selectedAddress.phone_number || ""}
+                        value={selectedAddress.phone_number}
                         title="휴대폰번호"
                         defaultValue=""
                         className={styles.address_input}

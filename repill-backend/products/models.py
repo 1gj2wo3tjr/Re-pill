@@ -15,7 +15,7 @@ class Product(models.Model):
     name = models.CharField(max_length=50)      # 제품명
     company = models.CharField(max_length=50)   # 제조사
     price = models.PositiveIntegerField()       # 가격
-    content = models.TextField()                # 제품 설명
+    content = models.TextField(blank=True)                # 제품 설명
     ingrediants = models.ManyToManyField(Ingrediant, through='Included')
     thumbnail_url = models.URLField(max_length=200, blank=True)    # 제품 이미지 URL
 
@@ -58,4 +58,4 @@ class Cart(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField()
-    delivery_fee = models.PositiveIntegerField()
+    # delivery_fee = models.PositiveIntegerField()

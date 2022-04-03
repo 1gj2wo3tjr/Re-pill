@@ -334,3 +334,6 @@ pip-selfcheck.json
 
 # data.py가 생성하는 json 파일
 data.json
+
+# db settings
+/backend/mysql.cnf

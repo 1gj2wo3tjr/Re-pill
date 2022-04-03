@@ -4,6 +4,8 @@ from django.core.validators import RegexValidator, MinValueValidator, MaxValueVa
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
+from products.models import Product
+
 # Create your models here.
 class User(AbstractUser):
     uid = models.CharField(max_length=20, null=True)  # 카카오톡 유저 ID
@@ -38,6 +40,9 @@ class DeliveryAddress(models.Model):
 # 주문 모델
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    order_number = models.PositiveIntegerField(default=0)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
+    quantity = models.PositiveIntegerField(default=1)
     order_date = models.DateTimeField(default=timezone.now)
     address = models.CharField(max_length=80)
     # 0: 주문 취소, 1: 결제 완료, 2: 배송준비중, 3: 배송중, 4: 배송 완료

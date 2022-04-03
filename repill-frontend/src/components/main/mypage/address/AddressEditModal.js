@@ -7,7 +7,7 @@ import styles from "../Mypage.module.css"
 import axios from "axios"
 
 function AddressEditModal({ address, setAddress, open, setOpen, data }) {
-  let token = localStorage.getItem('token')
+  let token = sessionStorage.getItem('token')
   const headers = {
     Authorization: `Bearer ${token}`
   }
@@ -54,7 +54,7 @@ function AddressEditModal({ address, setAddress, open, setOpen, data }) {
       })
       .then((res) => console.log(res))
       .catch((err) => console.log(err))
-      window.location.reload(true)
+      setTimeout(window.location.reload(true), 1000)
     } else {
       axios.put(`http://127.0.0.1:8000/api/v1/accounts/address/${data.id}/`, {
         address_name: form.address_name,
@@ -68,7 +68,7 @@ function AddressEditModal({ address, setAddress, open, setOpen, data }) {
       })
       .then((res) => console.log(res))
       .catch((err) => console.log(err))
-      window.location.reload(true)
+      setTimeout(window.location.reload(true), 1000)
     }
   }
 

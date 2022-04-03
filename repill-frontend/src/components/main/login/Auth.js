@@ -5,10 +5,9 @@ import axios from "axios";
 const Auth = () => {
   const code = new URL(window.location.href).searchParams.get("code");
   const navigate = useNavigate();
-  const [profile, setProfile] = useState([]);
 
   useEffect(() => {
-    console.log(code);
+    // console.log(code);
     axios({
       url: "http://localhost:8000/api/v1/accounts/login",
       method: "get",
@@ -17,11 +16,19 @@ const Auth = () => {
       },
     })
       .then((res) => {
-        console.log(res.data.profile_img);
+        console.log(res.data);
         const ACCESS_TOKEN = res.data.access_token;
-        localStorage.setItem("token", ACCESS_TOKEN);
-        setProfile(res.data);
-        console.log(profile);
+        const userEmail = res.data.email;
+        const userName = res.data.name;
+        const userImg = res.data.profile_img;
+        const is_admin = res.data.is_admin;
+        const is_staff = res.data.is_staff;
+        sessionStorage.setItem("token", ACCESS_TOKEN);
+        sessionStorage.setItem("email", userEmail);
+        sessionStorage.setItem("name", userName);
+        sessionStorage.setItem("img", userImg);
+        sessionStorage.setItem("admin", is_admin);
+        sessionStorage.setItem("staff", is_staff);
         navigate("/");
       })
       .catch((err) => {
@@ -30,9 +37,6 @@ const Auth = () => {
         navigate("/KakaoLogin");
       });
   }, []);
-  return (
-    // <div>{code}</div>
-    <></>
-  );
+  return <></>;
 };
 export default Auth;

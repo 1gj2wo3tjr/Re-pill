@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -9,6 +9,8 @@ import { CardActionArea } from "@mui/material";
 import { useMediaQuery } from "react-responsive";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import CartModal from "./CartModal";
 
 function ProductList({ list }) {
   const isMobile = useMediaQuery({
@@ -19,33 +21,97 @@ function ProductList({ list }) {
     query: "(max-width: 1200px)",
   });
 
+  let token = sessionStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  const [open, setOpen] = useState(false);
+
+  const goCart = (productId) => {
+    axios
+      .post(
+        `http://127.0.0.1:8000/api/v1/products/cart/`,
+        {
+          quantity: 1,
+          product: productId,
+        },
+        {
+          headers: headers,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setOpen((prev) => !prev);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
+      <style>
+        {`
+        .css-h93ljk-MuiTypography-root,.css-r40f8v-MuiTypography-root,
+        .css-pxfymf-MuiTypography-root,.css-1tt4jnm-MuiTypography-root,
+        .css-kxbeit-MuiTypography-root,.css-tn2rp-MuiTypography-root,
+        .css-3gthtk-MuiTypography-root, .css-162xqhf-MuiTypography-root,
+        .css-1ef4pj9-MuiTypography-root{
+          font-family: "Noto Sans KR";
+        }
+
+      `}
+      </style>
       {isMobile ? (
         <>
           {list.map((item, index) => (
             <Card
               sx={{
-                maxWidth: "48%",
-                minWidth: "48%",
-                margin: "1%",
+                maxWidth: "100%",
+                minWidth: "100%",
+                marginBottom: "15px",
               }}
               key={index}
             >
               <Link to={`/product/${item.id}`}>
-                <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={item.url}
-                    alt="green iguana"
+                <CardActionArea
+                  sx={{ display: "flex", justifyContent: "start" }}
+                >
+                  <img
+                    src={item.thumbnail_url}
+                    style={{
+                      width: "120px",
+                      margin: "20px",
+                      objectFit: "contain",
+                    }}
+                    alt={item.name}
                   />
                   <CardContent style={{ height: "120px" }}>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {item.id}
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      sx={{
+                        color: "#219f94",
+                        fontWeight: "bold",
+                        fontSize: "16px",
+                      }}
+                    >
+                      {item.company}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {item.title}
+                      {item.name}
+                    </Typography>
+                    <Typography
+                      variant="h5"
+                      color="text.secondary"
+                      sx={{
+                        float: "right",
+                        paddingTop: "10px",
+                        fontWeight: "bold",
+                        color: "#219f94",
+                      }}
+                    >
+                      {item.price.toLocaleString()}원
                     </Typography>
                   </CardContent>
                 </CardActionArea>
@@ -54,6 +120,7 @@ function ProductList({ list }) {
                 <Button
                   sx={{ borderRadius: "20px" }}
                   style={{ backgroundColor: "#E8E8A6" }}
+                  onClick={() => goCart(item.id)}
                 >
                   <AddShoppingCartIcon
                     sx={{ color: "rgb(87, 87, 87)" }}
@@ -82,15 +149,37 @@ function ProductList({ list }) {
                       <CardMedia
                         component="img"
                         height="140"
-                        image={item.url}
-                        alt="green iguana"
+                        image={item.thumbnail_url}
+                        alt="thumbnail_url"
+                        sx={{ objectFit: "contain", padding: "10px" }}
                       />
                       <CardContent style={{ height: "120px" }}>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {item.id}
+                        <Typography
+                          gutterBottom
+                          variant="h5"
+                          component="div"
+                          sx={{
+                            color: "rgba(0, 0, 0, 0.6)",
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                          }}
+                        >
+                          {item.company}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          {item.title}
+                          {item.name}
+                        </Typography>
+                        <Typography
+                          variant="h5"
+                          color="text.secondary"
+                          sx={{
+                            float: "right",
+                            paddingTop: "10px",
+                            fontWeight: "bold",
+                            color: "#219f94",
+                          }}
+                        >
+                          {item.price.toLocaleString()}원
                         </Typography>
                       </CardContent>
                     </CardActionArea>
@@ -99,6 +188,7 @@ function ProductList({ list }) {
                     <Button
                       sx={{ borderRadius: "20px" }}
                       style={{ backgroundColor: "#E8E8A6" }}
+                      onClick={() => goCart(item.id)}
                     >
                       <AddShoppingCartIcon
                         sx={{ color: "rgb(87, 87, 87)" }}
@@ -124,16 +214,42 @@ function ProductList({ list }) {
                     <CardActionArea>
                       <CardMedia
                         component="img"
-                        height="140"
-                        image={item.url}
-                        alt="green iguana"
+                        height="200"
+                        image={item.thumbnail_url}
+                        alt="thumbnail_url"
+                        sx={{ objectFit: "contain", padding: "10px" }}
                       />
-                      <CardContent style={{ height: "120px" }}>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {item.id}
+                      <CardContent style={{ height: "130px" }}>
+                        <Typography
+                          gutterBottom
+                          variant="h5"
+                          component="div"
+                          sx={{
+                            color: "rgba(0, 0, 0, 0.6)",
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                          }}
+                        >
+                          {item.company}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {item.title}
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ fontSize: "13px" }}
+                        >
+                          {item.name}
+                        </Typography>
+                        <Typography
+                          variant="h5"
+                          color="text.secondary"
+                          sx={{
+                            float: "right",
+                            paddingTop: "10px",
+                            fontWeight: "bold",
+                            color: "#219f94",
+                          }}
+                        >
+                          {item.price.toLocaleString()}원
                         </Typography>
                       </CardContent>
                     </CardActionArea>
@@ -142,6 +258,7 @@ function ProductList({ list }) {
                     <Button
                       sx={{ borderRadius: "20px" }}
                       style={{ backgroundColor: "#E8E8A6" }}
+                      onClick={() => goCart(item.id)}
                     >
                       <AddShoppingCartIcon
                         sx={{ color: "rgb(87, 87, 87)" }}
@@ -154,6 +271,7 @@ function ProductList({ list }) {
           )}
         </>
       )}
+      {open ? <CartModal open={open} setOpen={setOpen} /> : null}
     </>
   );
 }

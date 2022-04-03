@@ -9,24 +9,31 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import PaymentIcon from "@mui/icons-material/Payment";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import CartModal from "./CartModal";
 
 function ProductDetail() {
   let params = useParams();
+  let token = sessionStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
   const [detail, setDetail] = useState([]);
   const [review, setReview] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [open, setOpen] = useState(false);
 
   const getDetail = async () => {
     window.scrollTo({ top: 0 });
     const response = await axios.get(
-      `https://jsonplaceholder.typicode.com/photos/${params.id}`
+      `http://127.0.0.1:8000/api/v1/products/items/${params.id}`
     );
+
     setDetail(response.data);
   };
 
   const getReview = async () => {
     const response = await axios.get(
-      `https://jsonplaceholder.typicode.com/comments/?postId=${params.id}`
+      `http://127.0.0.1:8000/api/v1/products/reviews/${params.id}`
     );
     setReview(response.data);
   };
@@ -36,13 +43,12 @@ function ProductDetail() {
   });
 
   const onChange = (e) => {
-    // console.log(e.target.value);
+    console.log(e.target.value);
     setQuantity(e.target.value);
   };
 
   const quantitySub = () => {
     let a = quantity;
-    console.log(a);
     if (quantity > 1) {
       a--;
       setQuantity(a);
@@ -51,13 +57,29 @@ function ProductDetail() {
 
   const quantityAdd = () => {
     let a = quantity;
-    console.log(a);
     if (quantity < 999) {
       a++;
       setQuantity(a);
     }
-    // setQuantity(a++);
-    // console.log(a);
+  };
+
+  const goCart = () => {
+    axios
+      .post(
+        `http://127.0.0.1:8000/api/v1/products/cart/`,
+        {
+          quantity: quantity,
+          product: detail.id,
+        },
+        {
+          headers: headers,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setOpen((prev) => !prev);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -75,18 +97,23 @@ function ProductDetail() {
 
   return (
     <>
+      <style>
+        {`
+        
+      `}
+      </style>
       {isMobile ? (
         <Container className={styles.mob_container}>
           <div className={styles.mob_top}>
             <div className={styles.mob_name}>
-              <p className={styles.mob_id}>회사이름: {detail.id}</p>
-              <p className={styles.mob_title}>{detail.title}</p>
+              <p className={styles.mob_id}>{detail.company}</p>
+              <p className={styles.mob_title}>{detail.name}</p>
             </div>
             <div className={styles.mob_img}>
-              <img src={detail.url} alt="" />
+              <img src={detail.thumbnail_url} alt="" />
             </div>
             <div className={styles.mob_view}>
-              <p className={styles.mob_short_info}>간단한 제품 소개</p>
+              <p className={styles.mob_short_info}>{detail.content}</p>
               <div className={styles.mob_qty}>
                 <div>
                   <p
@@ -99,11 +126,11 @@ function ProductDetail() {
                     구매 수량
                   </p>
                 </div>
-                <div>
+                <div style={{ alignItem: "center" }}>
                   <button
                     className={styles.mob_qty_btn}
-                    onClick={() => quantitySub()}
                     style={{ marginRight: "10px" }}
+                    onClick={() => quantitySub()}
                   >
                     <RemoveIcon></RemoveIcon>
                   </button>
@@ -133,20 +160,23 @@ function ProductDetail() {
                 >
                   총 상품 금액
                 </p>
-                <p>{(15000 * quantity).toLocaleString()}원</p>
+                <p>{(detail.price * quantity).toLocaleString()} 원</p>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                {/* 회원 토큰 */}
-                <Link to={`/cart`}>
-                  <button className={styles.mob_cart}>
-                    <div style={{ display: "block", justifyContent: "center" }}>
-                      <AddShoppingCartIcon
-                        sx={{ color: "rgb(87, 87, 87)" }}
-                      ></AddShoppingCartIcon>{" "}
-                      <p> 장바구니 담기</p>
-                    </div>
-                  </button>
-                </Link>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  marginTop: "20px",
+                }}
+              >
+                <button className={styles.mob_cart} onClick={() => goCart()}>
+                  <div style={{ display: "block", justifyContent: "center" }}>
+                    <AddShoppingCartIcon
+                      sx={{ color: "rgb(87, 87, 87)" }}
+                    ></AddShoppingCartIcon>{" "}
+                    <p> 장바구니 담기</p>
+                  </div>
+                </button>
                 <button className={styles.mob_buy}>
                   <div style={{ display: "block", justifyContent: "center" }}>
                     <PaymentIcon
@@ -163,7 +193,7 @@ function ProductDetail() {
           <div className={styles.mob_main}>
             {/* 다른 이미지 많이 필요할 것 같은 */}
             <div className={styles.mob_img}>
-              <img src={detail.url} alt="" />
+              <img src={detail.thumbnail_url} alt="" />
             </div>
             {/* ingrediants */}
             <div style={{ display: "flex", justifyContent: "center" }}>
@@ -200,12 +230,12 @@ function ProductDetail() {
             style={{ display: "flex", justifyContent: "center" }}
           >
             <div className={styles.detail_img}>
-              <img src={detail.url} alt="" />
+              <img src={detail.thumbnail_url} alt="" />
             </div>
             <div className={styles.detail_view}>
-              <p className={styles.detail_id}>회사이름: {detail.id}</p>
-              <p className={styles.detail_title}>{detail.title}</p>
-              <p className={styles.detail_short_info}>간단한 제품 소개</p>
+              <p className={styles.detail_id}>{detail.company}</p>
+              <p className={styles.detail_title}>{detail.name}</p>
+              <p className={styles.detail_short_info}>{detail.content}</p>
               <div className={styles.product_qty}>
                 <div>
                   <p
@@ -218,7 +248,14 @@ function ProductDetail() {
                     구매 수량
                   </p>
                 </div>
-                <div style={{ margin: "3px 0 0 80px" }}>
+                <div
+                  style={{
+                    margin: "3px 0 0 80px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <button
                     className={styles.qty_btn}
                     onClick={() => quantitySub()}
@@ -251,23 +288,22 @@ function ProductDetail() {
                 >
                   총 상품 금액
                 </p>
-                <p>{(15000 * quantity).toLocaleString()}원</p>
+                <p>{(detail.price * quantity).toLocaleString()} 원</p>
               </div>
               <div style={{ float: "right", marginTop: "20px" }}>
-                {/* 회원 토큰 */}
-                <Link to={`/cart`}>
-                  <button className={styles.button_cart}>
-                    <div style={{ display: "flex", justifyContent: "start" }}>
-                      <AddShoppingCartIcon
-                        sx={{
-                          color: "rgb(87, 87, 87)",
-                          marginRight: "10px",
-                        }}
-                      ></AddShoppingCartIcon>{" "}
-                      <p> 장바구니 담기</p>
-                    </div>
-                  </button>
-                </Link>
+                {/* <Link to={`/cart`}> */}
+                <button className={styles.button_cart} onClick={() => goCart()}>
+                  <div style={{ display: "flex", justifyContent: "start" }}>
+                    <AddShoppingCartIcon
+                      sx={{
+                        color: "rgb(87, 87, 87)",
+                        marginRight: "10px",
+                      }}
+                    ></AddShoppingCartIcon>{" "}
+                    <p> 장바구니 담기</p>
+                  </div>
+                </button>
+                {/* </Link> */}
                 <Link to={`/order`}>
                   <button className={styles.button_buy}>
                     <div style={{ display: "flex", justifyContent: "start" }}>
@@ -283,9 +319,8 @@ function ProductDetail() {
           </div>
           {/* 상품 성분 및 정보  */}
           <div className={styles.detail_main}>
-            <p>뭘 넣어야할지 모르겠어요</p>
             {/* 다른 이미지 많이 필요할 것 같은 */}
-            <img src={detail.url} alt="" style={{ width: "400px" }} />
+            <img src={detail.thumbnail_url} alt="" style={{ width: "400px" }} />
             {/* ingrediants */}
             <div style={{ display: "flex", justifyContent: "center" }}>
               <table
@@ -311,6 +346,7 @@ function ProductDetail() {
           </div>
         </Container>
       )}
+      {open ? <CartModal open={open} setOpen={setOpen} /> : null}
     </>
   );
 }

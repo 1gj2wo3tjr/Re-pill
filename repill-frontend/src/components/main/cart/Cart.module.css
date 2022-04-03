@@ -145,3 +145,30 @@
 .button_all:hover {
   background-color: #f3f3f3;
 }
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  /* border: 1px solid #cfcfcf; */
+}
+/* .checkbox input[type="checkbox"]:checked {
+  background-color: #219f94;
+}
+.checkbox input[type="checkbox"]::before {
+  background-color: #219f94;
+} */
+
+.btn_delete {
+  background-color: #dddddd;
+  padding: 9px 20px;
+  color: rgb(87, 87, 87);
+  font-size: 12.5px;
+  font-weight: bold;
+  margin: 15px 5px;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.btn_delete:hover {
+  background-color: #ebebeb;
+}

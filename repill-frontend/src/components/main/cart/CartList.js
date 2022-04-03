@@ -20,6 +20,11 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 
 function CartList({ cart, total, setTotal }) {
+  let token = sessionStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
   const [product, setProduct] = useState([]);
   const [checkList, setCheckList] = useState([]);
   const [idList, setIdList] = useState([]);
@@ -31,10 +36,12 @@ function CartList({ cart, total, setTotal }) {
       axios
         .get(`http://127.0.0.1:8000/api/v1/products/items/${item.product}`)
         .then((res) => {
+          // console.log(cart);
           console.log(res.data);
           // setProduct((product) => [res.data, ...product]);
           setProduct((product) => [
             {
+              cartId: item.id,
               id: res.data.id,
               name: res.data.name,
               company: res.data.company,
@@ -47,6 +54,7 @@ function CartList({ cart, total, setTotal }) {
           ]);
 
           ids[index] = res.data.id;
+          // ids[index] = { id: res.data.id, cartId: item.id };
         })
         .catch((err) => console.log(err))
     );
@@ -72,11 +80,12 @@ function CartList({ cart, total, setTotal }) {
     product.map((item, index) => setTotal((total) => total + item.price));
   };
 
-  const onChangeEach = (e, id) => {
+  const onChangeEach = (e, id, cartId) => {
     console.log("onChangeEach: ", e.target.checked);
     // check되면 checkList에 상품 id 넣기
     const m = product.find((a) => a.id === id);
-
+    console.log(checkList);
+    console.log(m);
     if (e.target.checked) {
       setCheckList([...checkList, id]);
       setTotal((total) => total + m.price);
@@ -88,17 +97,58 @@ function CartList({ cart, total, setTotal }) {
     }
   };
 
+  const quantitySub = (item) => {
+    if (item.quantity > 1) {
+      const a = --item.quantity;
+
+      axios
+        .patch(
+          `http://127.0.0.1:8000/api/v1/products/items/${item.cartId}/`,
+          {
+            quantity: a,
+            product: item.id,
+          },
+          {
+            headers: headers,
+          }
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const deleteBtn = () => {
+    if (checkList.length === 0) {
+      alert("선택된 상품이 없습니다!");
+    } else {
+      console.log(checkList); // 상품 아이디 [4,7]
+      // product에서 [4,7] => cartId
+
+      checkList.map((item, index) => {
+        console.log(item);
+        const deleteList = product.find((a) => a.id === item);
+        console.log(deleteList);
+
+        axios
+          .delete(
+            `http://127.0.0.1:8000/api/v1/products/items/${deleteList.cartId}/`, // 장바구니 아이디
+            { headers: headers }
+          )
+          .then((res) => {
+            console.log(res);
+            console.log("삭제");
+          })
+          .catch((err) => console.log(err));
+      });
+    }
+  };
+
   useEffect(() => {
     setProduct([]);
     getProduct();
   }, [cart]);
-
-  // useEffect(() => {
-  //   checkList.map((list, index) => {
-  //     const m = product.find((a) => a.id === list);
-  //     setTotal((total) => total + m.price);
-  //   });
-  // }, [checkList]);
 
   return (
     <>
@@ -113,6 +163,13 @@ function CartList({ cart, total, setTotal }) {
         }
       `}
       </style>
+
+      <div style={{ display: "flex", justifyContent: "end" }}>
+        <button className={styles.btn_delete} onClick={deleteBtn}>
+          <p>선택 상품 삭제</p>
+        </button>
+      </div>
+
       <Table>
         <TableHead>
           <TableRow style={{ backgroundColor: "#F2F5C8" }}>
@@ -169,7 +226,7 @@ function CartList({ cart, total, setTotal }) {
                       <input
                         type="checkbox"
                         className={styles.checkbox}
-                        onChange={(e) => onChangeEach(e, item.id)}
+                        onChange={(e) => onChangeEach(e, item.id, item.cartId)}
                         checked={checkList.includes(item.id)}
                       />
                     </TableCell>
@@ -229,7 +286,7 @@ function CartList({ cart, total, setTotal }) {
                       >
                         <RemoveIcon
                           className={styles.qty_icon}
-                          // onClick={() => quantitySub()}
+                          onClick={() => quantitySub(item)}
                         ></RemoveIcon>
                         <input
                           type="text"

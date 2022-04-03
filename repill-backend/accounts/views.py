@@ -185,7 +185,8 @@ class OrderDetail(APIView):
     # 주문 기록 삭제 (관리자)
     def delete(self, request, order_pk):
         if request.user.is_staff:
-            order = get_list_or_404(Order, pk=order_pk)
-            order.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            orders = get_list_or_404(Order, pk=order_pk)
+            for order in orders:
+                order.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_403_FORBIDDEN)

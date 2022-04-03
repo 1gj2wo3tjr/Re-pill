@@ -8,7 +8,7 @@ import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
@@ -73,10 +73,16 @@ export default function PersistentDrawerLeft() {
 
   return (
     <Box
-      sx={{ display: "flex", height: "700px", color: "rgba(245,254,192,50%)" }}
+      sx={{
+        display: "flex",
+        height: "700px",
+        color: "black",
+      }}
     >
       <CssBaseline />
-      <IconButton
+      <Button
+        variant="contained"
+        disableElevation
         color="inherit"
         aria-label="open drawer"
         onClick={handleDrawerOpen}
@@ -84,7 +90,7 @@ export default function PersistentDrawerLeft() {
         sx={{ mr: 2, ...(open && { display: "none" }) }}
       >
         <ArrowForwardIosIcon />
-      </IconButton>
+      </Button>
       <Drawer
         sx={{
           width: drawerWidth,
@@ -99,13 +105,13 @@ export default function PersistentDrawerLeft() {
         open={open}
       >
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+          <Button onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (
               <ChevronRightIcon />
             )}
-          </IconButton>
+          </Button>
         </DrawerHeader>
         <Divider />
         <List>
@@ -122,7 +128,7 @@ export default function PersistentDrawerLeft() {
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
-            <Link to="/">회원정보 관리</Link>
+            <Link to="/mypage/userinfo">회원정보 관리</Link>
           </ListItem>
           <ListItem>
             <ListItemIcon>
@@ -145,7 +151,9 @@ export default function PersistentDrawerLeft() {
         </List>
       </Drawer>
       <Main open={open}>
-        {login ? <MypageCompo /> : <h1>로그인 하고 들어와라</h1>}
+        <div style={{ marginLeft: "10%", marginRight: "10%" }}>
+          {login ? <MypageCompo /> : <h1>로그인 하고 들어와라</h1>}
+        </div>
       </Main>
     </Box>
   );

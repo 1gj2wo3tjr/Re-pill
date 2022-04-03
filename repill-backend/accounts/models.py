@@ -1,7 +1,10 @@
 from django.db import models
 from django.conf import settings
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
+
+from products.models import Product
 
 # Create your models here.
 class User(AbstractUser):
@@ -32,3 +35,19 @@ class DeliveryAddress(models.Model):
 
     def __str__(self):
         return f'{self.user}님 ({self.phone_number})의 배송지 {self.address_name}: {self.address} {self.detailed_address}'
+
+
+# 주문 모델
+class Order(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    order_number = models.PositiveIntegerField(default=0)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
+    quantity = models.PositiveIntegerField(default=1)
+    order_date = models.DateTimeField(default=timezone.now)
+    address = models.CharField(max_length=80)
+    # 0: 주문 취소, 1: 결제 완료, 2: 배송준비중, 3: 배송중, 4: 배송 완료
+    order_status = models.PositiveSmallIntegerField(validators=[MinValueValidator(0), MaxValueValidator(4)])
+    order_receive = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f'{id}번 주문'

@@ -8,36 +8,13 @@ import ReviewEditModal from './ReviewEditModal';
 import axios from 'axios';
 
 function MyorderTab() {
-  let token = localStorage.getItem('token')
+  let token = sessionStorage.getItem('token')
   const headers = {
     Authorization: `Bearer ${token}`
   }
-  const [list, setList] = useState([
-    {
-      id: 1,
-      title: "지엔엠라이프 GNM자연의품격 루테인11 30캡슐",
-      price: "34,500",
-      date: "2022.01.16",
-      review: false
-    },
-    {
-      id: 2,
-      title: "지엔엠라이프 GNM자연의품격 루테인11 30캡슐",
-      price: "34,500",
-      date: "2022.01.10",
-      review: true
-    },
-    {
-      id: 3,
-      title: "지엔엠라이프 GNM자연의품격 루테인11 30캡슐",
-      price: "34,500",
-      date: "2022.01.10",
-      review: true
-    }
-  ])
   const [review, setReview] = useState([])
 
-  // const [list, setList] = useState([])
+  const [list, setList] = useState([])
 
   // const today = new Date()
   const [openRegister, setOpenRegister] = useState(false)
@@ -64,6 +41,19 @@ function MyorderTab() {
     setOpenEdit((prev) => !prev)
   }
 
+  // 주문 내역 받아오는 함수
+  const getOrder = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/v1/accounts/order/", {
+        headers: headers
+      })
+      console.log(response.data)
+      setList(response.data)
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
   // 리뷰 데이터 받아오는 함수
   const getReview = async () => {
     try {
@@ -81,6 +71,7 @@ function MyorderTab() {
   }
 
   useEffect(() => {
+    getOrder()
     getReview()
   }, [])
 
@@ -109,7 +100,7 @@ function MyorderTab() {
                 </div>
               </div>
               <div style={{ width: "25%", display: "flex", flexDirection: "column" }}>
-                {item.review===true ? (
+                {list.has_review===1 ? (
                   <button className={styles.order_review_button_mob} onClick={() => handleDetailModal(item)}>리뷰보기</button>
                 ) : (
                   <button className={styles.order_review_register_button_mob} onClick={() => handleRegisterModal(item)}>리뷰쓰기</button>
@@ -144,7 +135,7 @@ function MyorderTab() {
                 </div>
               </div>
               <div style={{ width: "20%", display: "flex", flexDirection: "column" }}>
-                {item.review===true ? (
+                {list.has_review===1 ? (
                   <div style={{ display: "flex", justifyContent: "space-around" }}>
                     <button className={styles.order_review_detail_button} onClick={() => handleDetailModal(item)}>리뷰보기</button>
                     <button className={styles.order_review_edit_button} onClick={() => handleEditModal(item)}>리뷰수정</button>

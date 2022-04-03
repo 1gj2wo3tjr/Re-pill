@@ -25,15 +25,25 @@ import Linked from "@mui/material/Link";
 import Checkbox from "@mui/material/Checkbox";
 import AddressModal from "./AddressModal";
 import PayReady from "./PayReady";
+import axios from "axios";
 
 function Order() {
-  const [radio, setRadio] = useState("existing");
+  let token = sessionStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  const [radio, setRadio] = useState("new");
   const [radioPay, setRadioPay] = useState("kakaopay");
   const [selector, setSelector] = useState(1);
+  const [selectorAddress, setSelectorAddress] = useState(0);
   const [modal, setModal] = useState(false);
   const [address, setAdderss] = useState("");
   const [pay, setPay] = useState(false);
   const [agreement, setAgreement] = useState(false);
+  const [addressList, setAdderssList] = useState([]);
+  // const [selectedAddress, setSelectedAddress] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState([]);
 
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
@@ -47,15 +57,57 @@ function Order() {
     e.preventDefault();
   };
 
+  const getAddressList = () => {
+    axios
+      .get("http://127.0.0.1:8000/api/v1/accounts/address/", {
+        headers: headers,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setAdderssList(res.data);
+        // getSelectAddress(0);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // 기존.신규 배송지 메소드
   const handleChange = (e) => {
+    console.log(e.target.value);
     setRadio(e.target.value);
+
+    if (e.target.value === "new") {
+      setSelectedAddress({
+        id: "",
+        address_name: "",
+        address: "",
+        detailed_address: "",
+        phone_number: "",
+        zipcode: "",
+      });
+    } else {
+      getSelectAddress(0);
+    }
   };
 
   const checkPay = (e) => {
     setRadioPay(e.target.value);
   };
 
+  const getSelectAddress = (idx) => {
+    // addressList의 index 가져오자
+    const selected = addressList[idx];
+    console.log(selected);
+    setSelectedAddress(selected);
+  };
+
+  const handleAddress = (event) => {
+    console.log(event.target.value);
+    setSelectorAddress(event.target.value);
+    getSelectAddress(event.target.value);
+  };
+
   const handleRequest = (e) => {
+    console.log(e.target.value);
     setSelector(e.target.value);
   };
 
@@ -91,6 +143,10 @@ function Order() {
       03. 주문완료
     </Typography>,
   ];
+
+  useEffect(() => {
+    getAddressList();
+  }, []);
 
   return (
     <>
@@ -194,20 +250,6 @@ function Order() {
                           }}
                         >
                           <FormControlLabel
-                            value="existing"
-                            control={
-                              <Radio
-                                sx={{
-                                  color: "#cfcfcf",
-                                  "&.Mui-checked": {
-                                    color: "#219F94",
-                                  },
-                                }}
-                              />
-                            }
-                            label="기존 배송지"
-                          />
-                          <FormControlLabel
                             value="new"
                             control={
                               <Radio
@@ -220,6 +262,20 @@ function Order() {
                               />
                             }
                             label="신규 배송지"
+                          />
+                          <FormControlLabel
+                            value="existing"
+                            control={
+                              <Radio
+                                sx={{
+                                  color: "#cfcfcf",
+                                  "&.Mui-checked": {
+                                    color: "#219F94",
+                                  },
+                                }}
+                              />
+                            }
+                            label="기존 배송지"
                           />
                         </RadioGroup>
                       </FormControl>
@@ -238,6 +294,7 @@ function Order() {
                         // value={quantity}
                         title="받는분"
                         className={styles.mob_address_input}
+                        defaultValue=""
                       />
                     </TableCell>
                   </TableRow>
@@ -255,7 +312,7 @@ function Order() {
                           // value={quantity}
                           title="우편번호"
                           className={styles.mob_address_input}
-                          disabled
+                          defaultValue=""
                         />
                         <Button
                           className={styles.mob_button_search}
@@ -270,6 +327,7 @@ function Order() {
                         title="주소"
                         className={styles.mob_address_input}
                         style={{ width: "100%", marginBottom: "15px" }}
+                        defaultValue=""
                       />
                       <input
                         type="text"
@@ -277,6 +335,7 @@ function Order() {
                         title="상세주소"
                         className={styles.mob_address_input}
                         style={{ width: "100%" }}
+                        defaultValue=""
                       />
                     </TableCell>
                   </TableRow>
@@ -294,6 +353,7 @@ function Order() {
                         title="휴대폰번호"
                         className={styles.mob_address_input}
                         style={{ width: "100%" }}
+                        defaultValue=""
                       />
                     </TableCell>
                   </TableRow>
@@ -515,7 +575,7 @@ function Order() {
                         title="상품개수"
                         className={styles.qty_input}
                         // onChange={onChange}
-                        disabled
+                        // defaultValue=""
                       />
                     </div>
                   </TableCell>
@@ -551,51 +611,89 @@ function Order() {
                     >
                       <p>배송지 확인</p>
                     </TableCell>
-                    <TableCell className={styles.address_right}>
-                      <FormControl>
-                        <RadioGroup
-                          row
-                          aria-labelledby="demo-row-radio-buttons-group-label"
-                          name="row-radio-buttons-group"
-                          style={{ fontSize: "14px", marginLeft: "20px" }}
-                          value={radio}
-                          onChange={handleChange}
-                          sx={{
-                            "& .MuiSvgIcon-root": {
+                    <TableCell
+                      className={styles.address_right}
+                      // style={{ height: "79px" }}
+                      style={{
+                        display: "flex",
+                        justifyContent: "start",
+                        height: "79px",
+                      }}
+                    >
+                      <div style={{ marginTop: "5px" }}>
+                        <FormControl>
+                          <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            style={{
                               fontSize: "14px",
-                            },
-                          }}
-                        >
-                          <FormControlLabel
-                            value="existing"
-                            control={
-                              <Radio
-                                sx={{
-                                  color: "#cfcfcf",
-                                  "&.Mui-checked": {
-                                    color: "#219F94",
-                                  },
-                                }}
-                              />
-                            }
-                            label="기존 배송지"
-                          />
-                          <FormControlLabel
-                            value="new"
-                            control={
-                              <Radio
-                                sx={{
-                                  color: "#cfcfcf",
-                                  "&.Mui-checked": {
-                                    color: "#219F94",
-                                  },
-                                }}
-                              />
-                            }
-                            label="신규 배송지"
-                          />
-                        </RadioGroup>
-                      </FormControl>
+                              marginLeft: "22px",
+                            }}
+                            value={radio}
+                            onChange={handleChange}
+                            sx={{
+                              "& .MuiSvgIcon-root": {
+                                fontSize: "14px",
+                              },
+                            }}
+                          >
+                            <FormControlLabel
+                              value="new"
+                              control={
+                                <Radio
+                                  sx={{
+                                    color: "#cfcfcf",
+                                    "&.Mui-checked": {
+                                      color: "#219F94",
+                                    },
+                                  }}
+                                />
+                              }
+                              label="신규 배송지"
+                            />
+                            <FormControlLabel
+                              value="existing"
+                              control={
+                                <Radio
+                                  sx={{
+                                    color: "#cfcfcf",
+                                    "&.Mui-checked": {
+                                      color: "#219F94",
+                                    },
+                                  }}
+                                />
+                              }
+                              label="기존 배송지"
+                            />
+                          </RadioGroup>
+                        </FormControl>
+                      </div>
+                      {radio === "existing" ? (
+                        <div>
+                          <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <Select
+                              value={selectorAddress}
+                              onChange={handleAddress}
+                              displayEmpty
+                              inputProps={{ "aria-label": "Without label" }}
+                              className={styles.address_selector}
+                              sx={{
+                                "&.Mui-selected": {
+                                  // 색상 변경 안돼ㅠㅠ
+                                  border: "1px solid #f2f5c8",
+                                },
+                              }}
+                            >
+                              {addressList.map((item, index) => (
+                                <MenuItem value={index}>
+                                  {item.address_name} ({item.address})
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </div>
+                      ) : null}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -608,9 +706,10 @@ function Order() {
                     <TableCell className={styles.address_right}>
                       <input
                         type="text"
-                        // value={quantity}
+                        value={selectedAddress.address_name}
                         title="받는분"
                         className={styles.address_input}
+                        defaultValue=""
                       />
                     </TableCell>
                   </TableRow>
@@ -625,9 +724,10 @@ function Order() {
                       <div>
                         <input
                           type="text"
-                          value={address.zonecode}
+                          value={selectedAddress.zipcode}
                           title="우편번호"
                           className={styles.address_input}
+                          defaultValue=""
                           disabled
                         />
                         <Button
@@ -640,16 +740,18 @@ function Order() {
                       <div style={{ marginTop: "15px" }}>
                         <input
                           type="text"
-                          value={address.address}
+                          value={selectedAddress.address}
                           title="주소"
-                          disabled
+                          defaultValue=""
                           className={styles.address_input}
                           style={{ width: "330px" }}
+                          disabled
                         />
                         <input
                           type="text"
-                          // value={quantity}
+                          value={selectedAddress.detailed_address}
                           title="상세주소"
+                          defaultValue=""
                           className={styles.address_input}
                         />
                       </div>
@@ -664,9 +766,10 @@ function Order() {
                     </TableCell>
                     <TableCell className={styles.address_right}>
                       <input
-                        type="number"
-                        // value={quantity}
+                        type="text"
+                        value={selectedAddress.phone_number || ""}
                         title="휴대폰번호"
+                        defaultValue=""
                         className={styles.address_input}
                       />
                     </TableCell>

@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 import axios from "axios"
 
 function ReviewDetailModal({ open, setOpen }) {
-  let token = localStorage.getItem('token')
+  let token = sessionStorage.getItem('token')
   const headers = {
     Authorization: `Bearer ${token}`
   }
@@ -141,7 +141,15 @@ function ReviewDetailModal({ open, setOpen }) {
               </Form>
             </Modal.Content>
             <Modal.Content style={{ display: "flex", justifyContent: "center" }}>
-              <button onClick={handleActivate} className={styles.order_add_reviewModal_button}>{activate ? "완료" : "수정"}</button>
+              <button onClick={handleActivate} className={styles.order_add_reviewModal_button}>{activate ? (
+                <div>
+                  완료
+                </div>
+              ) : (
+                <div>
+                  수정
+                </div>
+              )}</button>
               <button onClick={deleteReview} className={styles.order_cancleModal_review_button}>삭제</button>
             </Modal.Content>
           </Modal>

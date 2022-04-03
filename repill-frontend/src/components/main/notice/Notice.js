@@ -8,6 +8,8 @@ import Pagination from "./Pagination";
 import { useMediaQuery } from 'react-responsive';
 
 function Notice() {
+  let staff = sessionStorage.getItem('staff')
+  console.log(staff)
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)"
   });
@@ -16,7 +18,6 @@ function Notice() {
   const [list, setList] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(10);
-  const [user, setUser] = useState("admin")
 
   const openModal = () => {
     setOpen((prev) => !prev)
@@ -64,7 +65,7 @@ function Notice() {
           <Container style={{ marginTop: '5%' }}>
             <h3>공지사항</h3>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              {user === "admin" ? (
+              {staff ? (
                 <>
                   <input type="text" placeholder="검색어를 입력해주세요" onChange={searchTitle} value={keyword} className={styles.search_content_mob}></input>
                   <button className={styles.add_notice_button} onClick={openModal}>+작성하기</button>
@@ -92,7 +93,7 @@ function Notice() {
             <Container style={{ marginTop: '5%' }}>
               <h1>공지사항</h1>
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                {user === "admin" ? (
+                {staff ? (
                   <>
                     <input type="text" placeholder="검색어를 입력해주세요" onChange={searchTitle} value={keyword} className={styles.search_content}></input>
                     <button className={styles.add_notice_button} onClick={openModal}>+작성하기</button>

@@ -38,12 +38,12 @@ function Order() {
   const [selector, setSelector] = useState(1);
   const [selectorAddress, setSelectorAddress] = useState(0);
   const [modal, setModal] = useState(false);
-  const [address, setAdderss] = useState("");
+  const [address, setAddress] = useState("");
   const [pay, setPay] = useState(false);
   const [agreement, setAgreement] = useState(false);
-  const [addressList, setAdderssList] = useState([]);
-  // const [selectedAddress, setSelectedAddress] = useState([]);
+  const [addressList, setAddressList] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState([]);
+  const [newAddress, setNewAddress] = useState("");
 
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
@@ -64,7 +64,7 @@ function Order() {
       })
       .then((res) => {
         console.log(res.data);
-        setAdderssList(res.data);
+        setAddressList(res.data);
         // getSelectAddress(0);
       })
       .catch((err) => console.log(err));
@@ -85,8 +85,20 @@ function Order() {
         zipcode: "",
       });
     } else {
+      setAddress("");
       getSelectAddress(0);
     }
+  };
+
+  // 신규 배송지 입력 확인 event
+  const onChange = (event) => {
+    const { name, value } = event.target;
+    console.log(name);
+    console.log(value);
+    setNewAddress({
+      ...newAddress,
+      [name]: value,
+    });
   };
 
   const checkPay = (e) => {
@@ -680,7 +692,6 @@ function Order() {
                               className={styles.address_selector}
                               sx={{
                                 "&.Mui-selected": {
-                                  // 색상 변경 안돼ㅠㅠ
                                   border: "1px solid #f2f5c8",
                                 },
                               }}
@@ -709,7 +720,9 @@ function Order() {
                         value={selectedAddress.address_name}
                         title="받는분"
                         className={styles.address_input}
-                        defaultValue=""
+                        // defaultValue=""
+                        onChange={onChange}
+                        name="address_name"
                       />
                     </TableCell>
                   </TableRow>
@@ -722,14 +735,27 @@ function Order() {
                     </TableCell>
                     <TableCell className={styles.address_right}>
                       <div>
-                        <input
-                          type="text"
-                          value={selectedAddress.zipcode}
-                          title="우편번호"
-                          className={styles.address_input}
-                          defaultValue=""
-                          disabled
-                        />
+                        {address ? (
+                          <>
+                            <input
+                              type="text"
+                              value={address.zonecode}
+                              title="우편번호"
+                              className={styles.address_input}
+                              defaultValue=""
+                              disabled
+                            />
+                          </>
+                        ) : (
+                          <input
+                            type="text"
+                            value={selectedAddress.zipcode}
+                            title="우편번호"
+                            className={styles.address_input}
+                            defaultValue=""
+                            disabled
+                          />
+                        )}
                         <Button
                           className={styles.button_search}
                           onClick={openModal}
@@ -738,15 +764,27 @@ function Order() {
                         </Button>
                       </div>
                       <div style={{ marginTop: "15px" }}>
-                        <input
-                          type="text"
-                          value={selectedAddress.address}
-                          title="주소"
-                          defaultValue=""
-                          className={styles.address_input}
-                          style={{ width: "330px" }}
-                          disabled
-                        />
+                        {address ? (
+                          <input
+                            type="text"
+                            value={address.address}
+                            title="주소"
+                            defaultValue=""
+                            className={styles.address_input}
+                            style={{ width: "330px" }}
+                            disabled
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            value={selectedAddress.address}
+                            title="주소"
+                            defaultValue=""
+                            className={styles.address_input}
+                            style={{ width: "330px" }}
+                            disabled
+                          />
+                        )}
                         <input
                           type="text"
                           value={selectedAddress.detailed_address}
@@ -934,12 +972,14 @@ function Order() {
               {/* </Link> */}
             </div>
             {modal ? (
-              <AddressModal
-                open={modal}
-                setOpen={setModal}
-                address={address}
-                setAdderss={setAdderss}
-              />
+              <>
+                <AddressModal
+                  modal={modal}
+                  setModal={setModal}
+                  address={address}
+                  setAddress={setAddress}
+                />
+              </>
             ) : null}
             {pay ? <PayReady open={pay} setOpen={setPay} /> : null}
           </Container>

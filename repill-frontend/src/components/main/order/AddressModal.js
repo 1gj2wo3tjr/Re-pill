@@ -2,19 +2,19 @@ import React from "react";
 import DaumPostcode from "react-daum-postcode";
 import { Button, Header, Icon, Modal } from "semantic-ui-react";
 
-function AddressModal({ open, setOpen, setAdderss }) {
-  const handleClose = () => setOpen(false);
+function AddressModal({ modal, setModal, setAddress }) {
+  const handleClose = () => setModal(false);
   const onComplete = (data) => {
     console.log(data);
-    setAdderss(data);
-    setOpen(false);
+    setAddress(data);
+    setModal(false);
   };
   return (
     <>
       <div>
         <Modal
           closeIcon
-          open={open}
+          open={modal}
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"

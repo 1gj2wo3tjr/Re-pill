@@ -9,7 +9,7 @@ import { Container } from "@mui/material";
 function Main() {
   const mobile_settings = {
     dots: true,
-    infinite: false,
+    infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -21,7 +21,7 @@ function Main() {
     speed: 500, // 애미메이션의 속도, 단위는 milliseconds
     slidesToShow: 1, // 한번에 몇개의 슬라이드를 보여줄 지
     slidesToScroll: 1, // 한번 스크롤시 몇장의 슬라이드를 넘길지
-    // autoplay: true,
+    autoplay: true,
   };
 
   const isMobile = useMediaQuery({
@@ -65,26 +65,50 @@ function Main() {
       `}
       </style>
       {isMobile ? (
-        <Slider {...mobile_settings} className={styles.slider}>
-          <div>
-            <img src="/assets/survey.png" alt="" style={{ width: "700px", height: "500px", marginTop: "1%" }} />
-            <div>
-              설문조사
-            </div>
+        <>
+          <div style={{ height: "550px", background: "#F2F5C8" }}>
+            <Slider {...mobile_settings} >
+              <div>
+                <div style={{ marginTop: "10px" }}>
+                  <div style={{ marginLeft: "5%", height: "120px" }}>
+                    <h2>내게 딱 맞는 영양제, 궁금하다면?</h2>
+                    <h4>나만을 위한 맞춤영양제를 찾아보세요 </h4>
+                    <h4>간단하게 체크하고 내 몸에 맞는 영양성분 찾기</h4>
+                  </div>
+                  <img src="/assets/survey.png" alt="" style={{ width: "80%", height: "300px", marginLeft: "11%", marginTop: "5%", borderRadius: "5%", boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)" }} />
+                  <button className={styles.survey_button_mob}>설문하기</button>
+                </div>
+              </div>
+              <div>
+                <div style={{ marginTop: "10px" }}>
+                  <div style={{ marginLeft: "5%", height: "120px" }}>
+                    맞춤형 분석
+                  </div>
+                  <img src="/assets/report.png" alt="" style={{ width: "80%", height: "300px", marginLeft: "11%", borderRadius: "5%", boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)" }} />
+                </div>
+              </div>
+              <div>
+                <div style={{ marginTop: "10px" }}>
+                  <div style={{ marginLeft: "5%", height: "120px" }}>
+                    구독시스템
+                  </div>
+                  <img src="/assets/time.png" alt="" style={{ width: "80%", height: "300px", marginLeft: "11%", borderRadius: "5%", boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)" }} />
+                </div>
+              </div>
+            </Slider>
           </div>
-          <div>
-            <img src="/assets/report.png" alt="" style={{ width: "700px", height: "500px", marginTop: "1%" }} />
-            <div>
-              맞춤형 분석
+          <Container style={{ marginTop: "2%" }}>
+            <div style={{ height: "300px" }}>
+              <h1>설문조사관련소개</h1>
             </div>
-          </div>
-          <div>
-            <img src="/assets/time.png" alt="" style={{ width: "700px", height: "500px", marginTop: "1%" }} />
-            <div>
-              구독시스템
+            <div style={{ height: "300px" }}>
+              <h1>개인맞춤형분석소개</h1>
             </div>
-          </div>
-        </Slider>
+            <div style={{ height: "300px" }}>
+              <h1>구독시스템소개</h1>
+            </div>
+          </Container>
+        </>
       ) : (
         <>
           <div style={{ height: "320px", background: "#F2F5C8" }}>

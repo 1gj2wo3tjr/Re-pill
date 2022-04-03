@@ -21,10 +21,14 @@ const Auth = () => {
         const userEmail = res.data.email;
         const userName = res.data.name;
         const userImg = res.data.profile_img;
+        const is_admin = res.data.is_admin;
+        const is_staff = res.data.is_staff;
         sessionStorage.setItem("token", ACCESS_TOKEN);
         sessionStorage.setItem("email", userEmail);
         sessionStorage.setItem("name", userName);
         sessionStorage.setItem("img", userImg);
+        sessionStorage.setItem("admin", is_admin);
+        sessionStorage.setItem("staff", is_staff);
         navigate("/");
       })
       .catch((err) => {

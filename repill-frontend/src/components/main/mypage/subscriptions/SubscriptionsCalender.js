@@ -3,6 +3,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // css import
 import moment from "moment";
 import CancelIcon from "@mui/icons-material/Cancel";
+import Button from "@mui/material/Button";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker } from "react-date-range";
@@ -72,6 +73,7 @@ class SubscriptionsCalender extends Component {
       selection: ranges["selection"],
     });
   };
+
   onCancel = () => {
     this.state.handleCancel();
   };
@@ -79,17 +81,34 @@ class SubscriptionsCalender extends Component {
   render() {
     return (
       <div
-        className="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-sky"
-        style={{ height: "70%", width: "100%" }}
+        style={{
+          height: "50%",
+          width: "40%",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -70%)",
+          backgroundColor: "white",
+          border: "2px solid #000",
+          boxShadow: 24,
+          p: 4,
+        }}
       >
-        <div className="bg-white rouded shadow-lg w-10 md:w-2/5">
-          <button
-            onClick={this.onCancel}
-            className="bg-green-300 hover:bg-green-500 rounded text-white "
-            style={{ border: "none" }}
-          >
-            <CancelIcon />
-          </button>
+        <Button
+          variant="contained"
+          onClick={this.onCancel}
+          style={{
+            border: "none",
+            backgroundColor: "#E8E8A6",
+            float: "right",
+            marginTop: "5px",
+            marginRight: "5px",
+          }}
+        >
+          <CancelIcon />
+        </Button>
+        <h1 style={{ textAlign: "center" }}>구독 관리</h1>
+        <div style={{ transform: "translate(10%, 15%)" }}>
           <DateRangePicker
             onChange={this.onRangeChange}
             months={1}

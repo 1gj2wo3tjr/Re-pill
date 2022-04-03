@@ -11,6 +11,7 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { useNavigate } from "react-router-dom";
 import SubscriptionsCalender from "./SubscriptionsCalender";
 import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
+import Modal from "@mui/material/Modal";
 
 function SubscriptionsCompo() {
   const [modalOn, setModalOn] = useState(false);
@@ -33,9 +34,21 @@ function SubscriptionsCompo() {
   const handleCalender = (data) => {
     setSelected(data);
     setModalOn(true);
+    console.log("열렸다!");
   };
   const handleCancel = () => {
     setModalOn(false);
+  };
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
   };
 
   return (

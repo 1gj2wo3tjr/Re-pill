@@ -48,7 +48,30 @@ function MyorderTab() {
         headers: headers
       })
       console.log(response.data)
-      setList(response.data)
+      response.data.map((item) => 
+        axios
+          .get(`http://127.0.0.1:8000/api/v1/products/items/${item.product}`)
+          .then((res) => {
+            setList((list) => [
+              {
+                address: item.address,
+                has_review: item.has_review,
+                id: item.id,
+                order_date: item.order_date,
+                order_receive: item.order_receive,
+                order_status: item.order_status,
+                quantity: item.quantity,
+                product: item.product,
+                order_number: item.order_number,
+                title: res.data.name,
+                img_url: res.data.thumbnail_url,
+                price: res.data.price
+              },
+              ...list
+            ])
+          })
+      )
+      // console.log(list)
     } catch(err) {
       console.log(err)
     }
@@ -66,13 +89,25 @@ function MyorderTab() {
     }
   }
 
-  const cancleOrder = () => {
-    alert("삭제")
+  const cancleOrder = (item) => {
+    axios.put(`http://127.0.0.1:8000/api/v1/accounts/order/${item.order_number}/`,
+    {
+      product: item.id,
+      quantity: item.quantity,
+      order_status: 2,
+      address: item.address,
+      order_receive: item.order_receive
+    }, {
+      headers: headers
+    })
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err))
   }
 
   useEffect(() => {
     getOrder()
     getReview()
+    setList([])
   }, [])
 
   return (
@@ -92,15 +127,15 @@ function MyorderTab() {
                 </div>
                 <div style={{ display: "flex", marginTop: "5%", fontSize: "0.5rem" }}>
                   <div>
-                    {item.price}원
+                    {item.price} * {item.quantity} 원
                   </div>
                   <div style={{ marginLeft: "10%" }}>
-                    {item.date}
+                    {item.order_date.slice(0,10)}
                   </div>
                 </div>
               </div>
               <div style={{ width: "25%", display: "flex", flexDirection: "column" }}>
-                {list.has_review===1 ? (
+                {item.has_review ? (
                   <button className={styles.order_review_button_mob} onClick={() => handleDetailModal(item)}>리뷰보기</button>
                 ) : (
                   <button className={styles.order_review_register_button_mob} onClick={() => handleRegisterModal(item)}>리뷰쓰기</button>
@@ -118,32 +153,36 @@ function MyorderTab() {
           <h1 style={{ marginTop: "5%" }}>결제 내역</h1>
           {list.map((item) => 
             <div style={{ border: "1px solid black", height: "15rem", marginTop: "5%", display: "flex", alignItems: "center", borderRadius: "10px" }} key={item.id}>
-              <div style={{ width: "15%" }}>
-                <img src={"/assets/logo512.png"} alt=""  style={{ width: "150px", height: "150px" }} />
+              <div style={{ width: "15%", marginLeft: "1%" }}>
+                <img src={item.img_url} alt=""  style={{ width: "150px", height: "150px" }} />
               </div>
-              <div style={{ width: "55%" }}>
+              <div style={{ width: "60%", marginLeft: "5%" }}>
                 <div style={{ fontSize: "2rem" }}>
-                  {item.title}
+                  <p>
+                    {item.title}
+                  </p>
                 </div>
                 <div style={{ display: "flex", marginTop: "5%", fontSize: "1.5rem" }}>
                   <div>
-                    {item.price}원
+                    {item.quantity} 개
                   </div>
                   <div style={{ marginLeft: "10%" }}>
-                    {item.date}
+                    {item.price * item.quantity} 원
+                  </div>
+                  <div style={{ marginLeft: "10%" }}>
+                    {item.order_date.slice(0,10)}
                   </div>
                 </div>
               </div>
-              <div style={{ width: "20%", display: "flex", flexDirection: "column" }}>
-                {list.has_review===1 ? (
-                  <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <div style={{ width: "20%", display: "flex", flexDirection: "column", marginLeft: "10%" }}>
+                {item.has_review ? (
+                  <div>
                     <button className={styles.order_review_detail_button} onClick={() => handleDetailModal(item)}>리뷰보기</button>
-                    <button className={styles.order_review_edit_button} onClick={() => handleEditModal(item)}>리뷰수정</button>
                   </div>
                 ) : (
                   <button className={styles.order_review_register_button} onClick={() => handleRegisterModal(item)}>리뷰쓰기</button>
                 )}
-                <button className={styles.order_cancle_order_button} onClick={cancleOrder}>구매취소</button>
+                <button className={styles.order_cancle_order_button} onClick={() => cancleOrder(item)}>구매취소</button>
               </div>
             </div>)}
             <ReviewRegisterModal open={openRegister} setOpen={setOpenRegister} id={setProductId} />

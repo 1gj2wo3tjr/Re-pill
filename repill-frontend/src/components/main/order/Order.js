@@ -181,10 +181,28 @@ function Order() {
       setPay((prev) => !prev);
 
       // let finalAddress="" ;
-      if (selectedAddress.id === "") {
+      if (radio === "new") {
         console.log("신규");
-        finalAddress = address.address + " " + address.detailed_address;
+        console.log(newAddress.address_name);
+        finalAddress = address.address + " " + newAddress.detailed_address;
         console.log(finalAddress);
+
+        axios
+          .post(
+            `http://127.0.0.1:8000/api/v1/accounts/order/`,
+            {
+              products: finalOrder,
+              address: finalAddress,
+              order_status: 1,
+              order_receive: newAddress.address_name,
+            },
+            { headers: headers }
+          )
+          .then((res) => {
+            alert("주문완료!");
+            deleteCart();
+          })
+          .catch((err) => alert("주문실패ㅠㅠ"));
       } else {
         console.log("기존");
         finalAddress =
@@ -400,14 +418,26 @@ function Order() {
                       <p>받는 분</p>
                     </TableCell>
                     <TableCell className={styles.mob_address_right}>
-                      <input
-                        type="text"
-                        value={selectedAddress.address_name}
-                        title="받는분"
-                        className={styles.mob_address_input}
-                        onChange={onChange}
-                        name="address_name"
-                      />
+                      {radio === "existing" ? (
+                        <input
+                          type="text"
+                          value={selectedAddress.address_name}
+                          title="받는분"
+                          className={styles.mob_address_input}
+                          onChange={onChange}
+                          name="address_name"
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={newAddress.address_name}
+                          title="받는분"
+                          className={styles.mob_address_input}
+                          onChange={onChange}
+                          name="address_name"
+                          defaultValue=""
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -466,14 +496,26 @@ function Order() {
                           disabled
                         />
                       )}
-                      <input
-                        type="text"
-                        value={selectedAddress.detailed_address}
-                        title="상세주소"
-                        className={styles.mob_address_input}
-                        style={{ width: "100%" }}
-                        defaultValue=""
-                      />
+                      {radio === "existing" ? (
+                        <input
+                          type="text"
+                          value={selectedAddress.detailed_address}
+                          title="상세주소"
+                          className={styles.mob_address_input}
+                          style={{ width: "100%" }}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={newAddress.detailed_address}
+                          title="상세주소"
+                          className={styles.mob_address_input}
+                          style={{ width: "100%" }}
+                          onChange={onChange}
+                          name="detailed_address"
+                          defaultValue=""
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -869,15 +911,26 @@ function Order() {
                       <p>받는 분</p>
                     </TableCell>
                     <TableCell className={styles.address_right}>
-                      <input
-                        type="text"
-                        value={selectedAddress.address_name}
-                        title="받는분"
-                        className={styles.address_input}
-                        // defaultValue=""
-                        onChange={onChange}
-                        name="address_name"
-                      />
+                      {radio === "existing" ? (
+                        <input
+                          type="text"
+                          value={selectedAddress.address_name}
+                          title="받는분"
+                          className={styles.address_input}
+                          onChange={onChange}
+                          name="address_name"
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={newAddress.address_name}
+                          title="받는분"
+                          className={styles.address_input}
+                          onChange={onChange}
+                          name="address_name"
+                          defaultValue=""
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -937,21 +990,23 @@ function Order() {
                             disabled
                           />
                         )}
-                        {address ? (
+                        {radio === "existing" ? (
                           <input
                             type="text"
                             value={address.detailed_address}
                             title="상세주소"
-                            defaultValue=""
+                            // defaultValue=""
                             className={styles.address_input}
                           />
                         ) : (
                           <input
                             type="text"
-                            value={selectedAddress.detailed_address}
+                            value={newAddress.detailed_address}
                             title="상세주소"
                             defaultValue=""
                             className={styles.address_input}
+                            onChange={onChange}
+                            name="detailed_address"
                           />
                         )}
                       </div>
@@ -1091,21 +1146,20 @@ function Order() {
                 </p>
               </div>
               <div className={styles.agreement}>
-                <Checkbox
-                  aria-label="a"
-                  value={agreement}
-                  onChange={agreementCheck}
-                  sx={{
-                    color: "#cfcfcf",
-                    "&.Mui-checked": {
-                      color: "#219F94",
-                    },
-                  }}
-                />
-                <p style={{ fontSize: "15px", lineHeight: "37px" }}>
-                  <span style={{ fontWeight: "bold" }}>(필수)</span> 구매하실
-                  상품의 결제정보를 확인하였으며, 구매진행에 동의합니다.
-                </p>
+                <div style={{ margin: "11px" }}>
+                  <input
+                    type="checkbox"
+                    onChange={agreementCheck}
+                    checked={agreement}
+                    style={{ width: "18px", height: "18px" }}
+                  />
+                </div>
+                <div>
+                  <p style={{ fontSize: "15px", lineHeight: "37px" }}>
+                    <span style={{ fontWeight: "bold" }}>(필수)</span> 구매하실
+                    상품의 결제정보를 확인하였으며, 구매진행에 동의합니다.
+                  </p>
+                </div>
               </div>
               {/* <Link to={`/orderCompleted`}> */}
               {/* <Link to={`/payReady`}> */}

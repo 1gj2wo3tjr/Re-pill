@@ -54,12 +54,12 @@ function CartList({ cart, total, setTotal }) {
           ]);
 
           ids[index] = res.data.id;
-          // ids[index] = { id: res.data.id, cartId: item.id };
         })
         .catch((err) => console.log(err))
     );
 
     setIdList(ids);
+    // setCheckList(ids);
   };
 
   // checkbox 전체 선택 => checkList에 product id값 다 넣기, 해제하면 빈 배열
@@ -84,8 +84,8 @@ function CartList({ cart, total, setTotal }) {
     console.log("onChangeEach: ", e.target.checked);
     // check되면 checkList에 상품 id 넣기
     const m = product.find((a) => a.id === id);
-    console.log(checkList);
-    console.log(m);
+    // console.log(checkList);
+    // console.log(m);
     if (e.target.checked) {
       setCheckList([...checkList, id]);
       setTotal((total) => total + m.price);
@@ -100,10 +100,9 @@ function CartList({ cart, total, setTotal }) {
   const quantitySub = (item) => {
     if (item.quantity > 1) {
       const a = --item.quantity;
-
       axios
         .patch(
-          `http://127.0.0.1:8000/api/v1/products/items/${item.cartId}/`,
+          `http://127.0.0.1:8000/api/v1/products/cart/${item.cartId}`,
           {
             quantity: a,
             product: item.id,
@@ -113,7 +112,58 @@ function CartList({ cart, total, setTotal }) {
           }
         )
         .then((res) => {
-          console.log(res);
+          setProduct(
+            product.map((p) =>
+              p.id === item.id
+                ? { ...p, quantity: a, price: a * item.original }
+                : p
+            )
+          );
+          setCheckList(
+            checkList.includes(item.id) ? checkList : [...checkList, item.id]
+          );
+          console.log("total : ", total);
+          if (total === 0 || !checkList.includes(item.id)) {
+            setTotal((total) => total + item.price - item.original);
+          } else {
+            setTotal((total) => total - item.original);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const quantityAdd = (item) => {
+    if (item.quantity < 999) {
+      const a = ++item.quantity;
+      axios
+        .patch(
+          `http://127.0.0.1:8000/api/v1/products/cart/${item.cartId}`,
+          {
+            quantity: a,
+            product: item.id,
+          },
+          {
+            headers: headers,
+          }
+        )
+        .then((res) => {
+          setProduct(
+            product.map((p) =>
+              p.id === item.id
+                ? { ...p, quantity: a, price: a * item.original }
+                : p
+            )
+          );
+          setCheckList(
+            checkList.includes(item.id) ? checkList : [...checkList, item.id]
+          );
+          console.log("total : ", total);
+          if (total === 0 || !checkList.includes(item.id)) {
+            setTotal((total) => total + item.price + item.original);
+          } else {
+            setTotal((total) => total + item.original);
+          }
         })
         .catch((err) => console.log(err));
     }
@@ -133,12 +183,13 @@ function CartList({ cart, total, setTotal }) {
 
         axios
           .delete(
-            `http://127.0.0.1:8000/api/v1/products/items/${deleteList.cartId}/`, // 장바구니 아이디
+            `http://127.0.0.1:8000/api/v1/products/cart/${deleteList.cartId}`,
             { headers: headers }
           )
           .then((res) => {
             console.log(res);
             console.log("삭제");
+            window.location.reload(true);
           })
           .catch((err) => console.log(err));
       });
@@ -147,6 +198,8 @@ function CartList({ cart, total, setTotal }) {
 
   useEffect(() => {
     setProduct([]);
+    setCheckList([]);
+    setTotal(0);
     getProduct();
   }, [cart]);
 
@@ -220,93 +273,96 @@ function CartList({ cart, total, setTotal }) {
           <>
             {cart.length !== 0 ? (
               <>
-                {product.map((item, index) => (
-                  <TableRow>
-                    <TableCell style={{ textAlign: "center" }}>
-                      <input
-                        type="checkbox"
-                        className={styles.checkbox}
-                        onChange={(e) => onChangeEach(e, item.id, item.cartId)}
-                        checked={checkList.includes(item.id)}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <div
-                        style={{
-                          display: "flex",
-                          height: "100px",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Link to={`/product/${item.id}`}>
-                          <div
-                            style={{
-                              objectFit: "contain",
-                              height: "100px",
-                              cursor: "pointer",
-                              marginRight: "70px",
-                            }}
-                          >
-                            <img
-                              src={item.thumbnail_url}
-                              alt=""
+                {product &&
+                  product.map((item, index) => (
+                    <TableRow>
+                      <TableCell style={{ textAlign: "center" }}>
+                        <input
+                          type="checkbox"
+                          className={styles.checkbox}
+                          onChange={(e) =>
+                            onChangeEach(e, item.id, item.cartId)
+                          }
+                          checked={checkList.includes(item.id)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <div
+                          style={{
+                            display: "flex",
+                            height: "100px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Link to={`/product/${item.id}`}>
+                            <div
                               style={{
                                 objectFit: "contain",
-                                height: "100%",
+                                height: "100px",
                                 cursor: "pointer",
-                              }}
-                            />
-                          </div>
-                        </Link>
-                        <Link to={`/product/${item.id}`}>
-                          <div style={{ fontSize: "13px" }}>
-                            <p
-                              style={{
-                                color: "rgba(0, 0, 0, 0.87)",
-                                fontWeight: "bold",
-                                marginBottom: "8px",
+                                marginRight: "70px",
                               }}
                             >
-                              {item.company}
-                            </p>
-                            <p style={{ color: "rgba(0, 0, 0, 0.87)" }}>
-                              {item.name}
-                            </p>
-                          </div>
-                        </Link>
-                      </div>
-                    </TableCell>
-                    <TableCell style={{ textAlign: "center" }}>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <RemoveIcon
-                          className={styles.qty_icon}
-                          onClick={() => quantitySub(item)}
-                        ></RemoveIcon>
-                        <input
-                          type="text"
-                          value={item.quantity}
-                          title="상품개수"
-                          className={styles.qty_input}
-                          // onChange={onChange}
-                          disabled
-                        />
-                        <AddIcon
-                          className={styles.qty_icon}
-                          // onClick={() => quantityAdd()}
-                        ></AddIcon>
-                      </div>
-                    </TableCell>
-                    <TableCell style={{ textAlign: "center" }}>
-                      <p>{item.price.toLocaleString()} 원</p>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                              <img
+                                src={item.thumbnail_url}
+                                alt=""
+                                style={{
+                                  objectFit: "contain",
+                                  height: "100%",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </div>
+                          </Link>
+                          <Link to={`/product/${item.id}`}>
+                            <div style={{ fontSize: "13px" }}>
+                              <p
+                                style={{
+                                  color: "rgba(0, 0, 0, 0.87)",
+                                  fontWeight: "bold",
+                                  marginBottom: "8px",
+                                }}
+                              >
+                                {item.company}
+                              </p>
+                              <p style={{ color: "rgba(0, 0, 0, 0.87)" }}>
+                                {item.name}
+                              </p>
+                            </div>
+                          </Link>
+                        </div>
+                      </TableCell>
+                      <TableCell style={{ textAlign: "center" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <RemoveIcon
+                            className={styles.qty_icon}
+                            onClick={() => quantitySub(item)}
+                          ></RemoveIcon>
+                          <input
+                            type="text"
+                            value={item.quantity}
+                            title="상품개수"
+                            className={styles.qty_input}
+                            // onChange={changQty}
+                            disabled
+                          />
+                          <AddIcon
+                            className={styles.qty_icon}
+                            onClick={() => quantityAdd(item)}
+                          ></AddIcon>
+                        </div>
+                      </TableCell>
+                      <TableCell style={{ textAlign: "center" }}>
+                        <p>{item.price.toLocaleString()} 원</p>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </>
             ) : (
               <>

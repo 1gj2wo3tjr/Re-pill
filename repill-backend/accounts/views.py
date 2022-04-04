@@ -12,6 +12,7 @@ from .serializers import DeliveryAddressSerializer, OrderSerializer
 
 import os
 import requests
+import uuid
 
 
 # SimpleJWT 토큰 생성
@@ -132,15 +133,17 @@ class OrderList(APIView):
         order_data = []
 
         if request.user.is_authenticated:
+            order_number = int(str(uuid.uuid4().time_low) + str(uuid.uuid4().time_mid))
+
             # 한 주문에 여러 제품을 주문할 수 있으므로 각 제품에 대해 serializer를 만들고 DB에 저장
             for product in request.data.get("products"):
                 updated_data = {**request.data, "product": product["number"], "quantity": product["quantity"]}
                 serializer = OrderSerializer(data=updated_data)
                 if serializer.is_valid():
                     if Review.objects.filter(user=request.user).filter(product=request.data.get("product")).exists():
-                        serializer.save(user=request.user, order_status=1, has_review=True)
+                        serializer.save(user=request.user, order_number=order_number, order_status=1, has_review=True)
                     else:
-                        serializer.save(user=request.user, order_status=1, has_review=False)
+                        serializer.save(user=request.user, order_number=order_number, order_status=1, has_review=False)
                     order_data.append(serializer.data)  # 각 제품에 대한 정보를 order_data에 추가 (최종적으로 order_data를 한 번에 반환)
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -168,6 +171,7 @@ class OrderDetail(APIView):
         if request.user.is_authenticated:
             try:
                 order_part = Order.objects.filter(order_number=order_pk).filter(product=request.data.get("product")).first()
+                print(order_part)
                 if not request.user == order_part.user:
                     return Response(status=status.HTTP_403_FORBIDDEN)    
                 else:    
@@ -177,7 +181,8 @@ class OrderDetail(APIView):
                             serializer.save(has_review=True)
                         else:
                             serializer.save(has_review=False)
-                    return Response(serializer.data, status=status.HTTP_200_OK)
+                        return Response(serializer.data, status=status.HTTP_200_OK)
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             except:
                 return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)

@@ -214,7 +214,9 @@ function CartList({ cart, total, setTotal, setChecked }) {
     navigate(`/order`, { state: { orderList: orderList } });
   };
 
-  const allOrder = () => {};
+  const allOrder = () => {
+    navigate(`/order`, { state: { orderList: product } });
+  };
 
   useEffect(() => {
     setProduct([]);

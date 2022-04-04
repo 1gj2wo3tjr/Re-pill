@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import DaumPostcode from "react-daum-postcode";
 import { Modal } from 'semantic-ui-react'
 import { TableRow, TableCell } from "@mui/material";
@@ -7,7 +7,7 @@ import styles from "../Mypage.module.css"
 import axios from "axios"
 
 function AddressAddModal({ address, setAddress, open, setOpen }) {
-  let token = localStorage.getItem('token')
+  let token = sessionStorage.getItem('token')
   const headers = {
     Authorization: `Bearer ${token}`
   }
@@ -17,6 +17,8 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
     phoneNum: "",
     subAddress: ""
   })
+
+  const [phoneNum, setPhoneNum] = useState("")
 
   const onCompletePost = (data) => {
     setAddress(data);
@@ -31,12 +33,11 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
   }
 
   const cancleModal = () => {
+    setAddress("")
+    setForm("")
+    setPhoneNum("")
+    setPopUp(false)
     setOpen((prev) => !prev)
-    form.name = ""
-    form.phoneNum = ""
-    form.subAddress = ""
-    address.address = ""
-    address.zonecode = ""
   }
 
   const onChange = (event) => {
@@ -47,6 +48,15 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
     })
   }
 
+  const checkPhoneNum = (e) => {
+    const regex = /^[0-9\b -]{0,13}$/;
+    if (regex.test(e.target.value)) {
+      setPhoneNum(e.target.value);
+    } else {
+      alert("숫자만 입력해주세요")
+    }
+  }
+
   const registerAddress = () => {
     // axios post 요청 코드
     axios.post("http://127.0.0.1:8000/api/v1/accounts/address/", {
@@ -54,18 +64,28 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
       address: address.address,
       detailed_address: form.subAddress,
       zipcode: address.zonecode,
-      phone_number: form.phoneNum
+      phone_number: phoneNum
     },
     {
       headers: headers
     })
     .then((res) => console.log(res))
     .catch((err) => console.log(err))
+    setAddress("")
     setForm("")
-    address.address = ""
-    address.zonecode = ""
+    setPhoneNum("")
+    setPopUp(false)
     window.location.reload(true)
   }
+
+  useEffect(() => {
+    if (phoneNum.length === 10) {
+      setPhoneNum(phoneNum.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'))
+    }
+    if (phoneNum.length === 13) {
+      setPhoneNum(phoneNum.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'))
+    }
+  })
 
   return (
     <>
@@ -83,7 +103,7 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
               </TableRow>
               <TableRow style={{ display: "flex", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem", textAlign: "center" }}>
                 <div style={{ fontSize: "1rem", width: "40%" }}>연락처</div>
-                <div style={{ fontSize: "1rem", width: "60%" }}><input type="text" onChange={onChange} value={form.phoneNum} name="phoneNum" style={{ width: "82%" }} maxlength="13" /></div>
+                <div style={{ fontSize: "1rem", width: "60%" }}><input type="text" onChange={checkPhoneNum} value={phoneNum} name="phoneNum" style={{ width: "82%" }} maxlength="13" /></div>
               </TableRow>
               <TableRow style={{ display: "flex", justifyContent: "space-between", border: "1px solid black", marginTop: "1%" }}>
                 <TableCell style={{ fontSize: "1rem", width: "40%", textAlign: "center" }}>주소</TableCell>
@@ -121,11 +141,11 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
             <Modal.Content>
               <TableRow style={{ display: "flex", justifyContent: "space-between", height: "5rem", alignItems: "center", border: "1px solid black" }}>
                 <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>받는사람이름</TableCell>
-                <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.name} name="name" /></TableCell>
+                <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.name} name="name" style={{ height: "30px" }} /></TableCell>
               </TableRow>
               <TableRow style={{ display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem" }}>
                 <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>연락처</TableCell>
-                <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.phoneNum} name="phoneNum" maxlength="13" /></TableCell>
+                <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={checkPhoneNum} value={phoneNum} name="phoneNum" maxlength="13" /></TableCell>
               </TableRow>
               <TableRow style={{ display: "flex", justifyContent: "space-between", border: "1px solid black", marginTop: "1%" }}>
                 <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>주소</TableCell>

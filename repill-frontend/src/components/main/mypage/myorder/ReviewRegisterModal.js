@@ -5,8 +5,8 @@ import styles from "../Mypage.module.css"
 import axios from "axios"
 import Rating from '@mui/material/Rating';
 
-function ReviewRegisterModal({ open, setOpen }) {
-  let token = localStorage.getItem('token')
+function ReviewRegisterModal({ open, setOpen, id }) {
+  let token = sessionStorage.getItem('token')
   const headers = {
     Authorization: `Bearer ${token}`
   }
@@ -20,7 +20,7 @@ function ReviewRegisterModal({ open, setOpen }) {
   )
 
   const [form, setForm] = useState("")
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(3);
 
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)"
@@ -40,18 +40,18 @@ function ReviewRegisterModal({ open, setOpen }) {
     if (!form.length) {
       alert("내용을 확인해주세요")
     } 
-    // else {
-    //   axios.post("http://127.0.0.1:8000/api/v1/products/review/", {
-    //     product: ,
-    //     title: ,
-    //     content: ,
-    //     rating: value
-    //   },{
-    //     headers: headers
-    //   })
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err))
-    // }
+    else {
+      axios.post("http://127.0.0.1:8000/api/v1/products/reviews/", {
+        product: id,
+        content: form,
+        rating: value
+      },{
+        headers: headers
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+      setTimeout(window.location.reload(true), 1000)
+    }
   }
 
   return (

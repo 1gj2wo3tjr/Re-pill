@@ -6,10 +6,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User, DeliveryAddress, Order
+from .models import User, DeliveryAddress, Order, Subscription
 from products.models import Review
-from .serializers import DeliveryAddressSerializer, OrderSerializer
+from .serializers import DeliveryAddressSerializer, OrderSerializer, SubscriptionSerializer
 
+from datetime import date, timedelta
 import os
 import requests
 import uuid
@@ -171,7 +172,6 @@ class OrderDetail(APIView):
         if request.user.is_authenticated:
             try:
                 order_part = Order.objects.filter(order_number=order_pk).filter(product=request.data.get("product")).first()
-                print(order_part)
                 if not request.user == order_part.user:
                     return Response(status=status.HTTP_403_FORBIDDEN)    
                 else:    
@@ -194,4 +194,74 @@ class OrderDetail(APIView):
             for order in orders:
                 order.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+
+# 구독 관련 API
+class SubscriptionList(APIView):
+    # 특정 사용자의 구독 전체 조회
+    def get(self, request):
+        if request.user.is_authenticated:
+            subscriptions = Subscription.objects.filter(user=request.user)
+            serializer = SubscriptionSerializer(subscriptions, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
+    # 구독 신청
+    def post(self, request):
+        if request.user.is_authenticated:
+            serializer = SubscriptionSerializer(data=request.data)
+            if serializer.is_valid():
+
+                subscribe_dates = dict()
+
+                prev_date = date.today()
+                subscribe_dates["0"] = str(prev_date)
+
+                for idx in range(1, int(request.data.get("subscribe_times"))):
+                    next_date = prev_date + timedelta(days=request.data.get("period"))
+                    subscribe_dates[str(idx)] = str(next_date)
+                    prev_date = next_date
+
+                serializer.save(user=request.user, subscribe_dates=subscribe_dates)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class SubscriptionDetail(APIView):
+    # 특정 상품 구독 조회
+    def get(self, request, product_pk):
+        if request.user.is_authenticated:
+            try:
+                subscription = get_object_or_404(Subscription, user=request.user, product=product_pk)
+                serializer = SubscriptionSerializer(subscription)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
+    # 상품 구독 수정
+    def put(self, request, product_pk):
+        if request.user.is_authenticated:
+            try:
+                subscription = get_object_or_404(Subscription, user=request.user, product=product_pk)
+                serializer = SubscriptionSerializer(subscription, data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
+    # 상품 구독 취소
+    def delete(self, request, product_pk):
+        if request.user.is_authenticated:
+            try:
+                subscription = get_object_or_404(Subscription, user=request.user, product=product_pk)
+                subscription.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_403_FORBIDDEN)

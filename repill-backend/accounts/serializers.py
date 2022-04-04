@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import DeliveryAddress, Order
+from .models import DeliveryAddress, Order, Subscription
 from django.contrib.auth import get_user_model
 
 class DeliveryAddressUserSerializer(serializers.ModelSerializer):
@@ -23,4 +23,10 @@ class OrderSerializer(serializers.ModelSerializer):
     has_review = serializers.BooleanField(read_only=True)
     class Meta:
         model = Order
+        fields = '__all__'
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    class Meta:
+        model = Subscription
         fields = '__all__'

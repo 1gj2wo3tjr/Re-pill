@@ -4,7 +4,6 @@ import { useMediaQuery } from 'react-responsive';
 import styles from "../Mypage.module.css"
 import ReviewRegisterModal from './ReviewRegisterModal';
 import ReviewDetailModal from './ReviewDetailModal';
-import ReviewEditModal from './ReviewEditModal';
 import axios from 'axios';
 
 function MyorderTab() {
@@ -19,16 +18,16 @@ function MyorderTab() {
   // const today = new Date()
   const [openRegister, setOpenRegister] = useState(false)
   const [openDetail, setOpenDetail] = useState(false)
-  const [openEdit, setOpenEdit] = useState(false)
   const [productId, setProductId] = useState("")
   const [reviewId, setReviewId] = useState("")
+  const [orderStatus, setOrderStatus] = useState("")
 
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)"
   });
 
   const handleRegisterModal = (item) => {
-    setProductId(item.id)
+    setProductId(item.product)
     setOpenRegister((prev) => !prev)
   }
 
@@ -37,17 +36,22 @@ function MyorderTab() {
     setOpenDetail((prev) => !prev)
   }
 
-  const handleEditModal = (item) => {
-    setOpenEdit((prev) => !prev)
-  }
-
   // 주문 내역 받아오는 함수
   const getOrder = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/v1/accounts/order/", {
         headers: headers
       })
-      console.log(response.data)
+      // const status = response.data.order_status
+      // if (status === 1) {
+      //   setOrderStatus("구매취소")
+      // } else if (status === 2) {
+      //   setOrderStatus("배송준비중")
+      // } else if (status === 3) {
+      //   setOrderStatus("배송중")
+      // } else if (status === 4) {
+      //   setOrderStatus("배송완료")
+      // }
       response.data.map((item) => 
         axios
           .get(`http://127.0.0.1:8000/api/v1/products/items/${item.product}`)
@@ -71,7 +75,6 @@ function MyorderTab() {
             ])
           })
       )
-      // console.log(list)
     } catch(err) {
       console.log(err)
     }
@@ -89,12 +92,13 @@ function MyorderTab() {
     }
   }
 
+  // 구매 취소 order_status 값을 변경
   const cancleOrder = (item) => {
     axios.put(`http://127.0.0.1:8000/api/v1/accounts/order/${item.order_number}/`,
     {
-      product: item.id,
+      product: item.product,
       quantity: item.quantity,
-      order_status: 2,
+      order_status: 1,
       address: item.address,
       order_receive: item.order_receive
     }, {
@@ -102,6 +106,7 @@ function MyorderTab() {
     })
     .then((res) => console.log(res))
     .catch((err) => console.log(err))
+    setTimeout(window.location.reload(true), 1000)
   }
 
   useEffect(() => {
@@ -118,34 +123,35 @@ function MyorderTab() {
           <h3 style={{ marginTop: "2%" }}>결제 내역</h3>
           {list.map((item) => 
             <div style={{ border: "1px solid black", height: "10rem", marginTop: "5%", display: "flex", alignItems: "center", borderRadius: "10px" }} key={item.id}>
-              <div style={{ width: "25%" }}>
-                <img src={"/assets/logo512.png"} alt=""  style={{ width: "70px", height: "70px" }} />
-              </div>
-              <div style={{ width: "50%" }}>
+              <div style={{ width: "60%", marginLeft: "5%" }}>
                 <div style={{ fontSize: "1rem" }}>
-                  {item.title}
+                  <p>
+                    {item.title}
+                  </p>
                 </div>
                 <div style={{ display: "flex", marginTop: "5%", fontSize: "0.5rem" }}>
                   <div>
-                    {item.price} * {item.quantity} 원
+                    {item.quantity} 개
+                  </div>
+                  <div style={{ marginLeft: "10%" }}>
+                    {item.price * item.quantity} 원
                   </div>
                   <div style={{ marginLeft: "10%" }}>
                     {item.order_date.slice(0,10)}
                   </div>
                 </div>
               </div>
-              <div style={{ width: "25%", display: "flex", flexDirection: "column" }}>
+              <div style={{ width: "25%", display: "flex", flexDirection: "column", marginLeft: "5%" }}>
                 {item.has_review ? (
                   <button className={styles.order_review_button_mob} onClick={() => handleDetailModal(item)}>리뷰보기</button>
                 ) : (
                   <button className={styles.order_review_register_button_mob} onClick={() => handleRegisterModal(item)}>리뷰쓰기</button>
                 )}
-                <button className={styles.order_cancle_order_button_mob} onClick={cancleOrder}>구매취소</button>
+                <button className={styles.order_cancle_order_button_mob} onClick={() => cancleOrder(item)}>구매취소</button>
               </div>
             </div>)}
-            <ReviewRegisterModal open={openRegister} setOpen={setOpenRegister} id={setProductId} />
-            <ReviewDetailModal open={openDetail} setOpen={setOpenDetail} />
-            <ReviewEditModal open={openEdit} setOpen={setOpenEdit} />
+            <ReviewRegisterModal open={openRegister} setOpen={setOpenRegister} id={productId} />
+            <ReviewDetailModal open={openDetail} setOpen={setOpenDetail} id={reviewId} />
         </Container>
       </>) : (
       <>
@@ -185,9 +191,8 @@ function MyorderTab() {
                 <button className={styles.order_cancle_order_button} onClick={() => cancleOrder(item)}>구매취소</button>
               </div>
             </div>)}
-            <ReviewRegisterModal open={openRegister} setOpen={setOpenRegister} id={setProductId} />
+            <ReviewRegisterModal open={openRegister} setOpen={setOpenRegister} id={productId} />
             <ReviewDetailModal open={openDetail} setOpen={setOpenDetail} id={reviewId} />
-            <ReviewEditModal open={openEdit} setOpen={setOpenEdit} />
         </Container>
       </> 
       )}

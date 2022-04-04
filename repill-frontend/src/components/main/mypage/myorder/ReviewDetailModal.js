@@ -5,7 +5,7 @@ import Rating from '@mui/material/Rating';
 import { useMediaQuery } from 'react-responsive';
 import axios from "axios"
 
-function ReviewDetailModal({ open, setOpen }) {
+function ReviewDetailModal({ open, setOpen, id }) {
   let token = sessionStorage.getItem('token')
   const headers = {
     Authorization: `Bearer ${token}`
@@ -24,7 +24,6 @@ function ReviewDetailModal({ open, setOpen }) {
   const handleActivate = () => {
     setActivate((prev) => !prev)
     if (activate === false) {
-      let id = 1
       axios.put(`http://127.0.0.1:8000/api/v1/products/reviews/${id}/`, {
 
       },
@@ -35,19 +34,23 @@ function ReviewDetailModal({ open, setOpen }) {
   }
 
   const deleteReview = () => {
-    let id = 1
     axios.delete(`http://127.0.0.1:8000/api/v1/products/reviews/${id}/`, {
       headers: headers
     })
     window.location.reload(true)
   }
 
-  const editReview = (event) => {
+  // 리뷰 내용 수정(onChange)
+  const editContent = (event) => {
     setForm(event.target.value)
   }
 
+  // 수정된 리뷰 put 요청
+  const editReview = () => {
+    console.log("수정완료")
+  }
+
   const getReview = async () => {
-    let id = 1
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/v1/products/reviews/${id}/`, {
         headers: headers
@@ -68,6 +71,8 @@ function ReviewDetailModal({ open, setOpen }) {
       {isMobile ? (
         <>
           <Modal
+            onClose={() => setOpen(false)}
+            onOpen={() => setOpen(true)}
             open={open}
             centered={false}
           >
@@ -102,6 +107,8 @@ function ReviewDetailModal({ open, setOpen }) {
         </>) : (
         <>
           <Modal
+            onClose={() => setOpen(false)}
+            onOpen={() => setOpen(true)}
             open={open}
             centered={false}
           >
@@ -134,7 +141,7 @@ function ReviewDetailModal({ open, setOpen }) {
             <Modal.Content>
               <Form>
                 {activate ? (
-                  <TextArea rows={10} style={{ fontSize: "1.5rem" }} onChange={editReview} value={review.content}></TextArea>
+                  <TextArea rows={10} style={{ fontSize: "1.5rem" }} onChange={editContent} value={review.content}></TextArea>
                 ) : (
                   <TextArea rows={10} style={{ fontSize: "1.5rem" }} value={review.content} readOnly></TextArea>
                 )}
@@ -142,7 +149,7 @@ function ReviewDetailModal({ open, setOpen }) {
             </Modal.Content>
             <Modal.Content style={{ display: "flex", justifyContent: "center" }}>
               <button onClick={handleActivate} className={styles.order_add_reviewModal_button}>{activate ? (
-                <div>
+                <div onClick={editReview}>
                   완료
                 </div>
               ) : (

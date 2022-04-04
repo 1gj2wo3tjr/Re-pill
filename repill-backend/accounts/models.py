@@ -40,7 +40,7 @@ class DeliveryAddress(models.Model):
 # 주문 모델
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    order_number = models.PositiveIntegerField(default=0)
+    order_number = models.BigIntegerField(default=0)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     quantity = models.PositiveIntegerField(default=1)
     has_review = models.BooleanField(default=False)
@@ -51,4 +51,4 @@ class Order(models.Model):
     order_receive = models.CharField(max_length=20)
 
     def __str__(self):
-        return f'{self.order_number}번 주문'
+        return f'{self.order_number}번 주문 / {self.product}'

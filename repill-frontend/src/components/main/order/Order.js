@@ -18,7 +18,7 @@ import {
 import styles from "./Order.module.css";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import Linked from "@mui/material/Link";
@@ -33,6 +33,13 @@ function Order() {
     Authorization: `Bearer ${token}`,
   };
 
+  const navigate = useNavigate();
+
+  // navigate()로 보낸 값 받기
+  const location = useLocation();
+  console.log("state", location.state);
+  const { orderList } = location.state;
+
   const [radio, setRadio] = useState("new");
   const [radioPay, setRadioPay] = useState("kakaopay");
   const [selector, setSelector] = useState(1);
@@ -45,16 +52,21 @@ function Order() {
   const [selectedAddress, setSelectedAddress] = useState([]);
   const [newAddress, setNewAddress] = useState("");
 
+  const [total, setTotal] = useState(0);
+  const [finalOrder, setFinalOrder] = useState([]);
+
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });
 
   const agreementCheck = () => {
+    console.log("agreement ", agreement);
     setAgreement((prev) => !prev);
   };
 
   const handleClick = (e) => {
     e.preventDefault();
+    navigate(`/cart`);
   };
 
   const getAddressList = () => {
@@ -127,14 +139,6 @@ function Order() {
     setModal((prev) => !prev);
   };
 
-  const openPay = () => {
-    if (agreement) {
-      setPay((prev) => !prev);
-    } else {
-      alert("동의해주세요");
-    }
-  };
-
   const breadcrumbs = [
     // react-router-dom 의 Link와 겹치지 않도록
     <Linked
@@ -156,8 +160,79 @@ function Order() {
     </Typography>,
   ];
 
+  const getTotal = () => {
+    orderList.map((item, index) => setTotal((total) => total + item.price));
+  };
+
+  const getFinalOrder = () => {
+    orderList.map((item, index) =>
+      setFinalOrder((finalOrder) => [
+        { number: item.id, quantity: item.quantity },
+        ...finalOrder,
+      ])
+    );
+  };
+
+  let finalAddress = "";
+
+  const openPay = () => {
+    // console.log(agreement);
+    if (agreement) {
+      setPay((prev) => !prev);
+
+      // let finalAddress="" ;
+      if (selectedAddress.id === "") {
+        console.log("신규");
+        finalAddress = address.address + " " + address.detailed_address;
+        console.log(finalAddress);
+      } else {
+        console.log("기존");
+        finalAddress =
+          selectedAddress.address + " " + selectedAddress.detailed_address;
+
+        axios
+          .post(
+            `http://127.0.0.1:8000/api/v1/accounts/order/`,
+            {
+              products: finalOrder,
+              address: finalAddress,
+              order_status: 1,
+              order_receive: selectedAddress.address_name,
+            },
+            { headers: headers }
+          )
+          .then((res) => {
+            alert("주문완료!");
+            deleteCart();
+          })
+          .catch((err) => alert("주문실패ㅠㅠ"));
+      }
+    } else {
+      alert("동의해주세요");
+    }
+  };
+
+  const deleteCart = () => {
+    orderList.map((item, index) =>
+      axios
+        .delete(`http://127.0.0.1:8000/api/v1/products/cart/${item.cartId}`, {
+          headers: headers,
+        })
+        .then((res) => {
+          console.log("주문 및삭제");
+          navigate(`/product`);
+        })
+        .catch((err) => console.log(err))
+    );
+  };
+
   useEffect(() => {
+    setTotal(0);
+    setFinalOrder([]);
     getAddressList();
+    getTotal();
+    getFinalOrder();
+    setAgreement(false);
   }, []);
 
   return (
@@ -626,34 +701,53 @@ function Order() {
                     >
                       상품 금액
                     </TableCell>
-                    <TableCell
-                      style={{
-                        fontSize: "1rem",
-                        width: "10%",
-                        textAlign: "center",
-                      }}
-                    >
-                      배송비
-                    </TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  <TableCell style={{ textAlign: "center" }}>a</TableCell>
-                  <TableCell style={{ textAlign: "center" }}>
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                      <input
-                        type="text"
-                        // value={quantity}
-                        title="상품개수"
-                        className={styles.qty_input}
-                        // onChange={onChange}
-                        // defaultValue=""
-                      />
-                    </div>
-                  </TableCell>
-                  <TableCell style={{ textAlign: "center" }}>a</TableCell>
-                  <TableCell style={{ textAlign: "center" }}>a</TableCell>
-                </TableBody>
+                {orderList &&
+                  orderList.map((item, index) => (
+                    <>
+                      <TableBody>
+                        <TableCell>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <img
+                              src={item.thumbnail_url}
+                              alt=""
+                              style={{ width: "100px" }}
+                            />
+                            <div>
+                              <p>{item.company}</p>
+                              <p>{item.name}</p>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell style={{ textAlign: "center" }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <input
+                              type="text"
+                              value={item.quantity}
+                              title="상품개수"
+                              className={styles.qty_input}
+                              // onChange={onChange}
+                              // defaultValue=""
+                            />
+                          </div>
+                        </TableCell>
+                        <TableCell style={{ textAlign: "center" }}>
+                          <p>{item.price.toLocaleString()} 원</p>
+                        </TableCell>
+                      </TableBody>
+                    </>
+                  ))}
               </Table>
             </div>
             <div className={styles.address_div}>
@@ -843,13 +937,23 @@ function Order() {
                             disabled
                           />
                         )}
-                        <input
-                          type="text"
-                          value={selectedAddress.detailed_address}
-                          title="상세주소"
-                          defaultValue=""
-                          className={styles.address_input}
-                        />
+                        {address ? (
+                          <input
+                            type="text"
+                            value={address.detailed_address}
+                            title="상세주소"
+                            defaultValue=""
+                            className={styles.address_input}
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            value={selectedAddress.detailed_address}
+                            title="상세주소"
+                            defaultValue=""
+                            className={styles.address_input}
+                          />
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -965,20 +1069,6 @@ function Order() {
                             }
                             label="카카오페이"
                           />
-                          {/* <FormControlLabel
-                            value="new"
-                            control={
-                              <Radio
-                                sx={{
-                                  color: "#cfcfcf",
-                                  "&.Mui-checked": {
-                                    color: "#219F94",
-                                  },
-                                }}
-                              />
-                            }
-                            label="신규 배송지"
-                          /> */}
                         </RadioGroup>
                       </FormControl>
                     </TableCell>
@@ -997,7 +1087,7 @@ function Order() {
                     marginLeft: "10px",
                   }}
                 >
-                  50,000원
+                  {total.toLocaleString()} 원
                 </p>
               </div>
               <div className={styles.agreement}>
@@ -1039,7 +1129,7 @@ function Order() {
                 />
               </>
             ) : null}
-            {pay ? <PayReady open={pay} setOpen={setPay} /> : null}
+            {/* {pay ? <PayReady open={pay} setOpen={setPay} /> : null} */}
           </Container>
         </div>
       )}

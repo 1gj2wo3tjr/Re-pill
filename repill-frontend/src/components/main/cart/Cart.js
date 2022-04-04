@@ -1,24 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-import {
-  Table,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableBody,
-  Container,
-} from "@mui/material";
+import { Container } from "@mui/material";
 import axios from "axios";
 import styles from "./Cart.module.css";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
 import CartList from "./CartList";
 
 function Cart() {
@@ -26,6 +14,8 @@ function Cart() {
   const headers = {
     Authorization: `Bearer ${token}`,
   };
+
+  const navigate = useNavigate();
 
   const [checked, setChecked] = useState([]);
   const [cart, setCart] = useState([]);
@@ -58,6 +48,13 @@ function Cart() {
       03. 주문완료
     </Typography>,
   ];
+
+  const partOrder = () => {
+    console.log(checked);
+    navigate(`/order`, { state: { checked: checked } });
+  };
+
+  const allOrder = () => {};
 
   useEffect(() => {
     getCart();
@@ -153,43 +150,6 @@ function Cart() {
                 setTotal={setTotal}
                 setChecked={setChecked}
               />
-            </div>
-            <div className={styles.cart_bottom}>
-              <div
-                style={{
-                  width: "300px",
-                  textAlign: "center",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "end",
-                  marginTop: "20px",
-                }}
-              >
-                <p style={{ margin: "0px", fontSize: "15px" }}>
-                  총 {checked.length}개의 상품 금액
-                </p>
-                <p
-                  style={{
-                    fontSize: "22px",
-                    fontWeight: "bold",
-                    color: "#f27370",
-                  }}
-                >
-                  {total.toLocaleString()} 원
-                </p>
-              </div>
-            </div>
-            <div className={styles.cart_btn}>
-              <Link to={`/order`}>
-                <button className={styles.button_check}>
-                  <p>선택 상품 주문</p>
-                </button>
-              </Link>
-              <Link to={`/order`}>
-                <button className={styles.button_all}>
-                  <p>전체 상품 주문</p>
-                </button>
-              </Link>
             </div>
           </Container>
         </div>

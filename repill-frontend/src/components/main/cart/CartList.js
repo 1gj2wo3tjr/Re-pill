@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import {
   Table,
@@ -20,6 +20,7 @@ function CartList({ cart, total, setTotal, setChecked }) {
     Authorization: `Bearer ${token}`,
   };
 
+  const navigate = useNavigate();
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });
@@ -204,9 +205,21 @@ function CartList({ cart, total, setTotal, setChecked }) {
     }
   };
 
+  const partOrder = () => {
+    console.log(checkList);
+    const orderList = checkList.map((item, index) =>
+      product.find((p) => p.id === item)
+    );
+    console.log(orderList);
+    navigate(`/order`, { state: { orderList: orderList } });
+  };
+
+  const allOrder = () => {};
+
   useEffect(() => {
     setProduct([]);
     setCheckList([]);
+    setChecked([]);
     setTotal(0);
     getProduct();
   }, [cart]);
@@ -562,6 +575,40 @@ function CartList({ cart, total, setTotal, setChecked }) {
               </>
             </TableBody>
           </Table>
+          <div className={styles.cart_bottom}>
+            <div
+              style={{
+                width: "300px",
+                textAlign: "center",
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "end",
+                marginTop: "20px",
+              }}
+            >
+              <p style={{ margin: "0px", fontSize: "15px" }}>
+                총 {checkList.length}개의 상품 금액
+              </p>
+              <p
+                style={{
+                  fontSize: "22px",
+                  fontWeight: "bold",
+                  color: "#f27370",
+                }}
+              >
+                {total.toLocaleString()} 원
+              </p>
+            </div>
+          </div>
+          <div className={styles.cart_btn}>
+            <button className={styles.button_check} onClick={partOrder}>
+              <p>선택 상품 주문</p>
+            </button>
+
+            <button className={styles.button_all} onClick={allOrder}>
+              <p>전체 상품 주문</p>
+            </button>
+          </div>
         </>
       )}
     </>

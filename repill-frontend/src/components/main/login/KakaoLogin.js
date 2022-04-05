@@ -6,8 +6,18 @@ const KakaoLogin = () => {
   return (
     <>
       <div class="login-box">
-        <h2>Login</h2>
-        <form>
+        <h2 style={{ color: "#585858" }}>로그인</h2>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <img
+            src="/img/pill_1.png"
+            style={{ width: "25px", height: "25px", marginRight: "10px" }}
+            alt=""
+          />
+          <p style={{ fontWeight: "bold" }}>
+            Re:pill은 카카오로그인을 지원합니다.{" "}
+          </p>
+        </div>
+        <form style={{ display: "flex", justifyContent: "center" }}>
           <a href={KAKAO_AUTH_URL}>
             <span></span>
             <span></span>
@@ -15,7 +25,8 @@ const KakaoLogin = () => {
             <span></span>
             <img
               src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
-              style={{ width: 280 }}
+              alt=""
+              style={{ width: "250px" }}
             ></img>
           </a>
         </form>

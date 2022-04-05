@@ -191,6 +191,7 @@ function Navbar() {
                 <Link to="/">
                   <img
                     src="/img/logo_1.png"
+                    alt=""
                     style={{ width: "90px", marginTop: "10px" }}
                   />
                 </Link>
@@ -308,7 +309,7 @@ function Navbar() {
                         </Link>
                       </MenuItem>
                       <MenuItem onClick={handleCloseUserMenu}>
-                        <Link to="/kakaologin">
+                        <Link to="/">
                           <Typography onClick={clickLogout}>
                             <p
                               style={{
@@ -326,17 +327,19 @@ function Navbar() {
                   ) : (
                     <>
                       <MenuItem onClick={handleCloseUserMenu}>
-                        <Typography onClick={clickLogout}>
-                          <p
-                            style={{
-                              color: "#464646",
-                              fontWeight: "bold",
-                              fontSize: "15px",
-                            }}
-                          >
-                            로그인
-                          </p>
-                        </Typography>
+                        <Link to="/kakaologin">
+                          <Typography onClick={clickLogout}>
+                            <p
+                              style={{
+                                color: "#464646",
+                                fontWeight: "bold",
+                                fontSize: "15px",
+                              }}
+                            >
+                              로그인
+                            </p>
+                          </Typography>
+                        </Link>
                       </MenuItem>
                     </>
                   )}

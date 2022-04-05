@@ -1,6 +1,9 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
+
+from products.models import Product
+
 import uuid
 
 # Create your models here.
@@ -67,3 +70,12 @@ class SurveyQuestionChoices(models.Model):
 
     def __str__(self):
         return f'A{self.number}: {self.content}'
+
+
+class Recommend(models.Model):
+    """
+    제품 추천 협업 필터링을 위한 모델입니다.
+    """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    rating = models.FloatField()

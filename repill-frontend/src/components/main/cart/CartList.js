@@ -196,11 +196,16 @@ function CartList({ cart, total, setTotal }) {
 
   const partOrder = () => {
     console.log(checkList);
-    const orderList = checkList.map((item, index) =>
-      product.find((p) => p.id === item)
-    );
-    console.log(orderList);
-    navigate(`/order`, { state: { orderList: orderList } });
+
+    if (checkList.length > 0) {
+      const orderList = checkList.map((item, index) =>
+        product.find((p) => p.id === item)
+      );
+      console.log(orderList);
+      navigate(`/order`, { state: { orderList: orderList } });
+    } else {
+      alert("선택된 상품이 없습니다.");
+    }
   };
 
   const allOrder = () => {

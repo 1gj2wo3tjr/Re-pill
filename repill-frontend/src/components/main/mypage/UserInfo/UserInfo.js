@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import MypageCompo from "./MypageCompo";
+import UserInfoCompo from "./UserInfoCompo";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -151,9 +151,7 @@ export default function PersistentDrawerLeft() {
         </List>
       </Drawer>
       <Main open={open}>
-        <div style={{ marginLeft: "10%", marginRight: "10%" }}>
-          {login ? <MypageCompo /> : <h1>로그인 하고 들어와라</h1>}
-        </div>
+        {login ? <UserInfoCompo /> : <h1>로그인 하고 들어와라</h1>}
       </Main>
     </Box>
   );

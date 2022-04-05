@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User(AbstractUser):
-    uid = models.CharField(max_length=20, null=True)  # 카카오톡 유저 ID
+    # uid = models.CharField(max_length=20, null=True) 
     name = models.CharField(max_length=50, null=True)  # 카카오톡 등록 이름
     email = models.EmailField()  # 카카오톡 이메일, validation check 필요
     profile_img = models.TextField(null=True)  # 카카오톡 프로필 이미지 URL
@@ -15,7 +15,7 @@ class User(AbstractUser):
     is_admin = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.uid}'
+        return f'{self.username}'
 
 
 class DeliveryAddress(models.Model):

@@ -8,10 +8,15 @@ import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import Calender from "./Calender";
-import Chart from "./Chart";
+import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
-function MypageCompo() {
+function UserInfo() {
+  const navigate = useNavigate();
+  const handleAdress = () => {
+    navigate("/mypage/address");
+  };
+
   const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -26,9 +31,9 @@ function MypageCompo() {
   const userName = sessionStorage.getItem("name");
   const userEmail = sessionStorage.getItem("email");
   const userProfile = sessionStorage.getItem("img");
-
   return (
-    <>
+    <div style={{ marginLeft: "10%", marginRight: "10%" }}>
+      <h1 style={{ textAlign: "center", marginBottom: "3%" }}>회원정보관리</h1>
       <div className={classes.root}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -111,63 +116,55 @@ function MypageCompo() {
                       </Grid>
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col"></div>
-                    <div class="col"></div>
-                  </div>
-                  <div class="row">
-                    <div class="col"></div>
-                    <div class="col"></div>
-                  </div>
                 </div>
               </Paper>
             </div>
           </Grid>
-          <Grid item xs={6}>
-            <Paper
-              className={classes.paper}
-              style={{ backgroundColor: "rgba(245,254,192,50%)" }}
-            >
-              내 영양분석
-              <hr></hr>
-              <Chart />
-            </Paper>
-          </Grid>
-          <Grid item xs={6}>
-            <Paper
-              className={classes.paper}
-              style={{ backgroundColor: "rgba(245,254,192,50%)" }}
-            >
-              내 구독정보
-              <hr></hr>
-              <div>
-                <Calender />
-              </div>
-            </Paper>
-          </Grid>
-          {/* <Grid item xs={12}>
-            <h3 style={{ textAlign: "center" }}>맞춤형 케어</h3>
-          </Grid>
-          <Grid item xs={6}>
-            <Paper
-              className={classes.paper}
-              style={{ backgroundColor: "rgba(245,254,192,50%)" }}
-            >
-              무릎 관절염
-            </Paper>
-          </Grid>
-          <Grid item xs={6}>
-            <Paper
-              className={classes.paper}
-              style={{ backgroundColor: "rgba(245,254,192,50%)" }}
-            >
-              안구 건조증
-            </Paper>
-          </Grid> */}
         </Grid>
+        <div style={{ margin: "5%" }}>
+          <Grid item xs={10}>
+            <h2>배송지 관리</h2>
+            <p>
+              배송지를 등록하거나 기존 배송지를 추가, 변경, 삭제할 수 있습니다.
+            </p>
+          </Grid>
+          <Grid item xs={2} style={{ float: "right" }}>
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#E8E8A6",
+                color: "black",
+                borderRadius: "20px",
+              }}
+              onClick={handleAdress}
+            >
+              <span>배송지 관리</span>
+            </Button>
+          </Grid>
+        </div>
+        <div style={{ margin: "5%" }}>
+          <Grid item xs={10}>
+            <h2>회원 탈퇴</h2>
+            <p>Re:pill 서비스에서 탈퇴합니다.</p>
+            <a href="#">찾으시는 제품을 찾지 못하셨나요?</a>
+          </Grid>
+          <Grid item xs={2} style={{ float: "right" }}>
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#E8E8A6",
+                color: "black",
+                borderRadius: "20px",
+              }}
+              onClick={handleAdress}
+            >
+              <span>회 원 탈 퇴 </span>
+            </Button>
+          </Grid>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 
-export default MypageCompo;
+export default UserInfo;

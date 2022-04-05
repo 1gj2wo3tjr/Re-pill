@@ -92,6 +92,9 @@ function MyorderTab() {
     setTimeout(window.location.reload(true), 1000)
   }
 
+  // 날짜순으로 정렬시키기
+  const orderList = list.sort((a, b) => new Date(b.order_date) - new Date(a.order_date))
+
   useEffect(() => {
     getOrder()
     setList([])
@@ -103,7 +106,7 @@ function MyorderTab() {
       <>
         <Container>
           <h3 style={{ marginTop: "2%" }}>결제 내역</h3>
-          {list.map((item) => 
+          {orderList.map((item) => 
             <div style={{ border: "1px solid black", height: "10rem", marginTop: "5%", display: "flex", alignItems: "center", borderRadius: "10px" }} key={item.id}>
               <div style={{ width: "60%", marginLeft: "5%" }}>
                 <div style={{ fontSize: "1rem" }}>
@@ -143,7 +146,7 @@ function MyorderTab() {
       <>
         <Container>
           <h1 style={{ marginTop: "5%" }}>결제 내역</h1>
-          {list.map((item) => 
+          {orderList.map((item) => 
             <div style={{ border: "1px solid black", height: "15rem", marginTop: "5%", display: "flex", alignItems: "center", borderRadius: "10px" }} key={item.id}>
               <div style={{ width: "15%", marginLeft: "1%" }}>
                 <img src={item.img_url} alt=""  style={{ width: "150px", height: "150px" }} />

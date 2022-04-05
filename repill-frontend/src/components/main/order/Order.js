@@ -329,32 +329,6 @@ function Order() {
   const { params } = data;
   const { next_redirect_pc_url } = data;
 
-  // const goKakaoPay = () => {
-  //   console.log(params);
-  //   axios({
-  //     url: "/v1/payment/ready",
-  //     method: "POST",
-  //     headers: {
-  //       Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
-  //       "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-  //     },
-
-  //     params,
-  //   })
-  //     .then((response) => {
-  //       // 응답에서 필요한 data만 뽑는다.
-  //       const {
-  //         data: { next_redirect_pc_url, tid },
-  //       } = response;
-  //       // console.log("tid : ", tid);
-  //       // 응답 data로 state 갱신
-  //       setData({ next_redirect_pc_url, tid });
-  //       window.localStorage.setItem("tid", tid);
-  //       window.open(next_redirect_pc_url, "_self");
-  //     })
-  //     .catch((error) => console.log("error!", error));
-  // };
-
   const deleteCart = () => {
     orderList.map((item, index) =>
       axios
@@ -864,7 +838,7 @@ function Order() {
                     <TableCell
                       style={{
                         fontSize: "1rem",
-                        width: "40%",
+                        width: "50%",
                         textAlign: "center",
                       }}
                     >
@@ -898,7 +872,9 @@ function Order() {
                           <div
                             style={{
                               display: "flex",
-                              justifyContent: "center",
+                              justifyContent: "start",
+                              margin: "0 60px",
+                              alignItems: "center",
                             }}
                           >
                             <img
@@ -906,9 +882,21 @@ function Order() {
                               alt=""
                               style={{ width: "100px" }}
                             />
-                            <div>
-                              <p>{item.company}</p>
-                              <p>{item.name}</p>
+                            <div
+                              style={{ marginLeft: "30px", fontSize: "13px" }}
+                            >
+                              <p
+                                style={{
+                                  color: "rgba(0, 0, 0, 0.87)",
+                                  fontWeight: "bold",
+                                  marginBottom: "8px",
+                                }}
+                              >
+                                {item.company}
+                              </p>
+                              <p style={{ color: "rgba(0, 0, 0, 0.87)" }}>
+                                {item.name}
+                              </p>
                             </div>
                           </div>
                         </TableCell>

@@ -83,7 +83,61 @@ function PayResult(props) {
 
   return (
     <>
-      {isMobile ? null : (
+      {isMobile ? (
+        <div>
+          <Container className={styles.mob_container}>
+            <div className={styles.order_top} style={{ marginBottom: "10px" }}>
+              <h2>주문 완료</h2>
+            </div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                style={{
+                  textAlign: "center",
+                  backgroundColor: "rgb(233 233 233)",
+                  width: "800px",
+                  height: "300px",
+                  margin: "20px",
+                  borderRadius: "30px",
+                  alignContent: "center",
+                  padding: "80px 10px",
+                }}
+              >
+                <p style={{ fontSize: "15px", fontWeight: "bold" }}>
+                  {result.item_name}
+                </p>
+                <p style={{ fontSize: "15px", fontWeight: "bold" }}>
+                  {total.total} 원
+                </p>
+                <p style={{ fontSize: "14px", fontWeight: "bold" }}>
+                  의 결제가 완료되었습니다.
+                </p>
+              </div>
+            </div>
+            <div className={styles.mob_order_bottom}>
+              <Link to={`/product`}>
+                <button className={styles.mob_button_product}>
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <CreditScoreIcon
+                      style={{ marginRight: "10px" }}
+                    ></CreditScoreIcon>
+                  </div>
+                  <p>계속 쇼핑하기</p>
+                </button>
+              </Link>
+              <Link to={`/mypage/myorder`}>
+                <button className={styles.mob_button_pay}>
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <CreditScoreIcon
+                      style={{ marginRight: "10px" }}
+                    ></CreditScoreIcon>
+                  </div>
+                  <p>결제 내역 보기</p>
+                </button>
+              </Link>
+            </div>
+          </Container>
+        </div>
+      ) : (
         <div>
           <Container className={styles.container}>
             <div className={styles.order_top}>
@@ -128,7 +182,7 @@ function PayResult(props) {
                   </div>
                 </button>
               </Link>
-              <Link to={`/`}>
+              <Link to={`/mypage/myorder`}>
                 <button className={styles.button_pay}>
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <CreditScoreIcon

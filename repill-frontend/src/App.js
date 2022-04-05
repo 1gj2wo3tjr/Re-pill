@@ -16,7 +16,8 @@ import Recommend from "./components/main/recommend/Recommend";
 import Cart from "./components/main/cart/Cart";
 import Myorder from "./components/main/mypage/myorder/Myorder";
 import Order from "./components/main/order/Order";
-import OrderCompleted from "./components/main/order/OrderCompleted";
+import PayResult from "./components/main/order/PayResult";
+import PayReady from "./components/main/order/PayReady";
 import UserInfo from "./components/main/mypage/UserInfo/UserInfo";
 import Survey from "./components/main/survey/Survey";
 
@@ -39,7 +40,8 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/mypage/myorder" element={<Myorder />} />
           <Route path="/order" element={<Order />} />
-          <Route path="/orderCompleted" element={<OrderCompleted />} />
+          <Route path="/payResult" element={<PayResult />} />
+          <Route path="/payReady" element={<PayReady />} />
           <Route path="/mypage/subscriptions" element={<Subscriptions />} />
           <Route path="/mypage/userinfo" element={<UserInfo />} />
           <Route path="/survey/Survey.js" element={<Survey />} />

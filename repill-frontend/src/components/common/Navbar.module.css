@@ -1,85 +1,5 @@
-/* mobile */
-@media screen and (max-width: 768px) {
-  .navbar {
-    justify-content: space-around;
-    /* flex-direction: column; */
-  }
-
-  .nav_menus {
-    display: none;
-  }
-
-  .nav_menu {
-    display: none;
-  }
-
-  .nav_toggle_btn {
-    display: flex;
-    font-weight: 500;
-  }
-
-  .nav_toggle_btn_text {
-    color: #464646;
-    list-style: none;
-    font-weight: bold;
-    font-size: 15px;
-  }
-
-  .nav_toggle_btn_text:hover {
-    color: #219f94;
-  }
-
-  .toggle_menus {
-    overflow-y: hidden;
-    flex-direction: column;
-    width: 100%;
-    max-height: 100vh;
-    box-sizing: border-box;
-    transition: all 0.35s ease 0s;
-    list-style: none;
-    /* overlay하기 위함 */
-    position: absolute;
-    background-color: white;
-
-    box-shadow: 1px 1px 1px #cecece;
-    padding: 30px;
-
-    font-weight: bold;
-    font-size: 15px;
-
-    margin: 0;
-  }
-
-  .toggle_menu {
-    padding: 10px;
-  }
-
-  .toggle_menu_text {
-    color: #464646;
-  }
-
-  .toggle_menu_text:hover {
-    color: #219f94;
-  }
-
-  /* .nav_login {
-    display: none;
-  } */
-}
-
-/* PC */
-@media screen and (min-width: 750px) {
-  .nav_toggle_btn {
-    display: none;
-  }
-
-  .toggle_menus {
-    display: none;
-  }
-}
-
 .navbar_main {
-  box-shadow: 3px 3px 10px #f3f3f3;
+  box-shadow: 3px 3px 5px #f3f3f3;
 }
 .navbar {
   background-color: #ffffff;
@@ -89,6 +9,9 @@
   justify-content: space-around;
   text-align: center;
   width: 1050px;
+  margin-bottom: 10px;
+  position: sticky;
+  top: 0;
 }
 .nav_menus {
   display: flex;
@@ -148,7 +71,7 @@
 .logout_nav_menu {
   color: #585858;
   text-decoration: none;
-  margin: 0 70px;
+  margin: 0 80px;
   text-align: center;
 }
 

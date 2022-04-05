@@ -60,6 +60,9 @@ function PayResult(props) {
   });
   const { params } = data;
 
+  const [result, setResult] = useState([]);
+  const [total, setTotal] = useState("");
+
   useEffect(() => {
     console.log(params);
     axios({
@@ -73,7 +76,8 @@ function PayResult(props) {
     }).then((response) => {
       // 결제 승인에 대한 응답 출력
       console.log(response);
-      // setDate();
+      setResult(response.data);
+      setTotal(response.data.amount);
     });
   }, []);
 
@@ -95,7 +99,24 @@ function PayResult(props) {
             <div className={styles.order_main}>
               <h1>주문 완료</h1>
             </div>
-            <div></div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                style={{
+                  textAlign: "center",
+                  backgroundColor: "rgb(233 233 233)",
+                  width: "800px",
+                  height: "300px",
+                  margin: "20px",
+                  borderRadius: "30px",
+                  alignContent: "center",
+                  padding: "80px 0",
+                }}
+              >
+                <p style={{ fontSize: "18px" }}>{result.item_name}</p>
+                <p style={{ fontSize: "18px" }}>{total.total} 원</p>
+                <p style={{ fontSize: "16px" }}>의 결제가 완료되었습니다.</p>
+              </div>
+            </div>
             <div className={styles.order_bottom}>
               <Link to={`/product`}>
                 <button className={styles.button_product}>

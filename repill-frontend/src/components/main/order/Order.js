@@ -131,18 +131,15 @@ function Order() {
   const getSelectAddress = (idx) => {
     // addressList의 index 가져오자
     const selected = addressList[idx];
-    console.log(selected);
     setSelectedAddress(selected);
   };
 
   const handleAddress = (event) => {
-    console.log(event.target.value);
     setSelectorAddress(event.target.value);
     getSelectAddress(event.target.value);
   };
 
   const handleRequest = (e) => {
-    console.log(e.target.value);
     setSelector(e.target.value);
   };
 
@@ -185,7 +182,6 @@ function Order() {
   };
 
   let finalAddress = "";
-
   const openPay = () => {
     if (agreement) {
       setPay((prev) => !prev);
@@ -206,103 +202,158 @@ function Order() {
           alert("배송 정보를 입력해주세요.");
         } else {
           finalAddress = address.address + " " + newAddress.detailed_address;
-          console.log(finalAddress);
 
-          axios
-            .post(
-              `http://127.0.0.1:8000/api/v1/accounts/order/`,
-              {
-                products: finalOrder,
-                address: finalAddress,
-                order_status: 1,
-                order_receive: newAddress.address_name,
-              },
-              { headers: headers }
-            )
-            .then((res) => {
-              alert("주문완료!");
-              // deleteCart();
+          params.item_name = itemName;
+          params.total_amount = total;
+
+          axios({
+            url: "/v1/payment/ready",
+            method: "POST",
+            headers: {
+              Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+              "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+            },
+            params,
+          })
+            .then((response) => {
+              // 응답에서 필요한 data만 뽑는다.
+              const {
+                data: { next_redirect_pc_url, tid },
+              } = response;
+              // console.log("tid : ", tid);
+              // 응답 data로 state 갱신
+              setData({ next_redirect_pc_url, tid });
+              window.localStorage.setItem("tid", tid);
+              window.open(next_redirect_pc_url, "_self");
+
+              axios
+                .post(
+                  `http://127.0.0.1:8000/api/v1/accounts/order/`,
+                  {
+                    products: finalOrder,
+                    address: finalAddress,
+                    order_status: 1,
+                    order_receive: newAddress.address_name,
+                  },
+                  { headers: headers }
+                )
+                .then((res) => {})
+                .catch((err) => alert("주문실패ㅠㅠ"));
             })
-            .catch((err) => alert("주문실패ㅠㅠ"));
-          navigate(`/payReady`, {
-            state: { orderList: orderList, total: total },
-          });
+            .catch((error) => console.log("error!", error));
+          deleteCart();
         }
       } else {
         console.log("기존");
         finalAddress =
           selectedAddress.address + " " + selectedAddress.detailed_address;
 
-        goKakaoPay();
-        axios
-          .post(
-            `http://127.0.0.1:8000/api/v1/accounts/order/`,
-            {
-              products: finalOrder,
-              address: finalAddress,
-              order_status: 1,
-              order_receive: selectedAddress.address_name,
-            },
-            { headers: headers }
-          )
-          .then((res) => {
-            deleteCart();
+        params.item_name = itemName;
+        params.total_amount = total;
+
+        axios({
+          url: "/v1/payment/ready",
+          method: "POST",
+          headers: {
+            Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+            "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+          },
+
+          params,
+        })
+          .then((response) => {
+            // 응답에서 필요한 data만 뽑는다.
+            const {
+              data: { next_redirect_pc_url, tid },
+            } = response;
+            // console.log("tid : ", tid);
+            // 응답 data로 state 갱신
+            setData({ next_redirect_pc_url, tid });
+            window.localStorage.setItem("tid", tid);
+
+            // QR
+            window.open(next_redirect_pc_url, "_self");
+
+            axios
+              .post(
+                `http://127.0.0.1:8000/api/v1/accounts/order/`,
+                {
+                  products: finalOrder,
+                  address: finalAddress,
+                  order_status: 1,
+                  order_receive: selectedAddress.address_name,
+                },
+                { headers: headers }
+              )
+              .then((res) => {})
+              .catch((err) => alert("주문실패ㅠㅠ"));
           })
-          .catch((err) => alert("주문실패ㅠㅠ"));
+          .catch((error) => console.log("error!", error));
+        deleteCart();
       }
     } else {
       alert("동의해주세요");
     }
   };
 
+  const [itemName, setItemName] = useState();
+
+  const getItemName = () => {
+    if (orderList.length > 1) {
+      const string = orderList[0].name + " 외 " + (orderList.length - 1) + "건";
+      setItemName(string);
+    } else if (orderList.length === 1) {
+      setItemName(orderList[0].name);
+    }
+  };
+
   const [data, setData] = useState({
-    // 응답에서 가져올 값들
     next_redirect_pc_url: "",
     tid: "",
-    // 요청에 넘겨줄 매개변수들
     params: {
       cid: "TC0ONETIME",
       partner_order_id: "partner_order_id",
       partner_user_id: "partner_user_id",
-      item_name: "떡보끼",
-      quantity: 1,
-      total_amount: 10000,
-      vat_amount: 200,
+      item_name: "동대문엽기떡볶이",
+      quantity: orderList.length,
+      total_amount: 1,
+      vat_amount: 0,
       tax_free_amount: 0,
+      // router에 지정한 PayResult의 경로로 수정
       approval_url: "http://localhost:3000/payResult",
-      fail_url: "http://localhost:3000/order",
-      cancel_url: "http://localhost:3000/order",
+      fail_url: "http://localhost:3000/cart",
+      cancel_url: "http://localhost:3000/cart",
     },
   });
 
   const { params } = data;
   const { next_redirect_pc_url } = data;
 
-  const goKakaoPay = () => {
-    console.log(params);
-    axios({
-      url: "/v1/payment/ready",
-      method: "POST",
-      headers: {
-        Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
-        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-      },
+  // const goKakaoPay = () => {
+  //   console.log(params);
+  //   axios({
+  //     url: "/v1/payment/ready",
+  //     method: "POST",
+  //     headers: {
+  //       Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+  //       "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+  //     },
 
-      params,
-    })
-      .then((response) => {
-        // 응답에서 필요한 data만 뽑는다.
-        const {
-          data: { next_redirect_pc_url, tid },
-        } = response;
-        // console.log("tid : ", tid);
-        // 응답 data로 state 갱신
-        setData({ next_redirect_pc_url, tid });
-        window.localStorage.setItem("tid", tid);
-        window.open(next_redirect_pc_url, "_self");
-      })
-      .catch((error) => console.log("error!", error));
-  };
+  //     params,
+  //   })
+  //     .then((response) => {
+  //       // 응답에서 필요한 data만 뽑는다.
+  //       const {
+  //         data: { next_redirect_pc_url, tid },
+  //       } = response;
+  //       // console.log("tid : ", tid);
+  //       // 응답 data로 state 갱신
+  //       setData({ next_redirect_pc_url, tid });
+  //       window.localStorage.setItem("tid", tid);
+  //       window.open(next_redirect_pc_url, "_self");
+  //     })
+  //     .catch((error) => console.log("error!", error));
+  // };
 
   const deleteCart = () => {
     orderList.map((item, index) =>
@@ -324,6 +375,7 @@ function Order() {
     getAddressList();
     getTotal();
     getFinalOrder();
+    getItemName();
     setAgreement(false);
   }, []);
 

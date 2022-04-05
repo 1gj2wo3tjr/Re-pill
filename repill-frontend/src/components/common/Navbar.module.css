@@ -62,17 +62,13 @@
     color: #219f94;
   }
 
-  .nav_login {
+  /* .nav_login {
     display: none;
-  }
+  } */
 }
 
 /* PC */
 @media screen and (min-width: 750px) {
-  .navbar {
-    justify-content: space-around;
-  }
-
   .nav_toggle_btn {
     display: none;
   }
@@ -82,28 +78,78 @@
   }
 }
 
-/* 공통 */
+.navbar_main {
+  box-shadow: 3px 3px 10px #f3f3f3;
+}
 .navbar {
   background-color: #ffffff;
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  /* border-bottom: 1px solid #464646; */
-  box-shadow: 1px 1px 1px #cecece;
   font-weight: bold;
   font-size: 15px;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  width: 1050px;
 }
-
 .nav_menus {
   display: flex;
+  /* justify-content: space-between; */
   list-style: none;
-  justify-content: space-around;
-  width: 50%;
+  text-align: left;
+  padding: 0;
+  align-items: center;
+}
+.nav_menu {
+  color: #585858;
+  text-decoration: none;
+  margin: 0 80px;
+  text-align: center;
+}
+.search_input {
+  /* border: 1px solid rgb(201, 201, 201); */
+  border: 0px;
+  border-radius: 20px;
+  background-color: #f3f3f3;
+  padding: 8px 20px;
+  width: 300px;
+}
+.search_btn {
+  border: 0px;
+  border-radius: 20px;
+  background-color: white;
+  cursor: pointer;
 }
 
-.nav_menu {
-  color: #464646;
+.navbar_top {
+  background-color: #ffffff;
+  font-weight: bold;
+  font-size: 12px;
+  display: flex;
+  width: 1050px;
+  justify-content: end;
+  text-align: center;
+}
+.navbar_top_ul {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  text-align: center;
+  padding: 0;
+}
+.navbar_top_list {
+  color: #585858;
   text-decoration: none;
+  margin: 0 25px;
+  text-align: center;
+}
+.navbar_top_list:hover {
+  color: #219f94;
+}
+
+.logout_nav_menu {
+  color: #585858;
+  text-decoration: none;
+  margin: 0 70px;
+  text-align: center;
 }
 
 .nav_menu:hover {

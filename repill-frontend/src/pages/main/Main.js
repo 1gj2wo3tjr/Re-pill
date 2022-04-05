@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -64,10 +65,13 @@ function Main() {
         }
       `}
       </style>
+      <button>
+        <Link to="/survey/Survey.js">survey</Link>
+      </button>
       {isMobile ? (
         <>
           <div style={{ height: "550px", background: "#F2F5C8" }}>
-            <Slider {...mobile_settings} >
+            <Slider {...mobile_settings}>
               <div>
                 <div style={{ marginTop: "10px" }}>
                   <div style={{ marginLeft: "5%", height: "120px" }}>
@@ -75,7 +79,18 @@ function Main() {
                     <h4>나만을 위한 맞춤영양제를 찾아보세요 </h4>
                     <h4>간단하게 체크하고 내 몸에 맞는 영양성분 찾기</h4>
                   </div>
-                  <img src="/assets/survey.png" alt="" style={{ width: "80%", height: "300px", marginLeft: "11%", marginTop: "5%", borderRadius: "5%", boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)" }} />
+                  <img
+                    src="/assets/survey.png"
+                    alt=""
+                    style={{
+                      width: "80%",
+                      height: "300px",
+                      marginLeft: "11%",
+                      marginTop: "5%",
+                      borderRadius: "5%",
+                      boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)",
+                    }}
+                  />
                   <button className={styles.survey_button_mob}>설문하기</button>
                 </div>
               </div>
@@ -84,7 +99,17 @@ function Main() {
                   <div style={{ marginLeft: "5%", height: "120px" }}>
                     맞춤형 분석
                   </div>
-                  <img src="/assets/report.png" alt="" style={{ width: "80%", height: "300px", marginLeft: "11%", borderRadius: "5%", boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)" }} />
+                  <img
+                    src="/assets/report.png"
+                    alt=""
+                    style={{
+                      width: "80%",
+                      height: "300px",
+                      marginLeft: "11%",
+                      borderRadius: "5%",
+                      boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)",
+                    }}
+                  />
                 </div>
               </div>
               <div>
@@ -92,7 +117,17 @@ function Main() {
                   <div style={{ marginLeft: "5%", height: "120px" }}>
                     구독시스템
                   </div>
-                  <img src="/assets/time.png" alt="" style={{ width: "80%", height: "300px", marginLeft: "11%", borderRadius: "5%", boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)" }} />
+                  <img
+                    src="/assets/time.png"
+                    alt=""
+                    style={{
+                      width: "80%",
+                      height: "300px",
+                      marginLeft: "11%",
+                      borderRadius: "5%",
+                      boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)",
+                    }}
+                  />
                 </div>
               </div>
             </Slider>
@@ -112,10 +147,26 @@ function Main() {
       ) : (
         <>
           <div style={{ height: "320px", background: "#F2F5C8" }}>
-            <Slider {...settings} >
+            <Slider {...settings}>
               <div>
-                <div style={{ display: "flex", marginTop: "10px", justifyContent: "start" }}>
-                  <img src="/assets/survey.png" alt="" style={{ width: "20%", height: "300px", marginLeft: "28%", borderRadius: "5%", boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)" }} />
+                <div
+                  style={{
+                    display: "flex",
+                    marginTop: "10px",
+                    justifyContent: "start",
+                  }}
+                >
+                  <img
+                    src="/assets/survey.png"
+                    alt=""
+                    style={{
+                      width: "20%",
+                      height: "300px",
+                      marginLeft: "28%",
+                      borderRadius: "5%",
+                      boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)",
+                    }}
+                  />
                   <div style={{ marginLeft: "2%" }}>
                     <h1>내게 딱 맞는 영양제, 궁금하다면?</h1>
                     <h3>나만을 위한 맞춤영양제를 찾아보세요 </h3>
@@ -125,19 +176,47 @@ function Main() {
                 </div>
               </div>
               <div>
-                <div style={{ display: "flex", marginTop: "10px", justifyContent: "start" }}>
-                  <img src="/assets/report.png" alt="" style={{ width: "20%", height: "300px", marginLeft: "28%", borderRadius: "5%", boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)" }} />
-                  <div style={{ marginLeft: "2%" }}>
-                    맞춤형 분석
-                  </div>
+                <div
+                  style={{
+                    display: "flex",
+                    marginTop: "10px",
+                    justifyContent: "start",
+                  }}
+                >
+                  <img
+                    src="/assets/report.png"
+                    alt=""
+                    style={{
+                      width: "20%",
+                      height: "300px",
+                      marginLeft: "28%",
+                      borderRadius: "5%",
+                      boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)",
+                    }}
+                  />
+                  <div style={{ marginLeft: "2%" }}>맞춤형 분석</div>
                 </div>
               </div>
               <div>
-                <div style={{ display: "flex", marginTop: "10px", justifyContent: "start" }}>
-                  <img src="/assets/time.png" alt="" style={{ width: "20%", height: "300px", marginLeft: "28%", borderRadius: "5%", boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)" }} />
-                  <div style={{ marginLeft: "2%" }}>
-                    구독시스템
-                  </div>
+                <div
+                  style={{
+                    display: "flex",
+                    marginTop: "10px",
+                    justifyContent: "start",
+                  }}
+                >
+                  <img
+                    src="/assets/time.png"
+                    alt=""
+                    style={{
+                      width: "20%",
+                      height: "300px",
+                      marginLeft: "28%",
+                      borderRadius: "5%",
+                      boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)",
+                    }}
+                  />
+                  <div style={{ marginLeft: "2%" }}>구독시스템</div>
                 </div>
               </div>
             </Slider>

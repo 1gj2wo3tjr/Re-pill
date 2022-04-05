@@ -52,3 +52,16 @@ class Order(models.Model):
 
     def __str__(self):
         return f'{self.order_number}번 주문 / {self.product}'
+
+
+# 구독 모델
+class Subscription(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    start_date = models.DateTimeField(auto_now_add=True)
+    period = models.IntegerField(default=30)
+    subscribe_times = models.PositiveSmallIntegerField(default=1)
+    subscribe_dates = models.JSONField(default=dict)
+
+    def __str__(self):
+        return f'{self.user}님의 {self.product} 구독'

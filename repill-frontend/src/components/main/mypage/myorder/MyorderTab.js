@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import { Container } from "@mui/material";
+<<<<<<< HEAD
 import { useMediaQuery } from 'react-responsive';
 import styles from "../Mypage.module.css"
 import ReviewRegisterModal from './ReviewRegisterModal';
@@ -21,21 +22,58 @@ function MyorderTab() {
   const [productId, setProductId] = useState("")
   const [reviewId, setReviewId] = useState("")
   const [orderStatus, setOrderStatus] = useState("")
+=======
+import { useMediaQuery } from "react-responsive";
+import styles from "../Mypage.module.css";
+import ReviewModal from "./ReviewModal";
+// import axios from 'axios';
+
+function MyorderTab() {
+  const [list, setList] = useState([
+    {
+      id: 1,
+      title: "지엔엠라이프 GNM자연의품격 루테인11 30캡슐",
+      price: "34,500",
+      date: "2022.01.16",
+    },
+    {
+      id: 2,
+      title: "지엔엠라이프 GNM자연의품격 루테인11 30캡슐",
+      price: "34,500",
+      date: "2022.01.10",
+    },
+    {
+      id: 3,
+      title: "지엔엠라이프 GNM자연의품격 루테인11 30캡슐",
+      price: "34,500",
+      date: "2022.01.10",
+    },
+  ]);
+  // const today = new Date()
+  const [open, setOpen] = useState(false);
+>>>>>>> develop
 
   const isMobile = useMediaQuery({
-    query: "(max-width : 768px)"
+    query: "(max-width : 768px)",
   });
 
+<<<<<<< HEAD
   const handleRegisterModal = (item) => {
     setProductId(item.product)
     setOpenRegister((prev) => !prev)
   }
+=======
+  const handleReviewModal = () => {
+    setOpen((prev) => !prev);
+  };
+>>>>>>> develop
 
   const handleDetailModal = (item) => {
     setReviewId(item.id)
     setOpenDetail((prev) => !prev)
   }
 
+<<<<<<< HEAD
   // 주문 내역 받아오는 함수
   const getOrder = async () => {
     try {
@@ -79,6 +117,11 @@ function MyorderTab() {
       console.log(err)
     }
   }
+=======
+  const cancleOrder = () => {
+    alert("삭제");
+  };
+>>>>>>> develop
 
   // 리뷰 데이터 받아오는 함수
   const getReview = async () => {
@@ -118,6 +161,7 @@ function MyorderTab() {
   return (
     <div>
       {isMobile ? (
+<<<<<<< HEAD
       <>
         <Container>
           <h3 style={{ marginTop: "2%" }}>결제 내역</h3>
@@ -138,9 +182,64 @@ function MyorderTab() {
                   </div>
                   <div style={{ marginLeft: "10%" }}>
                     {item.order_date.slice(0,10)}
+=======
+        <>
+          <Container>
+            {list.map((item) => (
+              <div
+                style={{
+                  border: "1px solid black",
+                  height: "10rem",
+                  marginTop: "5%",
+                  display: "flex",
+                  alignItems: "center",
+                  borderRadius: "10px",
+                }}
+                key={item.id}
+              >
+                <div style={{ width: "25%" }}>
+                  <img
+                    src={"/assets/logo512.png"}
+                    alt=""
+                    style={{ width: "70px", height: "70px" }}
+                  />
+                </div>
+                <div style={{ width: "50%" }}>
+                  <div style={{ fontSize: "1rem" }}>{item.title}</div>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: "5%",
+                      fontSize: "0.5rem",
+                    }}
+                  >
+                    <div>{item.price}원</div>
+                    <div style={{ marginLeft: "10%" }}>{item.date}</div>
+>>>>>>> develop
                   </div>
                 </div>
+                <div
+                  style={{
+                    width: "25%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <button
+                    className={styles.order_review_button_mob}
+                    onClick={handleReviewModal}
+                  >
+                    리뷰쓰기
+                  </button>
+                  <button
+                    className={styles.order_cancle_order_button_mob}
+                    onClick={cancleOrder}
+                  >
+                    구매취소
+                  </button>
+                </div>
               </div>
+<<<<<<< HEAD
               <div style={{ width: "25%", display: "flex", flexDirection: "column", marginLeft: "5%" }}>
                 {item.has_review ? (
                   <button className={styles.order_review_button_mob} onClick={() => handleDetailModal(item)}>리뷰보기</button>
@@ -177,9 +276,70 @@ function MyorderTab() {
                   </div>
                   <div style={{ marginLeft: "10%" }}>
                     {item.order_date.slice(0,10)}
+=======
+            ))}
+            <ReviewModal open={open} setOpen={setOpen} />
+          </Container>
+        </>
+      ) : (
+        <>
+          <Container>
+            {list.map((item) => (
+              <div
+                style={{
+                  border: "1px solid black",
+                  height: "15rem",
+                  marginTop: "5%",
+                  display: "flex",
+                  alignItems: "center",
+                  borderRadius: "10px",
+                }}
+                key={item.id}
+              >
+                <div style={{ width: "15%" }}>
+                  <img
+                    src={"/assets/logo512.png"}
+                    alt=""
+                    style={{ width: "150px", height: "150px" }}
+                  />
+                </div>
+                <div style={{ width: "55%" }}>
+                  <div style={{ fontSize: "2rem" }}>{item.title}</div>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: "5%",
+                      fontSize: "1.5rem",
+                    }}
+                  >
+                    <div>{item.price}원</div>
+                    <div style={{ marginLeft: "10%" }}>{item.date}</div>
+>>>>>>> develop
                   </div>
                 </div>
+                <div
+                  style={{
+                    width: "20%",
+                    marginLeft: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <button
+                    className={styles.order_review_button}
+                    onClick={handleReviewModal}
+                  >
+                    리뷰쓰기
+                  </button>
+                  <button
+                    className={styles.order_cancle_order_button}
+                    onClick={cancleOrder}
+                  >
+                    구매취소
+                  </button>
+                </div>
               </div>
+<<<<<<< HEAD
               <div style={{ width: "20%", display: "flex", flexDirection: "column", marginLeft: "10%" }}>
                 {item.has_review ? (
                   <div>
@@ -195,9 +355,15 @@ function MyorderTab() {
             <ReviewDetailModal open={openDetail} setOpen={setOpenDetail} id={reviewId} />
         </Container>
       </> 
+=======
+            ))}
+            <ReviewModal open={open} setOpen={setOpen} />
+          </Container>
+        </>
+>>>>>>> develop
       )}
     </div>
-  )
+  );
 }
 
-export default MyorderTab
+export default MyorderTab;

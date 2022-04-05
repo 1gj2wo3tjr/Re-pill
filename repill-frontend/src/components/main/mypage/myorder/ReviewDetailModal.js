@@ -21,19 +21,17 @@ function ReviewDetailModal({ open, setOpen, reviewId, productId, title, imgUrl }
   // 수정 버튼누르면 수정 가능하게 상태를 변경하는 함수
   const handleActivate = () => {
     setActivate((prev) => !prev)
-    setValue("")
+    // setValue("")
   }
 
   const deleteReview = () => {
-    axios.delete(`http://127.0.0.1:8000/api/v1/products/reviews/${reviewId}/`, {
-      product: productId
-    },
+    axios.delete(`http://127.0.0.1:8000/api/v1/products/reviews/${reviewId}`, 
     {
       headers: headers
     })
     .then((res) => console.log(res))
     .catch((err) => console.log(err))
-    window.location.reload(true)
+    setTimeout(window.location.reload(true), 1000)
   }
 
   // 리뷰 내용 수정(onChange)
@@ -43,17 +41,18 @@ function ReviewDetailModal({ open, setOpen, reviewId, productId, title, imgUrl }
 
   // 수정된 리뷰 put 요청
   const editReview = () => {
-    if (form != review.content || value != review.rating)
-    axios.put(`http://127.0.0.1:8000/api/v1/products/reviews/${reviewId}/`, {
-      content: form,
-      rating: value,
-      product: productId
-    },{
-      headers: headers
-    })
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err))
-    setTimeout(window.location.reload(true), 1000)
+    if (form != review.content || value != review.rating) {
+      axios.put(`http://127.0.0.1:8000/api/v1/products/reviews/${reviewId}`, {
+        content: form,
+        rating: value,
+        product: productId
+      },{
+        headers: headers
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+      setTimeout(window.location.reload(true), 1000)
+    }
   }
 
   const getReview = async () => {
@@ -62,7 +61,8 @@ function ReviewDetailModal({ open, setOpen, reviewId, productId, title, imgUrl }
         headers: headers
       })
       setValue(response.data.rating)
-      setReview(response.data)
+      // setReview(response.data)
+      setForm(response.data)
     } catch(err) {
       console.log(err)
     }
@@ -84,7 +84,7 @@ function ReviewDetailModal({ open, setOpen, reviewId, productId, title, imgUrl }
           >
             <Modal.Content>
               <div style={{ border: "1px solid black", height: "40%", marginTop: "5%", display: "flex", alignItems: "center", borderRadius: "10px" }}>
-                <div style={{ width: "70%", marginLeft: "2%" }}>
+                <div style={{ marginLeft: "2%" }}>
                   <div style={{ fontSize: "1rem" }}>
                     {title}
                   </div>
@@ -109,9 +109,9 @@ function ReviewDetailModal({ open, setOpen, reviewId, productId, title, imgUrl }
             <Modal.Content>
               <Form>
                 {activate ? (
-                    <TextArea rows={10} style={{ fontSize: "1rem" }} onChange={editContent} value={form}></TextArea>
+                    <TextArea rows={10} style={{ fontSize: "1rem" }} onChange={editContent} value={form.content}></TextArea>
                   ) : (
-                    <TextArea rows={10} style={{ fontSize: "1rem" }} value={review.content} readOnly></TextArea>
+                    <TextArea rows={10} style={{ fontSize: "1rem" }} value={form.content} readOnly></TextArea>
                   )}
               </Form>
             </Modal.Content>
@@ -167,9 +167,9 @@ function ReviewDetailModal({ open, setOpen, reviewId, productId, title, imgUrl }
             <Modal.Content>
               <Form>
                 {activate ? (
-                  <TextArea rows={10} style={{ fontSize: "1.5rem" }} onChange={editContent} value={form}></TextArea>
+                  <TextArea rows={10} style={{ fontSize: "1.5rem" }} onChange={editContent} value={form.content}></TextArea>
                 ) : (
-                  <TextArea rows={10} style={{ fontSize: "1.5rem" }} value={review.content} readOnly></TextArea>
+                  <TextArea rows={10} style={{ fontSize: "1.5rem" }} value={form.content} readOnly></TextArea>
                 )}
               </Form>
             </Modal.Content>

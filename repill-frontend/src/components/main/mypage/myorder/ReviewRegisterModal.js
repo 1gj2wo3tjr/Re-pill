@@ -5,19 +5,11 @@ import styles from "../Mypage.module.css"
 import axios from "axios"
 import Rating from '@mui/material/Rating';
 
-function ReviewRegisterModal({ open, setOpen, id }) {
+function ReviewRegisterModal({ open, setOpen, id, title, imgUrl }) {
   let token = sessionStorage.getItem('token')
   const headers = {
     Authorization: `Bearer ${token}`
   }
-  const [list, setList] = useState(
-    {
-      id: 1,
-      title: "지엔엠라이프 GNM자연의품격 루테인11 30캡슐",
-      price: "34,500",
-      date: "2022.01.16"
-    }
-  )
 
   const [form, setForm] = useState("")
   const [value, setValue] = useState(3);
@@ -65,11 +57,11 @@ function ReviewRegisterModal({ open, setOpen, id }) {
             <Modal.Content>
               <div style={{ border: "1px solid black", height: "40%", marginTop: "5%", display: "flex", alignItems: "center", borderRadius: "10px" }}>
                 <div style={{ width: "20%" }}>
-                  <img src={"/assets/logo512.png"} alt=""  style={{ width: "70%", height: "100%" }} />
+                  <img src={imgUrl} alt=""  style={{ width: "70%", height: "100%" }} />
                 </div>
                 <div style={{ width: "60%" }}>
                   <div style={{ fontSize: "1rem" }}>
-                    {list.title}
+                    {title}
                   </div>
                 </div>
               </div>
@@ -99,11 +91,11 @@ function ReviewRegisterModal({ open, setOpen, id }) {
             <Modal.Content>
               <div style={{ border: "1px solid black", height: "40%", display: "flex", alignItems: "center", borderRadius: "10px" }}>
                 <div style={{ width: "20%" }}>
-                  <img src={"/assets/logo512.png"} alt=""  style={{ width: "90%", height: "100%" }} />
+                  <img src={imgUrl} alt=""  style={{ width: "90%", height: "100%" }} />
                 </div>
                 <div style={{ width: "70%" }}>
                   <div style={{ fontSize: "2rem" }}>
-                    {list.title}
+                    {title}
                   </div>
                   <Rating
                     name="simple-controlled"

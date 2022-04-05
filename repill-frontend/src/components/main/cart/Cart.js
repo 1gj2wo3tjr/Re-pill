@@ -15,9 +15,6 @@ function Cart() {
     Authorization: `Bearer ${token}`,
   };
 
-  const navigate = useNavigate();
-
-  const [checked, setChecked] = useState([]);
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
   const isMobile = useMediaQuery({
@@ -49,13 +46,6 @@ function Cart() {
     </Typography>,
   ];
 
-  const partOrder = () => {
-    console.log(checked);
-    navigate(`/order`, { state: { checked: checked } });
-  };
-
-  const allOrder = () => {};
-
   useEffect(() => {
     getCart();
   }, []);
@@ -84,49 +74,7 @@ function Cart() {
               <h3>장바구니</h3>
             </div>
             <div className={styles.mob_cart_main}>
-              <CartList
-                cart={cart}
-                total={total}
-                setTotal={setTotal}
-                setChecked={setChecked}
-              />
-            </div>
-            <div className={styles.cart_bottom}>
-              <div
-                style={{
-                  width: "300px",
-                  textAlign: "center",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "end",
-                  // marginTop: "10px",
-                }}
-              >
-                <p style={{ margin: "0px", fontSize: "15px" }}>
-                  총 {checked.length}개의 상품 금액
-                </p>
-                <p
-                  style={{
-                    fontSize: "22px",
-                    fontWeight: "bold",
-                    color: "#f27370",
-                  }}
-                >
-                  {total.toLocaleString()} 원
-                </p>
-              </div>
-            </div>
-            <div className={styles.mob_cart_btn}>
-              <Link to={`/order`}>
-                <button className={styles.button_check}>
-                  <p>선택 상품 주문</p>
-                </button>
-              </Link>
-              <Link to={`/order`}>
-                <button className={styles.button_all}>
-                  <p>전체 상품 주문</p>
-                </button>
-              </Link>
+              <CartList cart={cart} total={total} setTotal={setTotal} />
             </div>
           </Container>
         </div>
@@ -144,12 +92,7 @@ function Cart() {
               </Breadcrumbs>
             </div>
             <div className={styles.cart_main}>
-              <CartList
-                cart={cart}
-                total={total}
-                setTotal={setTotal}
-                setChecked={setChecked}
-              />
+              <CartList cart={cart} total={total} setTotal={setTotal} />
             </div>
           </Container>
         </div>

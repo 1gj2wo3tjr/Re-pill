@@ -9,4 +9,6 @@ urlpatterns = [
     path('address/<int:address_pk>/', views.AddressDetail.as_view()),
     path('order/', views.OrderList.as_view()),
     path('order/<int:order_pk>/', views.OrderDetail.as_view()),
+    path('subscription/', views.SubscriptionList.as_view()),
+    path('subscription/<int:product_pk>/', views.SubscriptionDetail.as_view()),
 ]

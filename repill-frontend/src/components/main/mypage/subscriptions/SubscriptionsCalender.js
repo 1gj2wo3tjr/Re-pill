@@ -82,10 +82,10 @@ class SubscriptionsCalender extends Component {
     return (
       <div
         style={{
-          height: "50%",
+          height: "70%",
           width: "40%",
           position: "absolute",
-          top: "50%",
+          top: "60%",
           left: "50%",
           transform: "translate(-50%, -70%)",
           backgroundColor: "white",

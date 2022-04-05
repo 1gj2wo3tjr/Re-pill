@@ -1,6 +1,10 @@
+from asyncore import read
+from django.shortcuts import get_list_or_404
 from rest_framework import serializers
 from .models import DeliveryAddress, Order, Subscription
 from django.contrib.auth import get_user_model
+
+from products.models import Product, Review
 
 class DeliveryAddressUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,8 +23,16 @@ class OrderUserSerializer(serializers.ModelSerializer):
         fields = ('username', 'name')
 
 class OrderSerializer(serializers.ModelSerializer):
+
     user = OrderUserSerializer(read_only=True)
-    has_review = serializers.BooleanField(read_only=True)
+    
+    # has_review = serializers.BooleanField(read_only=True)
+    has_review = serializers.SerializerMethodField()
+
+    def get_has_review(self, obj):
+        review = Review.objects.filter(user=obj.user, product=obj.product).first()
+        return review.id if review else False
+
     class Meta:
         model = Order
         fields = '__all__'

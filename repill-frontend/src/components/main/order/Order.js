@@ -18,7 +18,13 @@ import {
 import styles from "./Order.module.css";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useLocation,
+  BrowserRouter,
+  useHref,
+} from "react-router-dom";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import Linked from "@mui/material/Link";
@@ -62,6 +68,10 @@ function Order() {
   const agreementCheck = () => {
     console.log("agreement ", agreement);
     setAgreement((prev) => !prev);
+
+    // if (agreement === true) {
+    //   goKakaoPay();
+    // }
   };
 
   const handleClick = (e) => {
@@ -96,6 +106,7 @@ function Order() {
         phone_number: "",
         zipcode: "",
       });
+      setNewAddress({ address_name: "" });
     } else {
       setAddress("");
       getSelectAddress(0);
@@ -176,7 +187,6 @@ function Order() {
   let finalAddress = "";
 
   const openPay = () => {
-    // console.log(agreement);
     if (agreement) {
       setPay((prev) => !prev);
 
@@ -184,30 +194,46 @@ function Order() {
       if (radio === "new") {
         console.log("신규");
         console.log(newAddress.address_name);
-        finalAddress = address.address + " " + newAddress.detailed_address;
-        console.log(finalAddress);
 
-        axios
-          .post(
-            `http://127.0.0.1:8000/api/v1/accounts/order/`,
-            {
-              products: finalOrder,
-              address: finalAddress,
-              order_status: 1,
-              order_receive: newAddress.address_name,
-            },
-            { headers: headers }
-          )
-          .then((res) => {
-            alert("주문완료!");
-            deleteCart();
-          })
-          .catch((err) => alert("주문실패ㅠㅠ"));
+        if (
+          newAddress.address_name === "" ||
+          newAddress.address_name === undefined ||
+          address.address === "" ||
+          address.address === undefined ||
+          newAddress.detailed_address === "" ||
+          newAddress.detailed_address === undefined
+        ) {
+          alert("배송 정보를 입력해주세요.");
+        } else {
+          finalAddress = address.address + " " + newAddress.detailed_address;
+          console.log(finalAddress);
+
+          axios
+            .post(
+              `http://127.0.0.1:8000/api/v1/accounts/order/`,
+              {
+                products: finalOrder,
+                address: finalAddress,
+                order_status: 1,
+                order_receive: newAddress.address_name,
+              },
+              { headers: headers }
+            )
+            .then((res) => {
+              alert("주문완료!");
+              // deleteCart();
+            })
+            .catch((err) => alert("주문실패ㅠㅠ"));
+          navigate(`/payReady`, {
+            state: { orderList: orderList, total: total },
+          });
+        }
       } else {
         console.log("기존");
         finalAddress =
           selectedAddress.address + " " + selectedAddress.detailed_address;
 
+        goKakaoPay();
         axios
           .post(
             `http://127.0.0.1:8000/api/v1/accounts/order/`,
@@ -220,7 +246,6 @@ function Order() {
             { headers: headers }
           )
           .then((res) => {
-            alert("주문완료!");
             deleteCart();
           })
           .catch((err) => alert("주문실패ㅠㅠ"));
@@ -228,6 +253,55 @@ function Order() {
     } else {
       alert("동의해주세요");
     }
+  };
+
+  const [data, setData] = useState({
+    // 응답에서 가져올 값들
+    next_redirect_pc_url: "",
+    tid: "",
+    // 요청에 넘겨줄 매개변수들
+    params: {
+      cid: "TC0ONETIME",
+      partner_order_id: "partner_order_id",
+      partner_user_id: "partner_user_id",
+      item_name: "떡보끼",
+      quantity: 1,
+      total_amount: 10000,
+      vat_amount: 200,
+      tax_free_amount: 0,
+      approval_url: "http://localhost:3000/payResult",
+      fail_url: "http://localhost:3000/order",
+      cancel_url: "http://localhost:3000/order",
+    },
+  });
+
+  const { params } = data;
+  const { next_redirect_pc_url } = data;
+
+  const goKakaoPay = () => {
+    console.log(params);
+    axios({
+      url: "/v1/payment/ready",
+      method: "POST",
+      headers: {
+        Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+      },
+
+      params,
+    })
+      .then((response) => {
+        // 응답에서 필요한 data만 뽑는다.
+        const {
+          data: { next_redirect_pc_url, tid },
+        } = response;
+        // console.log("tid : ", tid);
+        // 응답 data로 state 갱신
+        setData({ next_redirect_pc_url, tid });
+        window.localStorage.setItem("tid", tid);
+        window.open(next_redirect_pc_url, "_self");
+      })
+      .catch((error) => console.log("error!", error));
   };
 
   const deleteCart = () => {
@@ -238,7 +312,7 @@ function Order() {
         })
         .then((res) => {
           console.log("주문 및삭제");
-          navigate(`/product`);
+          // navigate(`/product`);
         })
         .catch((err) => console.log(err))
     );
@@ -296,20 +370,43 @@ function Order() {
                 <TableHead>
                   <TableCell style={{ padding: "0px" }}></TableCell>
                 </TableHead>
-                <TableBody>
-                  <TableCell>
-                    <div className={styles.mob_order_list}>
-                      <img
-                        alt=""
-                        src="https://shopping-phinf.pstatic.net/main_2877420/28774205554.20210909130858.jpg?type=f300"
-                      />
-                      <div className={styles.mob_order_view}>
-                        <p>회사명</p>
-                        <p>상품명</p>
-                      </div>
-                    </div>
-                  </TableCell>
-                </TableBody>
+                {orderList &&
+                  orderList.map((item, index) => (
+                    <>
+                      <TableBody>
+                        <TableCell>
+                          <div className={styles.mob_order_list}>
+                            <img alt="" src={item.thumbnail_url} />
+                            <div className={styles.mob_order_view}>
+                              {/* <p>{item.company}</p> */}
+                              <p>{item.name}</p>
+                              <div
+                                style={{
+                                  marginTop: "15px",
+                                  textAlign: "right",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    fontSize: "12px",
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    margin: "0",
+                                  }}
+                                >
+                                  <p>구매 수량 </p>
+                                  <p>{item.quantity}</p>
+                                </div>
+                                <p style={{ fontSize: "14px" }}>
+                                  {item.price.toLocaleString()} 원
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </TableCell>
+                      </TableBody>
+                    </>
+                  ))}
               </Table>
             </div>
 
@@ -652,18 +749,15 @@ function Order() {
                     marginLeft: "10px",
                   }}
                 >
-                  50,000원
+                  {total.toLocaleString()} 원
                 </p>
               </div>
               <div className={styles.mob_agreement}>
-                <Checkbox
-                  aria-label="a"
-                  sx={{
-                    color: "#cfcfcf",
-                    "&.Mui-checked": {
-                      color: "#219F94",
-                    },
-                  }}
+                <input
+                  type="checkbox"
+                  onChange={agreementCheck}
+                  checked={agreement}
+                  style={{ width: "18px", height: "18px", margin: "15px 0" }}
                 />
                 <div style={{ fontSize: "12px", margin: "10px" }}>
                   <p style={{ margin: "0px" }}>
@@ -673,16 +767,15 @@ function Order() {
                   <p>구매진행에 동의합니다.</p>
                 </div>
               </div>
-              <Link to={`/orderCompleted`}>
-                <button className={styles.mob_button_buy}>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <CreditScoreIcon
-                      style={{ marginRight: "10px" }}
-                    ></CreditScoreIcon>
-                    <p>결제하기</p>
-                  </div>
-                </button>
-              </Link>
+
+              <button className={styles.mob_button_buy} onClick={openPay}>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <CreditScoreIcon
+                    style={{ marginRight: "10px" }}
+                  ></CreditScoreIcon>
+                  <p>결제하기</p>
+                </div>
+              </button>
             </div>
           </Container>
           {modal ? (
@@ -993,7 +1086,7 @@ function Order() {
                         {radio === "existing" ? (
                           <input
                             type="text"
-                            value={address.detailed_address}
+                            value={selectedAddress.detailed_address}
                             title="상세주소"
                             // defaultValue=""
                             className={styles.address_input}

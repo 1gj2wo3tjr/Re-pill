@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Container } from "@mui/material";
 import styles from "./OrderCompleted.module.css";
@@ -8,8 +8,10 @@ import { Link } from "react-router-dom";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import Linked from "@mui/material/Link";
+import axios from "axios";
+import { setDate } from "date-fns";
 
-function OrderCompleted() {
+function PayResult(props) {
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });
@@ -20,7 +22,7 @@ function OrderCompleted() {
 
   const breadcrumbs = [
     // react-router-dom 의 Link와 겹치지 않도록
-    <Linked
+    <Typography
       underline="hover"
       key="1"
       color="#BCBCBC"
@@ -30,8 +32,8 @@ function OrderCompleted() {
       fontWeight={"bold"}
     >
       01. 장바구니
-    </Linked>,
-    <Linked
+    </Typography>,
+    <Typography
       underline="hover"
       key="1"
       color="#BCBCBC"
@@ -41,11 +43,39 @@ function OrderCompleted() {
       fontWeight={"bold"}
     >
       02. 주문/결제
-    </Linked>,
+    </Typography>,
     <Typography key="3" color="#219F94" fontSize={"20px"} fontWeight={"bold"}>
       03. 주문완료
     </Typography>,
   ];
+
+  const [data, setData] = useState({
+    params: {
+      cid: "TC0ONETIME",
+      tid: window.localStorage.getItem("tid"),
+      partner_order_id: "partner_order_id",
+      partner_user_id: "partner_user_id",
+      pg_token: new URL(window.location.href).searchParams.get("pg_token"),
+    },
+  });
+  const { params } = data;
+
+  useEffect(() => {
+    console.log(params);
+    axios({
+      url: "/v1/payment/approve",
+      method: "POST",
+      headers: {
+        Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+      },
+      params,
+    }).then((response) => {
+      // 결제 승인에 대한 응답 출력
+      console.log(response);
+      // setDate();
+    });
+  }, []);
 
   return (
     <>
@@ -95,4 +125,4 @@ function OrderCompleted() {
   );
 }
 
-export default OrderCompleted;
+export default PayResult;

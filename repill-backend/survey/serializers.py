@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from .models import SurveyHistory, SurveyQuestion, SurveyQuestionChoices, SurveyResponse
+from .models import Recommend, SurveyHistory, SurveyQuestion, SurveyQuestionChoices, SurveyResponse
 from django.contrib.auth import get_user_model
+from products.models import Product, Review
+from products.serializers import ProductSerializer
 
 class SurveyHistoryListSerializer(serializers.ModelSerializer):
 
@@ -35,3 +37,21 @@ class SurveyHistorySerializer(serializers.ModelSerializer):
             SurveyResponse.objects.create(**response, survey=survey)
 
         return survey
+
+
+class RecommendSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    class Meta:
+        model = Recommend
+        fields = '__all__'
+
+
+class ReviewRecommendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['user', 'product', 'rating']
+
+class ProductRecommendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'name']

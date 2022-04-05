@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import datetime
 from pathlib import Path
 import os
 
@@ -149,8 +150,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 # 자체 User Model 사용
 AUTH_USER_MODEL = 'accounts.User'
-
-import datetime
 
 JWT_AUTH = {
     # JWT 토큰 만료기한: 1일

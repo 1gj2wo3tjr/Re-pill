@@ -92,6 +92,10 @@ function ProductDetail() {
 
   const [orderList, setOrderList] = useState([]);
 
+  const goReviewList = (id) => {
+    navigate(`/productReview`, { state: { id: id } });
+  };
+
   useEffect(() => {
     // setReview([]);
     getDetail();
@@ -332,7 +336,20 @@ function ProductDetail() {
             </div>
           </div>
           <div style={{ margin: "50px 0" }}>
-            <p style={{ fontSize: "16px", fontWeight: "bold" }}>상품 리뷰</p>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <p style={{ fontSize: "16px", fontWeight: "bold" }}>상품 리뷰</p>
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#585858",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                onClick={() => goReviewList(detail.id)}
+              >
+                전체 보기
+              </p>
+            </div>
             <ProductReview list={review} />
           </div>
         </Container>

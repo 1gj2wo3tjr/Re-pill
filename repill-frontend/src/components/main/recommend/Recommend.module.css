@@ -1,0 +1,10 @@
+/* mobile */
+.mob_container {
+  margin: 50px 0;
+  padding: 0 20px;
+}
+
+/* PC */
+.container {
+  margin-top: 100px;
+}

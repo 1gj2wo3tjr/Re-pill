@@ -8,6 +8,7 @@ import Category from "./Category";
 import Pagination from "react-js-pagination";
 import { useMediaQuery } from "react-responsive";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Loading from "../../common/Loading";
 
 function Product() {
   const [products, setProducts] = useState([]);
@@ -15,6 +16,8 @@ function Product() {
   const [postPerPage] = useState(24);
   const [keyword, setKeyword] = useState("");
   const [result, setResult] = useState([]);
+
+  const [loading, setLoading] = useState(true);
 
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
@@ -25,11 +28,18 @@ function Product() {
   // const { navKeyword } = location.state.keyword;
 
   const getProducts = async () => {
-    const response = await axios.get(
-      "http://127.0.0.1:8000/api/v1/products/items/"
-    );
-    setProducts(response.data);
-    setResult(response.data);
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/v1/products/items/"
+      );
+      console.log(response.data);
+      setProducts(response.data);
+      setResult(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+    setLoading(false);
+
     // console.log("navKeyword", location.state.keyword);
     // setKeyword(location.state.keyword);
     // filter(location.state.keyword);
@@ -62,6 +72,7 @@ function Product() {
   };
 
   useEffect(() => {
+    setLoading(true);
     // console.log(location.state.keyword);
     getProducts();
     // setKeyword(location.state.keyword);
@@ -125,83 +136,89 @@ function Product() {
           }
         `}
       </style>
-      {isMobile ? (
-        <div>
-          <Container style={{ margin: "50px 0" }}>
-            <div className={styles.search_div}>
-              <input
-                type="text"
-                placeholder="찾으시는 제품을 검색해주세요."
-                className={styles.mob_input}
-                onChange={onChange}
-                value={keyword}
-              ></input>
-              <button className={styles.search_btn} onClick={onClick}>
-                <SearchIcon></SearchIcon>
-              </button>
-            </div>
-
-            <div className={styles.search_num}>
-              <p>총 {result.length}건</p>
-            </div>
-
-            <div className={styles.product_lists}>
-              <ProductList list={currentProducts} />
-            </div>
-
-            <div>
-              <Pagination
-                activePage={currentPage}
-                itemsCountPerPage={24}
-                totalItemsCount={result.length}
-                pageRangeDisplayed={5}
-                prevPageText={"<"}
-                nextPageText={">"}
-                onChange={handlePageChange}
-              />
-            </div>
-          </Container>
-        </div>
+      {loading ? (
+        <Loading />
       ) : (
-        <div>
-          <div style={{ display: "inline" }}>
-            <Category />
-          </div>
-          <Container className={styles.container}>
-            <div className={styles.search_div}>
-              <input
-                type="text"
-                placeholder="찾으시는 제품을 검색해주세요."
-                className={styles.search_input}
-                onChange={onChange}
-                value={keyword}
-              ></input>
-              <button className={styles.search_btn} onClick={onClick}>
-                <SearchIcon></SearchIcon>
-              </button>
-            </div>
-
-            <div className={styles.search_num}>
-              <p>총 {result.length}건</p>
-            </div>
-
-            <div className={styles.product_lists}>
-              <ProductList list={currentProducts} />
-            </div>
-
+        <>
+          {isMobile ? (
             <div>
-              <Pagination
-                activePage={currentPage}
-                itemsCountPerPage={24}
-                totalItemsCount={result.length}
-                pageRangeDisplayed={5}
-                prevPageText={"<"}
-                nextPageText={">"}
-                onChange={handlePageChange}
-              />
+              <Container style={{ margin: "50px 0" }}>
+                <div className={styles.search_div}>
+                  <input
+                    type="text"
+                    placeholder="찾으시는 제품을 검색해주세요."
+                    className={styles.mob_input}
+                    onChange={onChange}
+                    value={keyword}
+                  ></input>
+                  <button className={styles.search_btn} onClick={onClick}>
+                    <SearchIcon></SearchIcon>
+                  </button>
+                </div>
+
+                <div className={styles.search_num}>
+                  <p>총 {result.length}건</p>
+                </div>
+
+                <div className={styles.product_lists}>
+                  <ProductList list={currentProducts} />
+                </div>
+
+                <div>
+                  <Pagination
+                    activePage={currentPage}
+                    itemsCountPerPage={24}
+                    totalItemsCount={result.length}
+                    pageRangeDisplayed={5}
+                    prevPageText={"<"}
+                    nextPageText={">"}
+                    onChange={handlePageChange}
+                  />
+                </div>
+              </Container>
             </div>
-          </Container>
-        </div>
+          ) : (
+            <div>
+              <div style={{ display: "inline" }}>
+                <Category />
+              </div>
+              <Container className={styles.container}>
+                <div className={styles.search_div}>
+                  <input
+                    type="text"
+                    placeholder="찾으시는 제품을 검색해주세요."
+                    className={styles.search_input}
+                    onChange={onChange}
+                    value={keyword}
+                  ></input>
+                  <button className={styles.search_btn} onClick={onClick}>
+                    <SearchIcon></SearchIcon>
+                  </button>
+                </div>
+
+                <div className={styles.search_num}>
+                  <p>총 {result.length}건</p>
+                </div>
+
+                <div className={styles.product_lists}>
+                  <ProductList list={currentProducts} />
+                </div>
+
+                <div>
+                  <Pagination
+                    activePage={currentPage}
+                    itemsCountPerPage={24}
+                    totalItemsCount={result.length}
+                    pageRangeDisplayed={5}
+                    prevPageText={"<"}
+                    nextPageText={">"}
+                    onChange={handlePageChange}
+                  />
+                </div>
+              </Container>
+            </div>
+          )}
+        </>
       )}
     </>
   );

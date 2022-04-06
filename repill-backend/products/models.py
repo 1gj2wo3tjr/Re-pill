@@ -3,9 +3,9 @@ from django.conf import settings
 
 class Ingrediant(models.Model):
     name = models.CharField(max_length=30)      # 성분명
-    content = models.TextField()                # 해당 성분에 대한 설명
-    dose_recomm = models.PositiveIntegerField()    # 일일 섭취 권장량
-    dose_recomm_metrics = models.CharField(max_length=10)     # 권장량 표기 단위
+    content = models.TextField(blank=True)                # 해당 성분에 대한 설명
+    dose_recomm = models.PositiveIntegerField(blank=True)    # 일일 섭취 권장량
+    dose_recomm_metrics = models.CharField(max_length=10, blank=True)     # 권장량 표기 단위
 
     def __str__(self):
         return f'{self.name}'

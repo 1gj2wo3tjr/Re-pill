@@ -1,109 +1,78 @@
-/* mobile */
-@media screen and (max-width: 768px) {
-  .navbar {
-    justify-content: space-around;
-    /* flex-direction: column; */
-  }
-
-  .nav_menus {
-    display: none;
-  }
-
-  .nav_menu {
-    display: none;
-  }
-
-  .nav_toggle_btn {
-    display: flex;
-    font-weight: 500;
-  }
-
-  .nav_toggle_btn_text {
-    color: #464646;
-    list-style: none;
-    font-weight: bold;
-    font-size: 15px;
-  }
-
-  .nav_toggle_btn_text:hover {
-    color: #219f94;
-  }
-
-  .toggle_menus {
-    overflow-y: hidden;
-    flex-direction: column;
-    width: 100%;
-    max-height: 100vh;
-    box-sizing: border-box;
-    transition: all 0.35s ease 0s;
-    list-style: none;
-    /* overlay하기 위함 */
-    position: absolute;
-    background-color: white;
-
-    box-shadow: 1px 1px 1px #cecece;
-    padding: 30px;
-
-    font-weight: bold;
-    font-size: 15px;
-
-    margin: 0;
-  }
-
-  .toggle_menu {
-    padding: 10px;
-  }
-
-  .toggle_menu_text {
-    color: #464646;
-  }
-
-  .toggle_menu_text:hover {
-    color: #219f94;
-  }
-
-  .nav_login {
-    display: none;
-  }
+.navbar_main {
+  box-shadow: 3px 3px 5px #f3f3f3;
 }
-
-/* PC */
-@media screen and (min-width: 750px) {
-  .navbar {
-    justify-content: space-around;
-  }
-
-  .nav_toggle_btn {
-    display: none;
-  }
-
-  .toggle_menus {
-    display: none;
-  }
-}
-
-/* 공통 */
 .navbar {
   background-color: #ffffff;
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  /* border-bottom: 1px solid #464646; */
-  box-shadow: 1px 1px 1px #cecece;
   font-weight: bold;
   font-size: 15px;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  width: 1050px;
+  margin-bottom: 10px;
+  position: sticky;
+  top: 0;
 }
-
 .nav_menus {
   display: flex;
+  /* justify-content: space-between; */
   list-style: none;
-  justify-content: space-around;
-  width: 50%;
+  text-align: left;
+  padding: 0;
+  align-items: center;
+}
+.nav_menu {
+  color: #585858;
+  text-decoration: none;
+  margin: 0 80px;
+  text-align: center;
+}
+.search_input {
+  /* border: 1px solid rgb(201, 201, 201); */
+  border: 0px;
+  border-radius: 20px;
+  background-color: #f3f3f3;
+  padding: 8px 20px;
+  width: 300px;
+}
+.search_btn {
+  border: 0px;
+  border-radius: 20px;
+  background-color: white;
+  cursor: pointer;
 }
 
-.nav_menu {
-  color: #464646;
+.navbar_top {
+  background-color: #ffffff;
+  font-weight: bold;
+  font-size: 12px;
+  display: flex;
+  width: 1050px;
+  justify-content: end;
+  text-align: center;
+}
+.navbar_top_ul {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  text-align: center;
+  padding: 0;
+}
+.navbar_top_list {
+  color: #585858;
   text-decoration: none;
+  margin: 0 25px;
+  text-align: center;
+}
+.navbar_top_list:hover {
+  color: #219f94;
+}
+
+.logout_nav_menu {
+  color: #585858;
+  text-decoration: none;
+  margin: 0 80px;
+  text-align: center;
 }
 
 .nav_menu:hover {

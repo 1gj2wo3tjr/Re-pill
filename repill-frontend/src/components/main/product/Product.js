@@ -7,6 +7,7 @@ import ProductList from "./ProductList";
 import Category from "./Category";
 import Pagination from "react-js-pagination";
 import { useMediaQuery } from "react-responsive";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function Product() {
   const [products, setProducts] = useState([]);
@@ -19,12 +20,19 @@ function Product() {
     query: "(max-width : 768px)",
   });
 
+  // const location = useLocation();
+  // console.log("state ", location.state.keyword);
+  // const { navKeyword } = location.state.keyword;
+
   const getProducts = async () => {
     const response = await axios.get(
       "http://127.0.0.1:8000/api/v1/products/items/"
     );
     setProducts(response.data);
     setResult(response.data);
+    // console.log("navKeyword", location.state.keyword);
+    // setKeyword(location.state.keyword);
+    // filter(location.state.keyword);
   };
 
   // 현재 페이지 가져오기
@@ -54,7 +62,10 @@ function Product() {
   };
 
   useEffect(() => {
+    // console.log(location.state.keyword);
     getProducts();
+    // setKeyword(location.state.keyword);
+    // filter(keyword);
   }, []);
 
   return (

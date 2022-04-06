@@ -20,4 +20,6 @@ urlpatterns = [
     path('report/', views.SurveyList.as_view()),
     path('report/<str:uuid>', views.Survey.as_view()),
     path('report/recomm/', views.RecommAlgorithm.as_view()),
+
+    path('question/', views.Questions.as_view()),
 ]

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Container } from "semantic-ui-react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import styles from "./Product.module.css";
 import ProductReview from "./ProductReview";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
@@ -17,6 +17,8 @@ function ProductDetail() {
   const headers = {
     Authorization: `Bearer ${token}`,
   };
+  const navigate = useNavigate();
+
   const [detail, setDetail] = useState([]);
   const [review, setReview] = useState([]);
   const [quantity, setQuantity] = useState(1);
@@ -81,6 +83,8 @@ function ProductDetail() {
       })
       .catch((err) => console.log(err));
   };
+
+  const [orderList, setOrderList] = useState([]);
 
   useEffect(() => {
     getDetail();
@@ -170,19 +174,11 @@ function ProductDetail() {
                 }}
               >
                 <button className={styles.mob_cart} onClick={() => goCart()}>
-                  <div style={{ display: "block", justifyContent: "center" }}>
+                  <div style={{ display: "block" }}>
                     <AddShoppingCartIcon
                       sx={{ color: "rgb(87, 87, 87)" }}
                     ></AddShoppingCartIcon>{" "}
                     <p> 장바구니 담기</p>
-                  </div>
-                </button>
-                <button className={styles.mob_buy}>
-                  <div style={{ display: "block", justifyContent: "center" }}>
-                    <PaymentIcon
-                      sx={{ color: "rgb(87, 87, 87)" }}
-                    ></PaymentIcon>{" "}
-                    <p>바로 구매하기</p>
                   </div>
                 </button>
               </div>
@@ -291,7 +287,6 @@ function ProductDetail() {
                 <p>{(detail.price * quantity).toLocaleString()} 원</p>
               </div>
               <div style={{ float: "right", marginTop: "20px" }}>
-                {/* <Link to={`/cart`}> */}
                 <button className={styles.button_cart} onClick={() => goCart()}>
                   <div style={{ display: "flex", justifyContent: "start" }}>
                     <AddShoppingCartIcon
@@ -303,17 +298,6 @@ function ProductDetail() {
                     <p> 장바구니 담기</p>
                   </div>
                 </button>
-                {/* </Link> */}
-                <Link to={`/order`}>
-                  <button className={styles.button_buy}>
-                    <div style={{ display: "flex", justifyContent: "start" }}>
-                      <PaymentIcon
-                        sx={{ color: "rgb(87, 87, 87)", marginRight: "10px" }}
-                      ></PaymentIcon>{" "}
-                      <p>바로 구매하기</p>
-                    </div>
-                  </button>
-                </Link>
               </div>
             </div>
           </div>

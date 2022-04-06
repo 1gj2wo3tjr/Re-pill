@@ -75,7 +75,8 @@
 }
 .mob_cart {
   background-color: #e8e8a6;
-  padding: 12px 33px;
+  width: 100%;
+  padding: 12px 0px;
   color: rgb(87, 87, 87);
   font-size: 13px;
   font-weight: bold;
@@ -240,7 +241,6 @@ input:focus {
   color: rgb(87, 87, 87);
   font-size: 15px;
   font-weight: bold;
-  margin-right: 20px;
   border: 0px;
   border-radius: 20px;
   cursor: pointer;

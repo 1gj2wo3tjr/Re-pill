@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -8,6 +8,8 @@ import { useMediaQuery } from "react-responsive";
 import { Container } from "@mui/material";
 
 function Main() {
+  let navigate = useNavigate()
+
   const mobile_settings = {
     dots: true,
     infinite: true,
@@ -28,6 +30,10 @@ function Main() {
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });
+
+  const goSurvey = () => {
+    navigate('/survey')
+  }
 
   return (
     <>
@@ -65,9 +71,6 @@ function Main() {
         }
       `}
       </style>
-      <button>
-        <Link to="/survey/Survey.js">survey</Link>
-      </button>
       {isMobile ? (
         <>
           <div style={{ height: "550px", background: "#F2F5C8" }}>
@@ -171,7 +174,7 @@ function Main() {
                     <h1>내게 딱 맞는 영양제, 궁금하다면?</h1>
                     <h3>나만을 위한 맞춤영양제를 찾아보세요 </h3>
                     <h3>간단하게 체크하고 내 몸에 맞는 영양성분 찾기</h3>
-                    <button className={styles.survey_button}>설문하기</button>
+                    <button className={styles.survey_button} onClick={goSurvey}>설문하기</button>
                   </div>
                 </div>
               </div>

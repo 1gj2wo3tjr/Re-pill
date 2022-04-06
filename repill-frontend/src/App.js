@@ -46,7 +46,7 @@ function App() {
           <Route path="/mypage/subscriptions" element={<Subscriptions />} />
           <Route path="/productReview" element={<ProductReview />} />
           <Route path="/mypage/userinfo" element={<UserInfo />} />
-          <Route path="/survey/Survey.js" element={<Survey />} />
+          <Route path="/survey" element={<Survey />} />
         </Routes>
       </div>
       <Footer />

@@ -16,6 +16,7 @@
   padding: 30px;
 }
 .review_content {
+  height: 100px;
   margin: 20px 0;
   white-space: pre-line;
 }

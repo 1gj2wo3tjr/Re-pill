@@ -5,7 +5,8 @@ import "slick-carousel/slick/slick-theme.css";
 import styles from "./Review.module.css";
 import { useMediaQuery } from "react-responsive";
 import Rating from "@mui/material/Rating";
-
+import Avatar from "@mui/material/Avatar";
+import PersonIcon from "@mui/icons-material/Person";
 function ProductReview({ list }) {
   const mobile_settings = {
     dots: true,
@@ -57,12 +58,30 @@ function ProductReview({ list }) {
               {list.map((item, index) => (
                 <div key={index}>
                   <div className={styles.review_div}>
-                    <Rating
-                      name="simple-controlled"
-                      value={list.rating}
-                      style={{ marginLeft: "5%" }}
-                      readOnly
-                    />
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      <Avatar>
+                        <PersonIcon></PersonIcon>
+                      </Avatar>
+                      <div style={{ marginTop: "3px", textAlign: "center" }}>
+                        <Rating
+                          name="simple-controlled"
+                          value={item.rating}
+                          style={{ marginLeft: "5%" }}
+                          readOnly
+                          size="large"
+                        />
+                      </div>
+                    </div>
+                    <hr style={{ color: "#adadad" }}></hr>
+                    <div className={styles.review_content}>
+                      <p>{item.content}</p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -72,14 +91,25 @@ function ProductReview({ list }) {
               {list.map((item, index) => (
                 <div key={index}>
                   <div className={styles.review_div}>
-                    <div>
-                      <Rating
-                        name="simple-controlled"
-                        value={item.rating}
-                        style={{ marginLeft: "5%" }}
-                        readOnly
-                        size="large"
-                      />
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      <Avatar>
+                        <PersonIcon></PersonIcon>
+                      </Avatar>
+                      <div style={{ marginTop: "3px", textAlign: "center" }}>
+                        <Rating
+                          name="simple-controlled"
+                          value={item.rating}
+                          style={{ marginLeft: "5%" }}
+                          readOnly
+                          size="large"
+                        />
+                      </div>
                     </div>
                     <hr style={{ color: "#adadad" }}></hr>
                     <div className={styles.review_content}>

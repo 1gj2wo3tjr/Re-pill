@@ -19,7 +19,7 @@ function Loading() {
             top: "150px",
           }}
         >
-          <ThreeDots color="#219F94" height={80} width={80} timeout={1000} />
+          <ThreeDots color="#219F94" height={80} width={80} timeout={3000} />
         </Container>
       ) : (
         <Container
@@ -30,7 +30,7 @@ function Loading() {
             top: "220px",
           }}
         >
-          <ThreeDots color="#219F94" height={80} width={80} timeout={1000} />
+          <ThreeDots color="#219F94" height={80} width={80} />
         </Container>
       )}
     </>

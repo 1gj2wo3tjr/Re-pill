@@ -1,12 +1,10 @@
-FROM python:3.9-slim-bullseye
+FROM python:3.9
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     python3-mysqldb \
   && apt-get install -y --no-install-recommends \
     default-libmysqlclient-dev \
-  && apt-get install -y --no-install-recommends \
-    gcc \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app

@@ -1,6 +1,5 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Slider from "react-slick";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,6 +10,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
+import axios from "axios"
 
 function Survey() {
   const useStyles = makeStyles((theme) => ({
@@ -36,18 +36,32 @@ function Survey() {
 
   const [value, setValue] = React.useState("female");
 
+  const [questions, setQuestions] = useState([])
+
+
   const handleChange = (event) => {
     setValue(event.target.value);
   };
 
+  const getQuestions = async() => {
+    try{
+      const response = await axios.get("http://127.0.0.1:8000/api/v1/survey/question/")
+      setQuestions(response.data)
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    getQuestions()
+  }, [])
+
   return (
     <>
       <div>
-        <h2> Survey</h2>
         <Slider ref={sliderRef} {...settings}>
           <div>
             <React.Fragment>
-              <CssBaseline />
               <Container fixed>
                 <Typography
                   style={{
@@ -71,7 +85,6 @@ function Survey() {
           </div>
           <div>
             <React.Fragment>
-              <CssBaseline />
               <Container fixed>
                 <Typography
                   style={{
@@ -118,50 +131,6 @@ function Survey() {
                 </Typography>
               </Container>
             </React.Fragment>
-          </div>
-          <div>
-            <React.Fragment>
-              <CssBaseline />
-              <Container fixed>
-                <Typography
-                  style={{
-                    backgroundColor: "#cfe8fc",
-                    height: "700px",
-                    margin: "3%",
-                    textAlign: "center",
-                  }}
-                >
-                  <br></br>
-                  <div style={{ fontSize: "50px" }}>리필!!!</div>
-                  <div>내가 널 뭐라고 부를까?</div>
-                  <TextField
-                    id="standard-full-width"
-                    label="Label"
-                    style={{ margin: "5%" }}
-                    placeholder="이름"
-                    helperText="이름 입력해라!"
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                  <div className={classes.root}>
-                    <Button variant="outlined" color="inherit" onClick={next}>
-                      다음
-                    </Button>
-                  </div>
-                </Typography>
-              </Container>
-            </React.Fragment>
-          </div>
-          <div>
-            <h3>4</h3>
-          </div>
-          <div>
-            <h3>5</h3>
-          </div>
-          <div>
-            <h3>6</h3>
           </div>
         </Slider>
       </div>

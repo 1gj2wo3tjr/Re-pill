@@ -5,7 +5,7 @@ import axios from "axios";
 import { useMediaQuery } from 'react-responsive';
 
 function AddNoticeModal({setOpen, open }) {
-  let token = localStorage.getItem('token')
+  let token = sessionStorage.getItem('token')
   const headers = {
     Authorization: `Bearer ${token}`
   }

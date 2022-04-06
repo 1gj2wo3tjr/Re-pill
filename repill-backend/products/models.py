@@ -30,8 +30,8 @@ class Included(models.Model):
     ingrediant = models.ForeignKey(Ingrediant, on_delete=models.CASCADE)    # 영양성분
 
     # 부가 정보
-    dose = models.PositiveIntegerField()                                    # 함유량
-    dose_metrics = models.CharField(max_length=10)                          # 함유량 표기 단위
+    dose = models.PositiveIntegerField(blank=True)                                    # 함유량
+    dose_metrics = models.CharField(max_length=10, blank=True)                          # 함유량 표기 단위
 
 # 상품 리뷰
 class Review(models.Model):

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Table, TableCell, TableHead, TableRow, Container } from "@mui/material";
 import Content from "./Content"
 import AddNoticeModal from "./AddNoticeModal"
@@ -8,15 +8,13 @@ import Pagination from "./Pagination";
 import { useMediaQuery } from 'react-responsive';
 
 function Notice() {
+  let staff = sessionStorage.getItem('staff')
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)"
   });
 
   const [open, setOpen] = useState(false)
   const [list, setList] = useState([])
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
-  const [user, setUser] = useState("admin")
 
   const openModal = () => {
     setOpen((prev) => !prev)
@@ -24,24 +22,6 @@ function Notice() {
   const [keyword, setKeyword] = useState("")
   const searchTitle = (event) => {
     setKeyword(event.target.value)
-  }
-
-
-  const getNotices = async() => {
-    try {
-      const response = await axios.get("http://127.0.0.1:8000/api/v1/community/notice/")
-      setList(response.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const indexOfLast = currentPage * postsPerPage;
-  const indexOfFirst = indexOfLast - postsPerPage;
-  function currentPosts(tmp) {
-    let currentPosts = 0;
-    currentPosts = tmp.slice(indexOfFirst, indexOfLast);
-    return currentPosts;
   }
 
   const filter = (keyword) => {
@@ -52,11 +32,6 @@ function Notice() {
     }
   }
 
-  useEffect(() => {
-    getNotices()
-    }, [])
-
-
   return (
     <div>
       {isMobile ? (
@@ -64,7 +39,7 @@ function Notice() {
           <Container style={{ marginTop: '5%' }}>
             <h3>공지사항</h3>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              {user === "admin" ? (
+              {staff ? (
                 <>
                   <input type="text" placeholder="검색어를 입력해주세요" onChange={searchTitle} value={keyword} className={styles.search_content_mob}></input>
                   <button className={styles.add_notice_button} onClick={openModal}>+작성하기</button>
@@ -78,12 +53,12 @@ function Notice() {
                   <Content keyword={keyword} list={filter(keyword)} />
                 </>) : (
                 <>
-                  <Content keyword={keyword} list={currentPosts(list)} />
+                  <Content keyword={keyword} list={list} />
                 </>)}
             </Table>
             {keyword.length ? (null) : (
               <>
-                <Pagination postsPerPage={postsPerPage} totalPosts={list.length} paginate={setCurrentPage} />
+                <Pagination setList={setList} />
               </>)}
           </Container>
           <AddNoticeModal open={open} setOpen={setOpen} />
@@ -92,7 +67,7 @@ function Notice() {
             <Container style={{ marginTop: '5%' }}>
               <h1>공지사항</h1>
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                {user === "admin" ? (
+                {staff ? (
                   <>
                     <input type="text" placeholder="검색어를 입력해주세요" onChange={searchTitle} value={keyword} className={styles.search_content}></input>
                     <button className={styles.add_notice_button} onClick={openModal}>+작성하기</button>
@@ -116,12 +91,12 @@ function Notice() {
                     <Content keyword={keyword} list={filter(keyword)} />
                   </>) : (
                   <>
-                    <Content keyword={keyword} list={currentPosts(list)} />
+                    <Content keyword={keyword} list={list} />
                   </>)}
               </Table>
               {keyword.length ? (null) : (
                 <>
-                  <Pagination postsPerPage={postsPerPage} totalPosts={list.length} paginate={setCurrentPage} />
+                  <Pagination setList={setList} />
                 </>)}
             </Container>
             <AddNoticeModal open={open} setOpen={setOpen} />

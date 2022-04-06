@@ -15,7 +15,7 @@
 }
 .nav_menus {
   display: flex;
-  /* justify-content: space-between; */
+  justify-content: space-between;
   list-style: none;
   text-align: left;
   padding: 0;
@@ -24,7 +24,8 @@
 .nav_menu {
   color: #585858;
   text-decoration: none;
-  margin: 0 80px;
+  margin: 0 60px;
+  /* margin: 0 80px; */
   text-align: center;
 }
 .search_input {

@@ -202,7 +202,7 @@ input:focus {
   font-size: 15px;
   font-weight: bold;
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
 }
 .qty_btn {
   color: rgb(87, 87, 87);

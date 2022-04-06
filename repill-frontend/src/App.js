@@ -44,7 +44,7 @@ function App() {
           <Route path="/payResult" element={<PayResult />} />
           <Route path="/payReady" element={<PayReady />} />
           <Route path="/mypage/subscriptions" element={<Subscriptions />} />
-          <Route path="/product/:id/reviews" element={<ProductReview />} />
+          <Route path="/productReview" element={<ProductReview />} />
           <Route path="/mypage/userinfo" element={<UserInfo />} />
           <Route path="/survey/Survey.js" element={<Survey />} />
         </Routes>

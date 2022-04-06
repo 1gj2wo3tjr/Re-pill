@@ -1,25 +1,24 @@
-import React from 'react'
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import { useMediaQuery } from 'react-responsive';
+import React from "react";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
+import { useMediaQuery } from "react-responsive";
 
 const style = {
-  width: '200px',
+  width: "150px",
   maxWidth: 200,
-  bgcolor: 'background.paper',
-  float: 'left',
-  margin: '0px 20px 0 100px',
-  paddingTop: '62px',
+  bgcolor: "background.paper",
+  float: "left",
+  margin: "0px 50px 0 50px",
+  paddingTop: "45px",
   position: "sticky",
-  top: "0"
+  top: "0",
 };
 
 function Category() {
-
   const isMobile = useMediaQuery({
-    query: "(max-width : 768px)"
+    query: "(max-width : 768px)",
   });
 
   return (
@@ -27,7 +26,7 @@ function Category() {
       {isMobile ? (
         <></>
       ) : (
-        <List sx={style} component="nav" aria-label="mailbox folders" >
+        <List sx={style} component="nav" aria-label="mailbox folders">
           <h2 style={{ padding: "0px 0 0 8px " }}>카테고리</h2>
           <ListItem button>
             <ListItemText primary="Inbox" />
@@ -43,9 +42,10 @@ function Category() {
           <ListItem button>
             <ListItemText primary="Spam" />
           </ListItem>
-        </List>)}
+        </List>
+      )}
     </>
-  )
+  );
 }
 
-export default Category
+export default Category;

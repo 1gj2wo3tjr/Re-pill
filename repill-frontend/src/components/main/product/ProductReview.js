@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./Review.module.css";
 import { useMediaQuery } from "react-responsive";
-
+import Rating from "@mui/material/Rating";
+import Avatar from "@mui/material/Avatar";
+import PersonIcon from "@mui/icons-material/Person";
 function ProductReview({ list }) {
   const mobile_settings = {
     dots: true,
@@ -26,6 +28,10 @@ function ProductReview({ list }) {
     query: "(max-width : 768px)",
   });
 
+  useEffect(() => {
+    console.log(list);
+  }, []);
+
   return (
     <>
       <style>
@@ -45,14 +51,37 @@ function ProductReview({ list }) {
         }
       `}
       </style>
-      {list.length > 0 ? (
+      {list && list.length > 0 ? (
         <>
           {isMobile ? (
             <Slider {...mobile_settings} className={styles.slider}>
               {list.map((item, index) => (
                 <div key={index}>
                   <div className={styles.review_div}>
-                    {item.postId}, {item.id}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      <Avatar>
+                        <PersonIcon></PersonIcon>
+                      </Avatar>
+                      <div style={{ marginTop: "3px", textAlign: "center" }}>
+                        <Rating
+                          name="simple-controlled"
+                          value={item.rating}
+                          style={{ marginLeft: "5%" }}
+                          readOnly
+                          size="large"
+                        />
+                      </div>
+                    </div>
+                    <hr style={{ color: "#adadad" }}></hr>
+                    <div className={styles.review_content}>
+                      <p>{item.content}</p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -62,7 +91,30 @@ function ProductReview({ list }) {
               {list.map((item, index) => (
                 <div key={index}>
                   <div className={styles.review_div}>
-                    {item.postId}, {item.id}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      <Avatar>
+                        <PersonIcon></PersonIcon>
+                      </Avatar>
+                      <div style={{ marginTop: "3px", textAlign: "center" }}>
+                        <Rating
+                          name="simple-controlled"
+                          value={item.rating}
+                          style={{ marginLeft: "5%" }}
+                          readOnly
+                          size="large"
+                        />
+                      </div>
+                    </div>
+                    <hr style={{ color: "#adadad" }}></hr>
+                    <div className={styles.review_content}>
+                      <p>{item.content}</p>
+                    </div>
                   </div>
                 </div>
               ))}

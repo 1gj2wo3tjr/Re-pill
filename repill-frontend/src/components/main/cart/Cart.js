@@ -23,7 +23,7 @@ function Cart() {
 
   const getCart = () => {
     axios
-      .get(`http://127.0.0.1:8000/api/v1/products/cart/`, {
+      .get(`${process.env.REACT_APP_BASE_URL}/api/v1/products/cart/`, {
         headers: headers,
       })
       .then((res) => {

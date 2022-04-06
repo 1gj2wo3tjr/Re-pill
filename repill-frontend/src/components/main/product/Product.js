@@ -31,7 +31,7 @@ function Product() {
       setLoading(true);
 
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/products/items/?search=${location.state.keyword}`
+        `${process.env.REACT_APP_BASE_URL}/api/v1/products/items/?search=${location.state.keyword}`
       );
       setProducts(response.data);
       setResult(response.data);

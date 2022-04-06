@@ -27,7 +27,9 @@ function ProductDetail() {
   const getDetail = () => {
     window.scrollTo({ top: 0 });
     axios
-      .get(`http://127.0.0.1:8000/api/v1/products/items/${params.id}`)
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/products/items/${params.id}`
+      )
       .then((response) => {
         console.log(response.data);
 
@@ -38,7 +40,9 @@ function ProductDetail() {
   const getReview = () => {
     console.log(params.id);
     axios
-      .get(`http://127.0.0.1:8000/api/v1/products/reviews?product=${params.id}`)
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/products/reviews?product=${params.id}`
+      )
       .then((res) => {
         console.log(res.data);
         setReview(res.data);
@@ -74,7 +78,7 @@ function ProductDetail() {
   const goCart = () => {
     axios
       .post(
-        `http://127.0.0.1:8000/api/v1/products/cart/`,
+        `${process.env.REACT_APP_BASE_URL}/api/v1/products/cart/`,
         {
           quantity: quantity,
           product: detail.id,

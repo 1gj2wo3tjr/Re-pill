@@ -95,7 +95,7 @@ function AddressEditModal({ address, setAddress, open, setOpen, data }) {
           <Modal
             centered={false}
             open={open}
-            style={{ position: "relative", width: "100%" }}
+            style={{ position: "relative", width: "100%", marginTop: "25%" }}
           >
             <Modal.Content>
               <TableRow style={{ display: "flex", alignItems: "center", border: "1px solid black", height: "5rem", textAlign: "center" }}>

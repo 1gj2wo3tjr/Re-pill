@@ -94,7 +94,7 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
           <Modal
             centered={false}
             open={open}
-            style={{ position: "relative", width: "100%" }}
+            style={{ position: "relative", width: "100%", marginTop: "25%" }}
           >
             <Modal.Content>
               <TableRow style={{ display: "flex", alignItems: "center", border: "1px solid black", height: "5rem", textAlign: "center" }}>
@@ -125,7 +125,7 @@ function AddressAddModal({ address, setAddress, open, setOpen }) {
             </Modal.Content>
             {popup && <div>
               <DaumPostcode
-                className={styles.search_address_modal}
+                className={styles.address_search_address_modal}
                 autoClose
                 onComplete={onCompletePost}
               /></div>}

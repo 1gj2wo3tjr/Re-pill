@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Table, TableCell, TableHead, TableRow, Container } from "@mui/material";
 import Content from "./Content"
 import AddNoticeModal from "./AddNoticeModal"
@@ -15,8 +15,6 @@ function Notice() {
 
   const [open, setOpen] = useState(false)
   const [list, setList] = useState([])
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
 
   const openModal = () => {
     setOpen((prev) => !prev)
@@ -26,24 +24,6 @@ function Notice() {
     setKeyword(event.target.value)
   }
 
-
-  const getNotices = async() => {
-    try {
-      const response = await axios.get("http://127.0.0.1:8000/api/v1/community/notice/")
-      setList(response.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const indexOfLast = currentPage * postsPerPage;
-  const indexOfFirst = indexOfLast - postsPerPage;
-  function currentPosts(tmp) {
-    let currentPosts = 0;
-    currentPosts = tmp.slice(indexOfFirst, indexOfLast);
-    return currentPosts;
-  }
-
   const filter = (keyword) => {
     if (keyword !== "") {
       return list.filter((item) => item.title.includes(keyword))
@@ -51,65 +31,6 @@ function Notice() {
       return list
     }
   }
-
-  let token = sessionStorage.getItem('token')
-  const headers = {
-    Authorization: `Bearer ${token}`
-  }
-
-  const kakaoTest = () => {
-    // 카카오톡 링크 공유하기
-    window.Kakao.Link.sendDefault({
-      objectType: 'feed',
-      content: {
-          title: '디저트 사진',
-          description: '아메리카노, 빵, 케익',
-          imageUrl: 'http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg',
-          link: {
-              mobileWebUrl: 'https://googsu.com',
-              webUrl: 'https://googsu.com',
-              androidExecParams: 'test',
-          },
-      },
-    });
-
-    // 나에게 메시지 보내기
-    // window.Kakao.API.request({
-    //   url: '/v2/api/talk/memo/default/send',
-    //   data: {
-    //       template_object: {
-    //           object_type: 'feed',
-    //           content: {
-    //               title: '카카오톡 링크 4.0',
-    //               description: '디폴트 템플릿 FEED',
-    //               image_url: 'http://test-tam.pe.kr/img/3.result.gif',
-    //               link: {
-    //                   mobileWebUrl: 'http://localhost:3000/',                                                        
-    //                       web_url: 'http://localhost:3000/',
-    //               },
-    //           },
-    //           social: {
-    //               like_count: 100,
-    //               comment_count: 200,
-    //           },
-    //           buttons: [{
-    //                   title: '쇼핑하러가기',
-    //                   link: {
-    //                       mobileWebUrl: 'http://localhost:3000/',                                                        
-    //                       web_url: 'http://localhost:3000/',
-    //                   },
-    //               },
-    //           ]
-    //       },
-    //   },
-    // });
-  }
-
-  useEffect(() => {
-    getNotices()
-    window.Kakao.init(process.env.REACT_APP_JS_KEY)
-    }, [])
-
 
   return (
     <div>
@@ -132,12 +53,12 @@ function Notice() {
                   <Content keyword={keyword} list={filter(keyword)} />
                 </>) : (
                 <>
-                  <Content keyword={keyword} list={currentPosts(list)} />
+                  <Content keyword={keyword} list={list} />
                 </>)}
             </Table>
             {keyword.length ? (null) : (
               <>
-                <Pagination postsPerPage={postsPerPage} totalPosts={list.length} paginate={setCurrentPage} />
+                <Pagination setList={setList} />
               </>)}
           </Container>
           <AddNoticeModal open={open} setOpen={setOpen} />
@@ -170,17 +91,16 @@ function Notice() {
                     <Content keyword={keyword} list={filter(keyword)} />
                   </>) : (
                   <>
-                    <Content keyword={keyword} list={currentPosts(list)} />
+                    <Content keyword={keyword} list={list} />
                   </>)}
               </Table>
               {keyword.length ? (null) : (
                 <>
-                  <Pagination postsPerPage={postsPerPage} totalPosts={list.length} paginate={setCurrentPage} />
+                  <Pagination setList={setList} />
                 </>)}
             </Container>
             <AddNoticeModal open={open} setOpen={setOpen} />
           </>)}
-        <button onClick={(e) => kakaoTest(e)}>kakao</button>
     </div>
   )
 }

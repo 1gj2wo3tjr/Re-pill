@@ -24,20 +24,26 @@ function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [open, setOpen] = useState(false);
 
-  const getDetail = async () => {
+  const getDetail = () => {
     window.scrollTo({ top: 0 });
-    const response = await axios.get(
-      `http://127.0.0.1:8000/api/v1/products/items/${params.id}`
-    );
+    axios
+      .get(`http://127.0.0.1:8000/api/v1/products/items/${params.id}`)
+      .then((response) => {
+        console.log(response.data);
 
-    setDetail(response.data);
+        setDetail(response.data);
+      });
   };
 
-  const getReview = async () => {
-    const response = await axios.get(
-      `http://127.0.0.1:8000/api/v1/products/reviews/${params.id}`
-    );
-    setReview(response.data);
+  const getReview = () => {
+    console.log(params.id);
+    axios
+      .get(`http://127.0.0.1:8000/api/v1/products/reviews?product=${params.id}`)
+      .then((res) => {
+        console.log(res.data);
+        setReview(res.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   const isMobile = useMediaQuery({
@@ -87,9 +93,10 @@ function ProductDetail() {
   const [orderList, setOrderList] = useState([]);
 
   useEffect(() => {
+    // setReview([]);
     getDetail();
     getReview();
-  }, [params.id]);
+  }, []);
 
   const settings = {
     dots: true,

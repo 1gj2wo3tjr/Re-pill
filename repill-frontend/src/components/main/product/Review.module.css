@@ -8,8 +8,14 @@
   height: 220px;
   margin-top: 10px;
   margin-left: 18px;
-  display: flex;
-  justify-content: space-around;
+  /* display: flex; */
+  /* justify-content: space-around; */
+  text-align: center;
   border: 1px solid #adadad;
   border-radius: 10px;
+  padding: 30px;
+}
+.review_content {
+  margin: 20px 0;
+  white-space: pre-line;
 }

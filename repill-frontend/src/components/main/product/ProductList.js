@@ -153,34 +153,45 @@ function ProductList({ list }) {
                         alt="thumbnail_url"
                         sx={{ objectFit: "contain", padding: "10px" }}
                       />
-                      <CardContent style={{ height: "120px" }}>
-                        <Typography
-                          gutterBottom
-                          variant="h5"
-                          component="div"
-                          sx={{
-                            color: "rgba(0, 0, 0, 0.6)",
-                            fontWeight: "bold",
-                            fontSize: "20px",
-                          }}
-                        >
-                          {item.company}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {item.name}
-                        </Typography>
-                        <Typography
-                          variant="h5"
-                          color="text.secondary"
-                          sx={{
-                            float: "right",
-                            paddingTop: "10px",
-                            fontWeight: "bold",
-                            color: "#219f94",
-                          }}
-                        >
-                          {item.price.toLocaleString()}원
-                        </Typography>
+                      <CardContent style={{ height: "130px" }}>
+                        <div style={{ marginBottom: "10px" }}>
+                          <Typography
+                            gutterBottom
+                            variant="h5"
+                            component="div"
+                            sx={{
+                              color: "rgba(0, 0, 0, 0.6)",
+                              fontWeight: "bold",
+                              fontSize: "20px",
+                            }}
+                          >
+                            {item.company}
+                          </Typography>
+                        </div>
+                        <div>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ fontSize: "13px", height: "70px" }}
+                          >
+                            {item.name}
+                          </Typography>
+                        </div>
+                        <div>
+                          <Typography
+                            variant="h5"
+                            color="text.secondary"
+                            sx={{
+                              float: "right",
+                              paddingTop: "10px",
+                              fontWeight: "bold",
+                              color: "#219f94",
+                              marginBottom: "20px",
+                            }}
+                          >
+                            {item.price.toLocaleString()}원
+                          </Typography>
+                        </div>
                       </CardContent>
                     </CardActionArea>
                   </Link>
@@ -220,37 +231,44 @@ function ProductList({ list }) {
                         sx={{ objectFit: "contain", padding: "10px" }}
                       />
                       <CardContent style={{ height: "130px" }}>
-                        <Typography
-                          gutterBottom
-                          variant="h5"
-                          component="div"
-                          sx={{
-                            color: "rgba(0, 0, 0, 0.6)",
-                            fontWeight: "bold",
-                            fontSize: "20px",
-                          }}
-                        >
-                          {item.company}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{ fontSize: "13px" }}
-                        >
-                          {item.name}
-                        </Typography>
-                        <Typography
-                          variant="h5"
-                          color="text.secondary"
-                          sx={{
-                            float: "right",
-                            paddingTop: "10px",
-                            fontWeight: "bold",
-                            color: "#219f94",
-                          }}
-                        >
-                          {item.price.toLocaleString()}원
-                        </Typography>
+                        <div style={{ marginBottom: "10px" }}>
+                          <Typography
+                            gutterBottom
+                            variant="h5"
+                            component="div"
+                            sx={{
+                              color: "rgba(0, 0, 0, 0.6)",
+                              fontWeight: "bold",
+                              fontSize: "20px",
+                            }}
+                          >
+                            {item.company}
+                          </Typography>
+                        </div>
+                        <div>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ fontSize: "13px", height: "70px" }}
+                          >
+                            {item.name}
+                          </Typography>
+                        </div>
+                        <div>
+                          <Typography
+                            variant="h5"
+                            color="text.secondary"
+                            sx={{
+                              float: "right",
+                              paddingTop: "10px",
+                              fontWeight: "bold",
+                              color: "#219f94",
+                              marginBottom: "20px",
+                            }}
+                          >
+                            {item.price.toLocaleString()}원
+                          </Typography>
+                        </div>
                       </CardContent>
                     </CardActionArea>
                   </Link>

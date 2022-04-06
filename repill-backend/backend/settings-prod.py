@@ -22,12 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+d98$=on_twz5k$u81n=n)ei5&qgp&l$n5dtm*4^!fm)!ti13f'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'j6a503.p.ssafy.io',
+]
 
 
 # Application definition
@@ -148,7 +151,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS: 모든 Origin 허용 (배포 시 수정할 것)
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'https://localhost:3000',
+    'http://127.0.0.1:3000',
+    'https://127.0.0.1:3000',
+]
+
+CORS_ALLOW_CREDENTIALS = True
 
 # 자체 User Model 사용
 AUTH_USER_MODEL = 'accounts.User'
@@ -183,8 +194,10 @@ SIMPLE_JWT = {
 # Swagger에서 인증을 Basic으로 사용하도록 정의: 추후 바꿀 것
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
-        'basic': {
-            'type': 'basic'
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
         }
     }
 }

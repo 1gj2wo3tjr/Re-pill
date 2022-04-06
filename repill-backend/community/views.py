@@ -48,11 +48,16 @@ from django.core.cache import cache
 def notice_list(request):
 
     def get_notice_list(request):  
+
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
+        
         # 공지를 PK 역순으로 표시
         notices = Notice.objects.order_by('-pk')
 
-        serializer = NoticeListSerializer(notices, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        page = paginator.paginate_queryset(notices, request)
+        serializer = NoticeListSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post_notice(request):
         if not request.user.is_authenticated:

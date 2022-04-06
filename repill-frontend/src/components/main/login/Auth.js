@@ -9,7 +9,7 @@ const Auth = () => {
   useEffect(() => {
     // console.log(code);
     axios({
-      url: "http://localhost:8000/api/v1/accounts/login",
+      url: `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/login`,
       method: "get",
       params: {
         code: code,

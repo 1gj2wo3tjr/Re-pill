@@ -55,3 +55,14 @@ class ProductRecommendSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name']
+
+class SurveyQuestionListSerializer(serializers.ModelSerializer):
+    class SurveyQuestionChoicesSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = SurveyQuestionChoices
+            fields = '__all__'
+        
+    choices = SurveyQuestionChoicesSerializer(many=True)
+    class Meta:
+        model = SurveyQuestion
+        fields = '__all__'

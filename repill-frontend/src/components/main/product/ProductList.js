@@ -31,7 +31,7 @@ function ProductList({ list }) {
   const goCart = (productId) => {
     axios
       .post(
-        `http://127.0.0.1:8000/api/v1/products/cart/`,
+        `${process.env.REACT_APP_BASE_URL}/api/v1/products/cart/`,
         {
           quantity: 1,
           product: productId,

@@ -2,12 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Header, Icon, Modal } from "semantic-ui-react";
 import { useMediaQuery } from "react-responsive";
 import styles from "./Product.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function CartModal({ open, setOpen }) {
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });
+
+  const navigate = useNavigate();
+
+  const goProduct = () => {
+    setOpen(false);
+    navigate(`/product`, { state: { keyword: "" } });
+  };
 
   return (
     <>
@@ -29,14 +36,12 @@ function CartModal({ open, setOpen }) {
             <p style={{ fontSize: "15px" }}>장바구니에 추가되었습니다.</p>
           </Modal.Content>
           <Modal.Actions style={{ textAlign: "center" }}>
-            <Link to="/product">
-              <button
-                className={styles.mob_modal_btn_continue}
-                onClick={() => setOpen(false)}
-              >
-                <Icon name="remove" /> <p>쇼핑 계속하기</p>
-              </button>
-            </Link>
+            <button
+              className={styles.mob_modal_btn_continue}
+              onClick={goProduct}
+            >
+              <Icon name="remove" /> <p>쇼핑 계속하기</p>
+            </button>
             <Link to={`/cart`}>
               <button
                 className={styles.mob_modal_btn_cart}
@@ -58,14 +63,9 @@ function CartModal({ open, setOpen }) {
             <p style={{ fontSize: "15px" }}>장바구니에 추가되었습니다.</p>
           </Modal.Content>
           <Modal.Actions style={{ textAlign: "center" }}>
-            <Link to="/product">
-              <button
-                className={styles.modal_btn_continue}
-                onClick={() => setOpen(false)}
-              >
-                <Icon name="remove" /> <p>쇼핑 계속하기</p>
-              </button>
-            </Link>
+            <button className={styles.modal_btn_continue} onClick={goProduct}>
+              <Icon name="remove" /> <p>쇼핑 계속하기</p>
+            </button>
             <Link to={`/cart`}>
               <button
                 className={styles.modal_btn_cart}

@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from backend.permissions import IsOwnerOnly
-from .models import Recommend, SurveyHistory
-from .serializers import RecommendSerializer, ResponsesSerializer, SurveyHistoryListSerializer, SurveyHistorySerializer, ReviewRecommendSerializer, ProductRecommendSerializer
+from .models import Recommend, SurveyHistory, SurveyQuestion
+from .serializers import RecommendSerializer, ResponsesSerializer, SurveyHistoryListSerializer, SurveyHistorySerializer, ReviewRecommendSerializer, ProductRecommendSerializer, SurveyQuestionListSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
@@ -54,6 +54,17 @@ class Survey(APIView):
         serializer = SurveyHistorySerializer(survey)
         return Response(serializer.data)
     
+
+class Questions(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = SurveyQuestionListSerializer
+
+    def get(self, request):
+        questions = SurveyQuestion.objects.all()
+        serializer = SurveyQuestionListSerializer(questions, many=True)
+        return Response(serializer.data)
+
+
     
 class RecommAlgorithm(APIView):
     # permission_classes = [IsAuthenticated]

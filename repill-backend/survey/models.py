@@ -64,7 +64,7 @@ class SurveyQuestionChoices(models.Model):
     related_ingrediant: 해당 설문과 유관한 성분
     """
     number = models.PositiveSmallIntegerField()
-    question = models.ForeignKey(SurveyQuestion, on_delete=models.CASCADE)
+    question = models.ForeignKey(SurveyQuestion, on_delete=models.CASCADE, related_name='choices')
     content = models.CharField(max_length=200)
     related_ingrediant = models.ForeignKey(Ingrediant, on_delete=models.SET_NULL, blank=True, null=True)
 

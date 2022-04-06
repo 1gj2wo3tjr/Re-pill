@@ -9,6 +9,7 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Calender from "./Calender";
+import Chart from "./Chart";
 
 function MypageCompo() {
   const useStyles = makeStyles((theme) => ({
@@ -128,6 +129,8 @@ function MypageCompo() {
               style={{ backgroundColor: "rgba(245,254,192,50%)" }}
             >
               내 영양분석
+              <hr></hr>
+              <Chart />
             </Paper>
           </Grid>
           <Grid item xs={6}>
@@ -137,10 +140,12 @@ function MypageCompo() {
             >
               내 구독정보
               <hr></hr>
-              <Calender className="flex justify-center items-center" />
+              <div>
+                <Calender />
+              </div>
             </Paper>
           </Grid>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <h3 style={{ textAlign: "center" }}>맞춤형 케어</h3>
           </Grid>
           <Grid item xs={6}>
@@ -158,7 +163,7 @@ function MypageCompo() {
             >
               안구 건조증
             </Paper>
-          </Grid>
+          </Grid> */}
         </Grid>
       </div>
     </>

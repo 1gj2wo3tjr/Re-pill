@@ -75,7 +75,8 @@
 }
 .mob_cart {
   background-color: #e8e8a6;
-  padding: 12px 33px;
+  width: 100%;
+  padding: 12px 0px;
   color: rgb(87, 87, 87);
   font-size: 13px;
   font-weight: bold;
@@ -142,6 +143,7 @@ input:focus {
   background-color: #e8e8a6;
   margin: 0 10px;
   cursor: pointer;
+  width: 50px;
 }
 
 .search_num {
@@ -204,17 +206,16 @@ input:focus {
 }
 .qty_btn {
   color: rgb(87, 87, 87);
-  font-size: 20px;
   font-weight: bold;
   border: 0px;
   border-radius: 20px;
   background-color: #e8e8a6;
   margin: 0 10px;
-  cursor: pointer;
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   vertical-align: middle;
-  padding: 10px;
+  padding: 5px;
+  cursor: pointer;
 }
 .qty_btn:hover {
   background-color: #f3f3f3;
@@ -240,7 +241,6 @@ input:focus {
   color: rgb(87, 87, 87);
   font-size: 15px;
   font-weight: bold;
-  margin-right: 20px;
   border: 0px;
   border-radius: 20px;
   cursor: pointer;
@@ -275,4 +275,51 @@ input:focus {
   height: 500px;
   background-color: antiquewhite;
   margin: 50px 0;
+}
+
+/* modal */
+.modal_btn_continue {
+  background-color: #e8e8a6;
+  padding: 12px 33px;
+  color: rgb(87, 87, 87);
+  font-size: 13px;
+  font-weight: bold;
+  margin-right: 20px;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.modal_btn_cart {
+  background-color: #c1deae;
+  padding: 12px 33px;
+  color: rgb(87, 87, 87);
+  font-size: 13px;
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.mob_modal_btn_continue {
+  background-color: #e8e8a6;
+  padding: 8px 20px;
+  color: rgb(87, 87, 87);
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 10px;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.mob_modal_btn_cart {
+  background-color: #c1deae;
+  padding: 8px 20px;
+  color: rgb(87, 87, 87);
+  font-size: 12px;
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
 }

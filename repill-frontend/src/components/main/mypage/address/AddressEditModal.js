@@ -7,12 +7,13 @@ import styles from "../Mypage.module.css"
 import axios from "axios"
 
 function AddressEditModal({ address, setAddress, open, setOpen, data }) {
-  let token = localStorage.getItem('token')
+  let token = sessionStorage.getItem('token')
   const headers = {
     Authorization: `Bearer ${token}`
   }
   const [popup, setPopUp] = useState(false)
   const [form, setForm] = useState("")
+  const [phoneNum, setPhoneNum] = useState("")
 
   const onCompletePost = (data) => {
     setAddress(data);
@@ -28,6 +29,7 @@ function AddressEditModal({ address, setAddress, open, setOpen, data }) {
 
   const cancleModal = () => {
     setForm("")
+    setAddress("")
     setOpen((prev) => !prev)
   }
 
@@ -39,13 +41,22 @@ function AddressEditModal({ address, setAddress, open, setOpen, data }) {
     })
   }
 
+  const checkPhoneNum = (e) => {
+    const regex = /^[0-9\b -]{0,13}$/;
+    if (regex.test(e.target.value)) {
+      setPhoneNum(e.target.value);
+    } else {
+      alert("숫자만 입력해주세요")
+    }
+  }
+
   const registerAddress = () => {
     // axios put 요청 코드
     if (!address.zonecode) {
       axios.put(`http://127.0.0.1:8000/api/v1/accounts/address/${data.id}/`, {
         address_name: form.address_name,
         address: form.address,
-        phone_number: form.phone_number,
+        phone_number: phoneNum,
         detailed_address: form.detailed_address,
         zipcode: form.zipcode
       },
@@ -54,12 +65,12 @@ function AddressEditModal({ address, setAddress, open, setOpen, data }) {
       })
       .then((res) => console.log(res))
       .catch((err) => console.log(err))
-      window.location.reload(true)
+      setTimeout(window.location.reload(true), 1000)
     } else {
       axios.put(`http://127.0.0.1:8000/api/v1/accounts/address/${data.id}/`, {
         address_name: form.address_name,
         address: address.address,
-        phone_number: form.phone_number,
+        phone_number: phoneNum,
         detailed_address: form.detailed_address,
         zipcode: address.zonecode
       },
@@ -68,12 +79,13 @@ function AddressEditModal({ address, setAddress, open, setOpen, data }) {
       })
       .then((res) => console.log(res))
       .catch((err) => console.log(err))
-      window.location.reload(true)
+      setTimeout(window.location.reload(true), 1000)
     }
   }
 
   useEffect(() => {
     setForm(data)
+    setPhoneNum(data.phone_number)
   }, [open])
 
   return (
@@ -142,7 +154,7 @@ function AddressEditModal({ address, setAddress, open, setOpen, data }) {
               </TableRow>
               <TableRow style={{ display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid black", marginTop: "1%", height: "5rem" }}>
                 <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>연락처</TableCell>
-                <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={onChange} value={form.phone_number} name="phone_number" /></TableCell>
+                <TableCell style={{ fontSize: "1.4rem", width: "60%" }}><input type="text" onChange={checkPhoneNum} value={phoneNum} name="phoneNum" maxlength="13" /></TableCell>
               </TableRow>
               <TableRow style={{ display: "flex", justifyContent: "space-between", border: "1px solid black", marginTop: "1%" }}>
                 <TableCell style={{ fontSize: "1.3rem", width: "40%" }}>주소</TableCell>

@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import axios from "axios"
 
 function AddressTab() {
-  let token = localStorage.getItem('token')
+  let token = sessionStorage.getItem('token')
   const headers = {
     Authorization: `Bearer ${token}`
   }

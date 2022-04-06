@@ -17,32 +17,29 @@ function Product() {
   const [keyword, setKeyword] = useState("");
   const [result, setResult] = useState([]);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(null);
 
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });
 
-  // const location = useLocation();
-  // console.log("state ", location.state.keyword);
-  // const { navKeyword } = location.state.keyword;
+  const location = useLocation();
+  const { navKeyword } = location.state.keyword;
 
   const getProducts = async () => {
     try {
+      setLoading(true);
+
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/v1/products/items/"
+        `http://127.0.0.1:8000/api/v1/products/items/?search=${location.state.keyword}`
       );
-      console.log(response.data);
       setProducts(response.data);
       setResult(response.data);
+      setLoading(false);
     } catch (err) {
       console.log(err);
+      setLoading(false);
     }
-    setLoading(false);
-
-    // console.log("navKeyword", location.state.keyword);
-    // setKeyword(location.state.keyword);
-    // filter(location.state.keyword);
   };
 
   // 현재 페이지 가져오기
@@ -72,11 +69,12 @@ function Product() {
   };
 
   useEffect(() => {
-    setLoading(true);
-    // console.log(location.state.keyword);
+    // setLoading(true);
     getProducts();
-    // setKeyword(location.state.keyword);
-    // filter(keyword);
+  }, [location.state.keyword]);
+
+  useEffect(() => {
+    return () => setLoading(false);
   }, []);
 
   return (
@@ -183,19 +181,6 @@ function Product() {
                 <Category />
               </div>
               <Container className={styles.container}>
-                <div className={styles.search_div}>
-                  <input
-                    type="text"
-                    placeholder="찾으시는 제품을 검색해주세요."
-                    className={styles.search_input}
-                    onChange={onChange}
-                    value={keyword}
-                  ></input>
-                  <button className={styles.search_btn} onClick={onClick}>
-                    <SearchIcon></SearchIcon>
-                  </button>
-                </div>
-
                 <div className={styles.search_num}>
                   <p>총 {result.length}건</p>
                 </div>

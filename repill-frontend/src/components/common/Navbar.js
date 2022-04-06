@@ -45,17 +45,27 @@ function Navbar() {
   };
 
   const userProfile = sessionStorage.getItem("img");
-  // const [keyword, setKeyword] = useState("");
-  // const onChange = (e) => {
-  //   console.log(e.target.value);
-  //   setKeyword(e.target.value);
-  // };
+  const [keyword, setKeyword] = useState("");
 
-  // const onClick = () => {
-  //   // window.location.reload(true);
-  //   navigate(`/product`, { state: { keyword: keyword } });
-  //   setKeyword("");
-  // };
+  const onChange = (e) => {
+    // console.log(e.target.value);
+    setKeyword(e.target.value);
+  };
+
+  const goProduct = () => {
+    navigate(`/product`, { state: { keyword: "" } });
+  };
+
+  const onKeyPress = (e) => {
+    // console.log(e.key);
+    if (e.key === "Enter") {
+      onClick();
+    }
+  };
+  const onClick = () => {
+    setKeyword("");
+    navigate(`/product`, { state: { keyword: keyword } });
+  };
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -151,19 +161,19 @@ function Navbar() {
                     </Link>
                   </MenuItem>
                   <MenuItem onClick={handleCloseNavMenu}>
-                    <Link to="/product">
-                      <Typography textAlign="center">
-                        <p
-                          style={{
-                            color: "#464646",
-                            fontWeight: "bold",
-                            fontSize: "15px",
-                          }}
-                        >
-                          제품보기
-                        </p>
-                      </Typography>
-                    </Link>
+                    <Typography textAlign="center">
+                      <p
+                        onClick={goProduct}
+                        style={{
+                          color: "#464646",
+                          fontWeight: "bold",
+                          fontSize: "15px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        제품보기
+                      </p>
+                    </Typography>
                   </MenuItem>
                   <MenuItem onClick={handleCloseNavMenu}>
                     <Link to="/notice">
@@ -355,11 +365,11 @@ function Navbar() {
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <nav className={styles.navbar_top}>
                   <ul className={styles.navbar_top_ul}>
-                    {/* <li>
-                  <Link to="/notice" className={styles.navbar_top_list}>
-                    공지사항
-                  </Link>
-                </li> */}
+                    <li>
+                      <Link to="/notice" className={styles.navbar_top_list}>
+                        공지사항
+                      </Link>
+                    </li>
                     <li>
                       <Link to="/mypage" className={styles.navbar_top_list}>
                         마이페이지
@@ -384,7 +394,11 @@ function Navbar() {
                 }}
               >
                 <Link to="/">
-                  <img src="/img/logo_1.png" style={{ width: "140px" }} />
+                  <img
+                    src="/img/logo_1.png"
+                    style={{ width: "140px" }}
+                    alt=""
+                  />
                 </Link>
               </div>
               <div
@@ -404,39 +418,40 @@ function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/product" className={styles.nav_menu}>
+                        <p
+                          className={styles.nav_menu}
+                          onClick={goProduct}
+                          style={{ cursor: "pointer" }}
+                        >
                           제품보기
-                        </Link>
-                        {/* <p
-                      className={styles.nav_menu}
-                      onClick={onClick}
-                      style={{ cursor: "pointer" }}
-                    >
-                      제품보기
-                    </p> */}
+                        </p>
                       </li>
-                      {/* <li>
-                    <div className={styles.nav_menu}>
-                      <div
-                        style={{ display: "flex", justifyContent: "center" }}
-                      >
-                        <input
-                          type="text"
-                          placeholder="찾으시는 제품을 검색해주세요."
-                          className={styles.search_input}
-                          onChange={onChange}
-                          value={keyword}
-                        ></input>
-                        <button className={styles.search_btn} onClick={onClick}>
-                          <SearchIcon style={{ fontSize: "25px" }}></SearchIcon>
-                        </button>
-                      </div>
-                    </div>
-                  </li> */}
                       <li>
-                        <Link to="/notice" className={styles.nav_menu}>
-                          공지사항
-                        </Link>
+                        <div className={styles.nav_menu}>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <input
+                              type="text"
+                              placeholder="찾으시는 제품을 검색해주세요."
+                              className={styles.search_input}
+                              onChange={onChange}
+                              onKeyPress={onKeyPress}
+                              value={keyword}
+                            ></input>
+                            <button
+                              className={styles.search_btn}
+                              onClick={onClick}
+                            >
+                              <SearchIcon
+                                style={{ fontSize: "25px" }}
+                              ></SearchIcon>
+                            </button>
+                          </div>
+                        </div>
                       </li>
                       <li>
                         <Link to="/cart" className={styles.nav_menu}>
@@ -453,11 +468,11 @@ function Navbar() {
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <nav className={styles.navbar_top}>
                   <ul className={styles.navbar_top_ul}>
-                    {/* <li>
-                  <Link to="/notice" className={styles.navbar_top_list}>
-                    공지사항
-                  </Link>
-                </li> */}
+                    <li>
+                      <Link to="/notice" className={styles.navbar_top_list}>
+                        공지사항
+                      </Link>
+                    </li>
                     <li>
                       <Link to="/kakaologin" className={styles.navbar_top_list}>
                         로그인
@@ -473,7 +488,11 @@ function Navbar() {
                 }}
               >
                 <Link to="/">
-                  <img src="/img/logo_1.png" style={{ width: "140px" }} />
+                  <img
+                    src="/img/logo_1.png"
+                    style={{ width: "140px" }}
+                    alt=""
+                  />
                 </Link>
               </div>
               <div style={{ display: "flex", justifyContent: "center" }}>
@@ -486,39 +505,40 @@ function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/product" className={styles.nav_menu}>
+                        <p
+                          className={styles.nav_menu}
+                          onClick={goProduct}
+                          style={{ cursor: "pointer" }}
+                        >
                           제품보기
-                        </Link>
-                        {/* <p
-                      className={styles.nav_menu}
-                      onClick={onClick}
-                      style={{ cursor: "pointer" }}
-                    >
-                      제품보기
-                    </p> */}
+                        </p>
                       </li>
-                      {/* <li>
-                    <div className={styles.nav_menu}>
-                      <div
-                        style={{ display: "flex", justifyContent: "center" }}
-                      >
-                        <input
-                          type="text"
-                          placeholder="찾으시는 제품을 검색해주세요."
-                          className={styles.search_input}
-                          onChange={onChange}
-                          value={keyword}
-                        ></input>
-                        <button className={styles.search_btn} onClick={onClick}>
-                          <SearchIcon style={{ fontSize: "25px" }}></SearchIcon>
-                        </button>
-                      </div>
-                    </div>
-                  </li> */}
                       <li>
-                        <Link to="/notice" className={styles.nav_menu}>
-                          공지사항
-                        </Link>
+                        <div className={styles.nav_menu}>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <input
+                              type="text"
+                              placeholder="찾으시는 제품을 검색해주세요."
+                              className={styles.search_input}
+                              onChange={onChange}
+                              onKeyPress={onKeyPress}
+                              value={keyword}
+                            ></input>
+                            <button
+                              className={styles.search_btn}
+                              onClick={onClick}
+                            >
+                              <SearchIcon
+                                style={{ fontSize: "25px" }}
+                              ></SearchIcon>
+                            </button>
+                          </div>
+                        </div>
                       </li>
                       <li>
                         <Link to="/cart" className={styles.nav_menu}>

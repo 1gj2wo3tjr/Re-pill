@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
+
+from products.models import Product, Ingrediant
 import uuid
 
 # Create your models here.
@@ -52,7 +54,6 @@ class SurveyResponse(models.Model):
 
     def __str__(self):
         return f'{self.question}: {self.answer_choice} / {self.answer_text}'
-        pass
 
 class SurveyQuestionChoices(models.Model):
     """
@@ -60,10 +61,21 @@ class SurveyQuestionChoices(models.Model):
     number: id와는 별개인, 답안 번호
     question: 이 선택지가 해당된 문제
     content: 선택지 설명
+    related_ingrediant: 해당 설문과 유관한 성분
     """
     number = models.PositiveSmallIntegerField()
     question = models.ForeignKey(SurveyQuestion, on_delete=models.CASCADE)
     content = models.CharField(max_length=200)
+    related_ingrediant = models.ForeignKey(Ingrediant, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return f'A{self.number}: {self.content}'
+
+
+class Recommend(models.Model):
+    """
+    제품 추천 협업 필터링을 위한 모델입니다.
+    """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    rating = models.FloatField()

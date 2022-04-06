@@ -18,35 +18,133 @@ import {
 import styles from "./Order.module.css";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
-import { Link } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useLocation,
+  BrowserRouter,
+  useHref,
+} from "react-router-dom";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import Linked from "@mui/material/Link";
 import Checkbox from "@mui/material/Checkbox";
+import AddressModal from "./AddressModal";
+import PayReady from "./PayReady";
+import axios from "axios";
 
 function Order() {
-  const [radio, setRadio] = useState("existing");
+  let token = sessionStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  const navigate = useNavigate();
+
+  // navigate()로 보낸 값 받기
+  const location = useLocation();
+  console.log("state", location.state);
+  const { orderList } = location.state;
+
+  const [radio, setRadio] = useState("new");
   const [radioPay, setRadioPay] = useState("kakaopay");
   const [selector, setSelector] = useState(1);
+  const [selectorAddress, setSelectorAddress] = useState(0);
+  const [modal, setModal] = useState(false);
+  const [address, setAddress] = useState("");
+  const [pay, setPay] = useState(false);
+  const [agreement, setAgreement] = useState(false);
+  const [addressList, setAddressList] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState([]);
+  const [newAddress, setNewAddress] = useState("");
+
+  const [total, setTotal] = useState(0);
+  const [finalOrder, setFinalOrder] = useState([]);
 
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });
 
-  const handleClick = (e) => {
-    e.preventDefault();
+  const agreementCheck = () => {
+    console.log("agreement ", agreement);
+    setAgreement((prev) => !prev);
+
+    // if (agreement === true) {
+    //   goKakaoPay();
+    // }
   };
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    navigate(`/cart`);
+  };
+
+  const getAddressList = () => {
+    axios
+      .get("http://127.0.0.1:8000/api/v1/accounts/address/", {
+        headers: headers,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setAddressList(res.data);
+        // getSelectAddress(0);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // 기존.신규 배송지 메소드
   const handleChange = (e) => {
+    console.log(e.target.value);
     setRadio(e.target.value);
+
+    if (e.target.value === "new") {
+      setSelectedAddress({
+        id: "",
+        address_name: "",
+        address: "",
+        detailed_address: "",
+        phone_number: "",
+        zipcode: "",
+      });
+      setNewAddress({ address_name: "" });
+    } else {
+      setAddress("");
+      getSelectAddress(0);
+    }
+  };
+
+  // 신규 배송지 입력 확인 event
+  const onChange = (event) => {
+    const { name, value } = event.target;
+    console.log(name);
+    console.log(value);
+    setNewAddress({
+      ...newAddress,
+      [name]: value,
+    });
   };
 
   const checkPay = (e) => {
     setRadioPay(e.target.value);
   };
 
+  const getSelectAddress = (idx) => {
+    // addressList의 index 가져오자
+    const selected = addressList[idx];
+    setSelectedAddress(selected);
+  };
+
+  const handleAddress = (event) => {
+    setSelectorAddress(event.target.value);
+    getSelectAddress(event.target.value);
+  };
+
   const handleRequest = (e) => {
     setSelector(e.target.value);
+  };
+
+  const openModal = () => {
+    setModal((prev) => !prev);
   };
 
   const breadcrumbs = [
@@ -69,6 +167,191 @@ function Order() {
       03. 주문완료
     </Typography>,
   ];
+
+  const getTotal = () => {
+    orderList.map((item, index) => setTotal((total) => total + item.price));
+  };
+
+  const getFinalOrder = () => {
+    orderList.map((item, index) =>
+      setFinalOrder((finalOrder) => [
+        { number: item.id, quantity: item.quantity },
+        ...finalOrder,
+      ])
+    );
+  };
+
+  let finalAddress = "";
+  const openPay = () => {
+    if (agreement) {
+      setPay((prev) => !prev);
+
+      // let finalAddress="" ;
+      if (radio === "new") {
+        console.log("신규");
+        console.log(newAddress.address_name);
+
+        if (
+          newAddress.address_name === "" ||
+          newAddress.address_name === undefined ||
+          address.address === "" ||
+          address.address === undefined ||
+          newAddress.detailed_address === "" ||
+          newAddress.detailed_address === undefined
+        ) {
+          alert("배송 정보를 입력해주세요.");
+        } else {
+          finalAddress = address.address + " " + newAddress.detailed_address;
+
+          params.item_name = itemName;
+          params.total_amount = total;
+
+          axios({
+            url: "/v1/payment/ready",
+            method: "POST",
+            headers: {
+              Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+              "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+            },
+            params,
+          })
+            .then((response) => {
+              // 응답에서 필요한 data만 뽑는다.
+              const {
+                data: { next_redirect_pc_url, tid },
+              } = response;
+              // console.log("tid : ", tid);
+              // 응답 data로 state 갱신
+              setData({ next_redirect_pc_url, tid });
+              window.localStorage.setItem("tid", tid);
+              window.open(next_redirect_pc_url, "_self");
+
+              axios
+                .post(
+                  `http://127.0.0.1:8000/api/v1/accounts/order/`,
+                  {
+                    products: finalOrder,
+                    address: finalAddress,
+                    order_status: 1,
+                    order_receive: newAddress.address_name,
+                  },
+                  { headers: headers }
+                )
+                .then((res) => {})
+                .catch((err) => alert("주문실패ㅠㅠ"));
+            })
+            .catch((error) => console.log("error!", error));
+          deleteCart();
+        }
+      } else {
+        console.log("기존");
+        finalAddress =
+          selectedAddress.address + " " + selectedAddress.detailed_address;
+
+        params.item_name = itemName;
+        params.total_amount = total;
+
+        axios({
+          url: "/v1/payment/ready",
+          method: "POST",
+          headers: {
+            Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+            "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+          },
+
+          params,
+        })
+          .then((response) => {
+            // 응답에서 필요한 data만 뽑는다.
+            const {
+              data: { next_redirect_pc_url, tid },
+            } = response;
+            // console.log("tid : ", tid);
+            // 응답 data로 state 갱신
+            setData({ next_redirect_pc_url, tid });
+            window.localStorage.setItem("tid", tid);
+
+            // QR
+            window.open(next_redirect_pc_url, "_self");
+
+            axios
+              .post(
+                `http://127.0.0.1:8000/api/v1/accounts/order/`,
+                {
+                  products: finalOrder,
+                  address: finalAddress,
+                  order_status: 1,
+                  order_receive: selectedAddress.address_name,
+                },
+                { headers: headers }
+              )
+              .then((res) => {})
+              .catch((err) => alert("주문실패ㅠㅠ"));
+          })
+          .catch((error) => console.log("error!", error));
+        deleteCart();
+      }
+    } else {
+      alert("동의해주세요");
+    }
+  };
+
+  const [itemName, setItemName] = useState();
+
+  const getItemName = () => {
+    if (orderList.length > 1) {
+      const string = orderList[0].name + " 외 " + (orderList.length - 1) + "건";
+      setItemName(string);
+    } else if (orderList.length === 1) {
+      setItemName(orderList[0].name);
+    }
+  };
+
+  const [data, setData] = useState({
+    next_redirect_pc_url: "",
+    tid: "",
+    params: {
+      cid: "TC0ONETIME",
+      partner_order_id: "partner_order_id",
+      partner_user_id: "partner_user_id",
+      item_name: "동대문엽기떡볶이",
+      quantity: orderList.length,
+      total_amount: 1,
+      vat_amount: 0,
+      tax_free_amount: 0,
+      // router에 지정한 PayResult의 경로로 수정
+      approval_url: "http://localhost:3000/payResult",
+      fail_url: "http://localhost:3000/cart",
+      cancel_url: "http://localhost:3000/cart",
+    },
+  });
+
+  const { params } = data;
+  const { next_redirect_pc_url } = data;
+
+  const deleteCart = () => {
+    orderList.map((item, index) =>
+      axios
+        .delete(`http://127.0.0.1:8000/api/v1/products/cart/${item.cartId}`, {
+          headers: headers,
+        })
+        .then((res) => {
+          console.log("주문 및삭제");
+          // navigate(`/product`);
+        })
+        .catch((err) => console.log(err))
+    );
+  };
+
+  useEffect(() => {
+    setTotal(0);
+    setFinalOrder([]);
+    getAddressList();
+    getTotal();
+    getFinalOrder();
+    getItemName();
+    setAgreement(false);
+  }, []);
 
   return (
     <>
@@ -113,20 +396,43 @@ function Order() {
                 <TableHead>
                   <TableCell style={{ padding: "0px" }}></TableCell>
                 </TableHead>
-                <TableBody>
-                  <TableCell>
-                    <div className={styles.mob_order_list}>
-                      <img
-                        alt=""
-                        src="https://shopping-phinf.pstatic.net/main_2877420/28774205554.20210909130858.jpg?type=f300"
-                      />
-                      <div className={styles.mob_order_view}>
-                        <p>회사명</p>
-                        <p>상품명</p>
-                      </div>
-                    </div>
-                  </TableCell>
-                </TableBody>
+                {orderList &&
+                  orderList.map((item, index) => (
+                    <>
+                      <TableBody>
+                        <TableCell>
+                          <div className={styles.mob_order_list}>
+                            <img alt="" src={item.thumbnail_url} />
+                            <div className={styles.mob_order_view}>
+                              {/* <p>{item.company}</p> */}
+                              <p>{item.name}</p>
+                              <div
+                                style={{
+                                  marginTop: "15px",
+                                  textAlign: "right",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    fontSize: "12px",
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    margin: "0",
+                                  }}
+                                >
+                                  <p>구매 수량 </p>
+                                  <p>{item.quantity}</p>
+                                </div>
+                                <p style={{ fontSize: "14px" }}>
+                                  {item.price.toLocaleString()} 원
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </TableCell>
+                      </TableBody>
+                    </>
+                  ))}
               </Table>
             </div>
 
@@ -172,20 +478,6 @@ function Order() {
                           }}
                         >
                           <FormControlLabel
-                            value="existing"
-                            control={
-                              <Radio
-                                sx={{
-                                  color: "#cfcfcf",
-                                  "&.Mui-checked": {
-                                    color: "#219F94",
-                                  },
-                                }}
-                              />
-                            }
-                            label="기존 배송지"
-                          />
-                          <FormControlLabel
                             value="new"
                             control={
                               <Radio
@@ -199,8 +491,46 @@ function Order() {
                             }
                             label="신규 배송지"
                           />
+                          <FormControlLabel
+                            value="existing"
+                            control={
+                              <Radio
+                                sx={{
+                                  color: "#cfcfcf",
+                                  "&.Mui-checked": {
+                                    color: "#219F94",
+                                  },
+                                }}
+                              />
+                            }
+                            label="기존 배송지"
+                          />
                         </RadioGroup>
                       </FormControl>
+                      {radio === "existing" ? (
+                        <div>
+                          <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <Select
+                              value={selectorAddress}
+                              onChange={handleAddress}
+                              displayEmpty
+                              inputProps={{ "aria-label": "Without label" }}
+                              className={styles.address_selector}
+                              sx={{
+                                "&.Mui-selected": {
+                                  border: "1px solid #f2f5c8",
+                                },
+                              }}
+                            >
+                              {addressList.map((item, index) => (
+                                <MenuItem value={index}>
+                                  {item.address_name} ({item.address})
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </div>
+                      ) : null}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -211,12 +541,26 @@ function Order() {
                       <p>받는 분</p>
                     </TableCell>
                     <TableCell className={styles.mob_address_right}>
-                      <input
-                        type="text"
-                        // value={quantity}
-                        title="받는분"
-                        className={styles.mob_address_input}
-                      />
+                      {radio === "existing" ? (
+                        <input
+                          type="text"
+                          value={selectedAddress.address_name}
+                          title="받는분"
+                          className={styles.mob_address_input}
+                          onChange={onChange}
+                          name="address_name"
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={newAddress.address_name}
+                          title="받는분"
+                          className={styles.mob_address_input}
+                          onChange={onChange}
+                          name="address_name"
+                          defaultValue=""
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -228,31 +572,73 @@ function Order() {
                     </TableCell>
                     <TableCell className={styles.mob_address_right}>
                       <div style={{ marginBottom: "15px" }}>
-                        <input
-                          type="text"
-                          // value={quantity}
-                          title="우편번호"
-                          className={styles.mob_address_input}
-                          disabled
-                        />
-                        <Button className={styles.mob_button_search}>
+                        {address ? (
+                          <input
+                            type="text"
+                            value={address.zonecode}
+                            title="우편번호"
+                            className={styles.mob_address_input}
+                            defaultValue=""
+                            disabled
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            value={selectedAddress.zipcode}
+                            title="우편번호"
+                            className={styles.mob_address_input}
+                            defaultValue=""
+                            disabled
+                          />
+                        )}
+                        <Button
+                          className={styles.mob_button_search}
+                          onClick={openModal}
+                        >
                           <p>우편번호 검색</p>
                         </Button>
                       </div>
-                      <input
-                        type="text"
-                        // value={quantity}
-                        title="주소"
-                        className={styles.mob_address_input}
-                        style={{ width: "100%", marginBottom: "15px" }}
-                      />
-                      <input
-                        type="text"
-                        // value={quantity}
-                        title="상세주소"
-                        className={styles.mob_address_input}
-                        style={{ width: "100%" }}
-                      />
+                      {address ? (
+                        <input
+                          type="text"
+                          value={address.address}
+                          title="주소"
+                          className={styles.mob_address_input}
+                          style={{ width: "100%", marginBottom: "15px" }}
+                          defaultValue=""
+                          disabled
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={selectedAddress.address}
+                          title="주소"
+                          className={styles.mob_address_input}
+                          style={{ width: "100%", marginBottom: "15px" }}
+                          defaultValue=""
+                          disabled
+                        />
+                      )}
+                      {radio === "existing" ? (
+                        <input
+                          type="text"
+                          value={selectedAddress.detailed_address}
+                          title="상세주소"
+                          className={styles.mob_address_input}
+                          style={{ width: "100%" }}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={newAddress.detailed_address}
+                          title="상세주소"
+                          className={styles.mob_address_input}
+                          style={{ width: "100%" }}
+                          onChange={onChange}
+                          name="detailed_address"
+                          defaultValue=""
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -264,11 +650,12 @@ function Order() {
                     </TableCell>
                     <TableCell className={styles.mob_address_right}>
                       <input
-                        type="number"
-                        // value={quantity}
+                        type="text"
+                        value={selectedAddress.phone_number}
                         title="휴대폰번호"
                         className={styles.mob_address_input}
                         style={{ width: "100%" }}
+                        defaultValue=""
                       />
                     </TableCell>
                   </TableRow>
@@ -388,18 +775,15 @@ function Order() {
                     marginLeft: "10px",
                   }}
                 >
-                  50,000원
+                  {total.toLocaleString()} 원
                 </p>
               </div>
               <div className={styles.mob_agreement}>
-                <Checkbox
-                  aria-label="a"
-                  sx={{
-                    color: "#cfcfcf",
-                    "&.Mui-checked": {
-                      color: "#219F94",
-                    },
-                  }}
+                <input
+                  type="checkbox"
+                  onChange={agreementCheck}
+                  checked={agreement}
+                  style={{ width: "18px", height: "18px", margin: "15px 0" }}
                 />
                 <div style={{ fontSize: "12px", margin: "10px" }}>
                   <p style={{ margin: "0px" }}>
@@ -409,18 +793,27 @@ function Order() {
                   <p>구매진행에 동의합니다.</p>
                 </div>
               </div>
-              <Link to={`/orderCompleted`}>
-                <button className={styles.mob_button_buy}>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <CreditScoreIcon
-                      style={{ marginRight: "10px" }}
-                    ></CreditScoreIcon>
-                    <p>결제하기</p>
-                  </div>
-                </button>
-              </Link>
+
+              <button className={styles.mob_button_buy} onClick={openPay}>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <CreditScoreIcon
+                    style={{ marginRight: "10px" }}
+                  ></CreditScoreIcon>
+                  <p>결제하기</p>
+                </div>
+              </button>
             </div>
           </Container>
+          {modal ? (
+            <>
+              <AddressModal
+                modal={modal}
+                setModal={setModal}
+                address={address}
+                setAddress={setAddress}
+              />
+            </>
+          ) : null}
         </div>
       ) : (
         <div>
@@ -435,7 +828,6 @@ function Order() {
                 {breadcrumbs}
               </Breadcrumbs>
             </div>
-
             <div className={styles.order_main}>
               <p style={{ fontSize: "17px", fontWeight: "bold" }}>
                 주문 상세 내역
@@ -446,7 +838,7 @@ function Order() {
                     <TableCell
                       style={{
                         fontSize: "1rem",
-                        width: "40%",
+                        width: "50%",
                         textAlign: "center",
                       }}
                     >
@@ -470,37 +862,69 @@ function Order() {
                     >
                       상품 금액
                     </TableCell>
-                    <TableCell
-                      style={{
-                        fontSize: "1rem",
-                        width: "10%",
-                        textAlign: "center",
-                      }}
-                    >
-                      배송비
-                    </TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  <TableCell style={{ textAlign: "center" }}>a</TableCell>
-                  <TableCell style={{ textAlign: "center" }}>
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                      <input
-                        type="text"
-                        // value={quantity}
-                        title="상품개수"
-                        className={styles.qty_input}
-                        // onChange={onChange}
-                        disabled
-                      />
-                    </div>
-                  </TableCell>
-                  <TableCell style={{ textAlign: "center" }}>a</TableCell>
-                  <TableCell style={{ textAlign: "center" }}>a</TableCell>
-                </TableBody>
+                {orderList &&
+                  orderList.map((item, index) => (
+                    <>
+                      <TableBody>
+                        <TableCell>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "start",
+                              margin: "0 60px",
+                              alignItems: "center",
+                            }}
+                          >
+                            <img
+                              src={item.thumbnail_url}
+                              alt=""
+                              style={{ width: "100px" }}
+                            />
+                            <div
+                              style={{ marginLeft: "30px", fontSize: "13px" }}
+                            >
+                              <p
+                                style={{
+                                  color: "rgba(0, 0, 0, 0.87)",
+                                  fontWeight: "bold",
+                                  marginBottom: "8px",
+                                }}
+                              >
+                                {item.company}
+                              </p>
+                              <p style={{ color: "rgba(0, 0, 0, 0.87)" }}>
+                                {item.name}
+                              </p>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell style={{ textAlign: "center" }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <input
+                              type="text"
+                              value={item.quantity}
+                              title="상품개수"
+                              className={styles.qty_input}
+                              // onChange={onChange}
+                              // defaultValue=""
+                            />
+                          </div>
+                        </TableCell>
+                        <TableCell style={{ textAlign: "center" }}>
+                          <p>{item.price.toLocaleString()} 원</p>
+                        </TableCell>
+                      </TableBody>
+                    </>
+                  ))}
               </Table>
             </div>
-
             <div className={styles.address_div}>
               <p
                 style={{
@@ -528,51 +952,88 @@ function Order() {
                     >
                       <p>배송지 확인</p>
                     </TableCell>
-                    <TableCell className={styles.address_right}>
-                      <FormControl>
-                        <RadioGroup
-                          row
-                          aria-labelledby="demo-row-radio-buttons-group-label"
-                          name="row-radio-buttons-group"
-                          style={{ fontSize: "14px", marginLeft: "20px" }}
-                          value={radio}
-                          onChange={handleChange}
-                          sx={{
-                            "& .MuiSvgIcon-root": {
+                    <TableCell
+                      className={styles.address_right}
+                      // style={{ height: "79px" }}
+                      style={{
+                        display: "flex",
+                        justifyContent: "start",
+                        height: "79px",
+                      }}
+                    >
+                      <div style={{ marginTop: "5px" }}>
+                        <FormControl>
+                          <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            style={{
                               fontSize: "14px",
-                            },
-                          }}
-                        >
-                          <FormControlLabel
-                            value="existing"
-                            control={
-                              <Radio
-                                sx={{
-                                  color: "#cfcfcf",
-                                  "&.Mui-checked": {
-                                    color: "#219F94",
-                                  },
-                                }}
-                              />
-                            }
-                            label="기존 배송지"
-                          />
-                          <FormControlLabel
-                            value="new"
-                            control={
-                              <Radio
-                                sx={{
-                                  color: "#cfcfcf",
-                                  "&.Mui-checked": {
-                                    color: "#219F94",
-                                  },
-                                }}
-                              />
-                            }
-                            label="신규 배송지"
-                          />
-                        </RadioGroup>
-                      </FormControl>
+                              marginLeft: "22px",
+                            }}
+                            value={radio}
+                            onChange={handleChange}
+                            sx={{
+                              "& .MuiSvgIcon-root": {
+                                fontSize: "14px",
+                              },
+                            }}
+                          >
+                            <FormControlLabel
+                              value="new"
+                              control={
+                                <Radio
+                                  sx={{
+                                    color: "#cfcfcf",
+                                    "&.Mui-checked": {
+                                      color: "#219F94",
+                                    },
+                                  }}
+                                />
+                              }
+                              label="신규 배송지"
+                            />
+                            <FormControlLabel
+                              value="existing"
+                              control={
+                                <Radio
+                                  sx={{
+                                    color: "#cfcfcf",
+                                    "&.Mui-checked": {
+                                      color: "#219F94",
+                                    },
+                                  }}
+                                />
+                              }
+                              label="기존 배송지"
+                            />
+                          </RadioGroup>
+                        </FormControl>
+                      </div>
+                      {radio === "existing" ? (
+                        <div>
+                          <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <Select
+                              value={selectorAddress}
+                              onChange={handleAddress}
+                              displayEmpty
+                              inputProps={{ "aria-label": "Without label" }}
+                              className={styles.address_selector}
+                              sx={{
+                                "&.Mui-selected": {
+                                  border: "1px solid #f2f5c8",
+                                },
+                              }}
+                            >
+                              {addressList.map((item, index) => (
+                                <MenuItem value={index}>
+                                  {item.address_name} ({item.address})
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </div>
+                      ) : null}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -583,12 +1044,26 @@ function Order() {
                       <p>받는 분</p>
                     </TableCell>
                     <TableCell className={styles.address_right}>
-                      <input
-                        type="text"
-                        // value={quantity}
-                        title="받는분"
-                        className={styles.address_input}
-                      />
+                      {radio === "existing" ? (
+                        <input
+                          type="text"
+                          value={selectedAddress.address_name}
+                          title="받는분"
+                          className={styles.address_input}
+                          onChange={onChange}
+                          name="address_name"
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={newAddress.address_name}
+                          title="받는분"
+                          className={styles.address_input}
+                          onChange={onChange}
+                          name="address_name"
+                          defaultValue=""
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -600,31 +1075,73 @@ function Order() {
                     </TableCell>
                     <TableCell className={styles.address_right}>
                       <div>
-                        <input
-                          type="text"
-                          // value={quantity}
-                          title="우편번호"
-                          className={styles.address_input}
-                          disabled
-                        />
-                        <Button className={styles.button_search}>
+                        {address ? (
+                          <input
+                            type="text"
+                            value={address.zonecode}
+                            title="우편번호"
+                            className={styles.address_input}
+                            defaultValue=""
+                            disabled
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            value={selectedAddress.zipcode}
+                            title="우편번호"
+                            className={styles.address_input}
+                            defaultValue=""
+                            disabled
+                          />
+                        )}
+                        <Button
+                          className={styles.button_search}
+                          onClick={openModal}
+                        >
                           <p>우편번호 검색</p>
                         </Button>
                       </div>
                       <div style={{ marginTop: "15px" }}>
-                        <input
-                          type="text"
-                          // value={quantity}
-                          title="주소"
-                          className={styles.address_input}
-                          style={{ width: "330px" }}
-                        />
-                        <input
-                          type="text"
-                          // value={quantity}
-                          title="상세주소"
-                          className={styles.address_input}
-                        />
+                        {address ? (
+                          <input
+                            type="text"
+                            value={address.address}
+                            title="주소"
+                            defaultValue=""
+                            className={styles.address_input}
+                            style={{ width: "330px" }}
+                            disabled
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            value={selectedAddress.address}
+                            title="주소"
+                            defaultValue=""
+                            className={styles.address_input}
+                            style={{ width: "330px" }}
+                            disabled
+                          />
+                        )}
+                        {radio === "existing" ? (
+                          <input
+                            type="text"
+                            value={selectedAddress.detailed_address}
+                            title="상세주소"
+                            // defaultValue=""
+                            className={styles.address_input}
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            value={newAddress.detailed_address}
+                            title="상세주소"
+                            defaultValue=""
+                            className={styles.address_input}
+                            onChange={onChange}
+                            name="detailed_address"
+                          />
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -637,9 +1154,10 @@ function Order() {
                     </TableCell>
                     <TableCell className={styles.address_right}>
                       <input
-                        type="number"
-                        // value={quantity}
+                        type="text"
+                        value={selectedAddress.phone_number}
                         title="휴대폰번호"
+                        defaultValue=""
                         className={styles.address_input}
                       />
                     </TableCell>
@@ -683,7 +1201,6 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
-
             <div className={styles.pay_div}>
               <p
                 style={{
@@ -740,20 +1257,6 @@ function Order() {
                             }
                             label="카카오페이"
                           />
-                          {/* <FormControlLabel
-                            value="new"
-                            control={
-                              <Radio
-                                sx={{
-                                  color: "#cfcfcf",
-                                  "&.Mui-checked": {
-                                    color: "#219F94",
-                                  },
-                                }}
-                              />
-                            }
-                            label="신규 배송지"
-                          /> */}
                         </RadioGroup>
                       </FormControl>
                     </TableCell>
@@ -761,7 +1264,6 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
-
             <div className={styles.order_bottom}>
               <div className={styles.final_pay}>
                 <p>최종 결제 금액</p>
@@ -773,35 +1275,48 @@ function Order() {
                     marginLeft: "10px",
                   }}
                 >
-                  50,000원
+                  {total.toLocaleString()} 원
                 </p>
               </div>
               <div className={styles.agreement}>
-                <Checkbox
-                  aria-label="a"
-                  sx={{
-                    color: "#cfcfcf",
-                    "&.Mui-checked": {
-                      color: "#219F94",
-                    },
-                  }}
-                />
-                <p style={{ fontSize: "15px", lineHeight: "37px" }}>
-                  <span style={{ fontWeight: "bold" }}>(필수)</span> 구매하실
-                  상품의 결제정보를 확인하였으며, 구매진행에 동의합니다.
-                </p>
+                <div style={{ margin: "11px" }}>
+                  <input
+                    type="checkbox"
+                    onChange={agreementCheck}
+                    checked={agreement}
+                    style={{ width: "18px", height: "18px" }}
+                  />
+                </div>
+                <div>
+                  <p style={{ fontSize: "15px", lineHeight: "37px" }}>
+                    <span style={{ fontWeight: "bold" }}>(필수)</span> 구매하실
+                    상품의 결제정보를 확인하였으며, 구매진행에 동의합니다.
+                  </p>
+                </div>
               </div>
-              <Link to={`/orderCompleted`}>
-                <button className={styles.button_buy}>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <CreditScoreIcon
-                      style={{ marginRight: "10px" }}
-                    ></CreditScoreIcon>
-                    <p>결제하기</p>
-                  </div>
-                </button>
-              </Link>
+              {/* <Link to={`/orderCompleted`}> */}
+              {/* <Link to={`/payReady`}> */}
+              <button className={styles.button_buy} onClick={openPay}>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <CreditScoreIcon
+                    style={{ marginRight: "10px" }}
+                  ></CreditScoreIcon>
+                  <p>결제하기</p>
+                </div>
+              </button>
+              {/* </Link> */}
             </div>
+            {modal ? (
+              <>
+                <AddressModal
+                  modal={modal}
+                  setModal={setModal}
+                  address={address}
+                  setAddress={setAddress}
+                />
+              </>
+            ) : null}
+            {/* {pay ? <PayReady open={pay} setOpen={setPay} /> : null} */}
           </Container>
         </div>
       )}

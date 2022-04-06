@@ -40,9 +40,10 @@ class DeliveryAddress(models.Model):
 # 주문 모델
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    order_number = models.PositiveIntegerField(default=0)
+    order_number = models.BigIntegerField(default=0)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     quantity = models.PositiveIntegerField(default=1)
+    has_review = models.BooleanField(default=False)
     order_date = models.DateTimeField(default=timezone.now)
     address = models.CharField(max_length=80)
     # 0: 주문 취소, 1: 결제 완료, 2: 배송준비중, 3: 배송중, 4: 배송 완료
@@ -50,4 +51,17 @@ class Order(models.Model):
     order_receive = models.CharField(max_length=20)
 
     def __str__(self):
-        return f'{id}번 주문'
+        return f'{self.order_number}번 주문 / {self.product}'
+
+
+# 구독 모델
+class Subscription(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    start_date = models.DateTimeField(auto_now_add=True)
+    period = models.IntegerField(default=30)
+    subscribe_times = models.PositiveSmallIntegerField(default=1)
+    subscribe_dates = models.JSONField(default=dict)
+
+    def __str__(self):
+        return f'{self.user}님의 {self.product} 구독'

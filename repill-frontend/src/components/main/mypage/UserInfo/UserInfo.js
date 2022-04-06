@@ -1,170 +1,158 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
+import { Link } from "react-router-dom";
+import UserInfoCompo from "./UserInfoCompo";
+import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import { createTheme, styled } from "@mui/material/styles";
-import Avatar from "@mui/material/Avatar";
+import Drawer from "@mui/material/Drawer";
+import CssBaseline from "@mui/material/CssBaseline";
+import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
-import Typography from "@mui/material/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import PersonIcon from "@mui/icons-material/Person";
+import ReceiptTwoToneIcon from "@mui/icons-material/ReceiptTwoTone";
+import CardMembershipTwoToneIcon from "@mui/icons-material/CardMembershipTwoTone";
+import HomeWorkIcon from "@mui/icons-material/HomeWork";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-function UserInfo() {
-  const navigate = useNavigate();
-  const handleAdress = () => {
-    navigate("/mypage/address");
+const drawerWidth = 240;
+
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
+  ({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: `-${drawerWidth}px`,
+    ...(open && {
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
+  })
+);
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: "flex-end",
+}));
+
+export default function PersistentDrawerLeft() {
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
   };
 
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: "center",
-      color: theme.palette.text.secondary,
-    },
-  }));
-  const classes = useStyles();
-  const userName = sessionStorage.getItem("name");
-  const userEmail = sessionStorage.getItem("email");
-  const userProfile = sessionStorage.getItem("img");
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const [login, setLogin] = useState();
+
+  useEffect(() => {
+    if (sessionStorage.getItem("token") === null) {
+      setLogin(false);
+    } else {
+      setLogin(true);
+    }
+  });
+
   return (
-    <div style={{ marginLeft: "10%", marginRight: "10%" }}>
-      <h1 style={{ textAlign: "center", margin: "3%" }}>회원정보관리</h1>
-      <div className={classes.root}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <div
-              style={{
-                margin: "0 auto",
-              }}
-            >
-              <Paper
-                className={classes.paper}
-                style={{ backgroundColor: "rgba(245,254,192,50%)" }}
-              >
-                <div class="container">
-                  <div class="row">
-                    <div class="profile">
-                      <Grid container spacing={3}>
-                        <Grid item xs={5} key={2}>
-                          <Avatar
-                            src={userProfile}
-                            sx={{ width: 200, height: 200, marginLeft: 10 }}
-                          />
-                        </Grid>
-                        <Grid item xs={7} key={2}>
-                          <Box
-                            sx={{
-                              width: "100%",
-                              maxWidth: 360,
-                              marginTop: 7,
-                            }}
-                            style={{ backgroundColor: "rgba(245,254,192,50%)" }}
-                          >
-                            <Box
-                              sx={{ my: 3, mx: 2 }}
-                              style={{
-                                backgroundColor: "rgba(245,254,192,50%)",
-                              }}
-                            >
-                              <Grid container alignItems="center">
-                                <Grid
-                                  item
-                                  xs
-                                  style={{
-                                    backgroundColor: "rgba(245,254,192,50%)",
-                                  }}
-                                >
-                                  <Typography
-                                    gutterBottom
-                                    variant="h4"
-                                    component="div"
-                                  >
-                                    {userName}
-                                  </Typography>
-                                </Grid>
-                                <Grid
-                                  item
-                                  style={{
-                                    backgroundColor: "rgba(245,254,192,50%)",
-                                  }}
-                                >
-                                  <Typography
-                                    gutterBottom
-                                    variant="h6"
-                                    component="div"
-                                  >
-                                    나이
-                                  </Typography>
-                                </Grid>
-                              </Grid>
-                            </Box>
-                            <Divider variant="middle" />
-                            <Typography
-                              gutterBottom
-                              variant="h6"
-                              component="div"
-                            >
-                              E-mail : {userEmail}
-                            </Typography>
-                          </Box>
-                        </Grid>
-                      </Grid>
-                    </div>
-                  </div>
-                </div>
-              </Paper>
-            </div>
-          </Grid>
-        </Grid>
-        <div style={{ margin: "5%" }}>
-          <Grid item xs={10}>
-            <h2>배송지 관리</h2>
-            <p>
-              배송지를 등록하거나 기존 배송지를 추가, 변경, 삭제할 수 있습니다.
-            </p>
-          </Grid>
-          <Grid item xs={2} style={{ float: "right" }}>
-            <Button
-              variant="contained"
-              style={{
-                backgroundColor: "#E8E8A6",
-                color: "black",
-                borderRadius: "20px",
-              }}
-              onClick={handleAdress}
-            >
-              <span>배송지 관리</span>
-            </Button>
-          </Grid>
-        </div>
-        <div style={{ margin: "5%" }}>
-          <Grid item xs={10}>
-            <h2>회원 탈퇴</h2>
-            <p>Re:pill 서비스에서 탈퇴합니다.</p>
-            <a href="#">찾으시는 제품을 찾지 못하셨나요?</a>
-          </Grid>
-          <Grid item xs={2} style={{ float: "right" }}>
-            <Button
-              variant="contained"
-              style={{
-                backgroundColor: "#E8E8A6",
-                color: "black",
-                borderRadius: "20px",
-              }}
-              onClick={handleAdress}
-            >
-              <span>회 원 탈 퇴 </span>
-            </Button>
-          </Grid>
-        </div>
-      </div>
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        height: "700px",
+        color: "black",
+      }}
+    >
+      <CssBaseline />
+      <Button
+        variant="contained"
+        disableElevation
+        color="inherit"
+        aria-label="open drawer"
+        onClick={handleDrawerOpen}
+        edge="start"
+        sx={{ mr: 2, ...(open && { display: "none" }) }}
+      >
+        <ArrowForwardIosIcon />
+      </Button>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={open}
+      >
+        <DrawerHeader>
+          <Button onClick={handleDrawerClose}>
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </Button>
+        </DrawerHeader>
+        <Divider />
+        <List>
+          <ListItem>
+            <ListItemIcon>
+              <BarChartIcon />
+            </ListItemIcon>
+            <Link to="/recommend">분석리포트</Link>
+          </ListItem>
+        </List>
+        <Divider />
+        <List>
+          <ListItem>
+            <ListItemIcon>
+              <PersonIcon />
+            </ListItemIcon>
+            <Link to="/mypage/userinfo">회원정보 관리</Link>
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <ReceiptTwoToneIcon />
+            </ListItemIcon>
+            <Link to="/mypage/myorder">결제 내역</Link>
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <CardMembershipTwoToneIcon />
+            </ListItemIcon>
+            <Link to="/mypage/subscriptions">구독관리</Link>
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <HomeWorkIcon />
+            </ListItemIcon>
+            <Link to="/mypage/address">배송지 관리</Link>
+          </ListItem>
+        </List>
+      </Drawer>
+      <Main open={open}>
+        {login ? <UserInfoCompo /> : <h1>로그인 하고 들어와라</h1>}
+      </Main>
+    </Box>
   );
 }
-
-export default UserInfo;

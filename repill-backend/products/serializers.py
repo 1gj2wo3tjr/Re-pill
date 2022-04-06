@@ -32,7 +32,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class ReviewListSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
-    content = serializers.CharField(allow_blank=True, trim_whitespace=False, write_only=True)
+    content = serializers.CharField(allow_blank=True, trim_whitespace=False)
     class Meta:
         model = Review
         fields = '__all__'

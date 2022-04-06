@@ -59,7 +59,7 @@ class ReviewList(ListCreateAPIView):
     """
     제품 리뷰 API입니다.
     """
-    permission_classes = [AllowAny]
+    permission_classes = [IsOwnerOrReadOnly]
     queryset = Review.objects.all()
     serializer_class = ReviewListSerializer
     
@@ -70,8 +70,8 @@ class ReviewList(ListCreateAPIView):
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        if not request.user.is_staff:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+        # if not request.user.is_staff:
+        #     return Response(status=status.HTTP_403_FORBIDDEN)
         
         review = request.data
         serializer = ReviewSerializer(data=review)

@@ -34,7 +34,9 @@ function CartList({ cart, total, setTotal }) {
 
     cart.map((item, index) =>
       axios
-        .get(`http://127.0.0.1:8000/api/v1/products/items/${item.product}`)
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/api/v1/products/items/${item.product}`
+        )
         .then((res) => {
           // console.log(cart);
           console.log(res.data);
@@ -100,7 +102,7 @@ function CartList({ cart, total, setTotal }) {
       const a = --item.quantity;
       axios
         .patch(
-          `http://127.0.0.1:8000/api/v1/products/cart/${item.cartId}`,
+          `${process.env.REACT_APP_BASE_URL}/api/v1/products/cart/${item.cartId}`,
           {
             quantity: a,
             product: item.id,
@@ -136,7 +138,7 @@ function CartList({ cart, total, setTotal }) {
       const a = ++item.quantity;
       axios
         .patch(
-          `http://127.0.0.1:8000/api/v1/products/cart/${item.cartId}`,
+          `${process.env.REACT_APP_BASE_URL}/api/v1/products/cart/${item.cartId}`,
           {
             quantity: a,
             product: item.id,
@@ -181,7 +183,7 @@ function CartList({ cart, total, setTotal }) {
 
         axios
           .delete(
-            `http://127.0.0.1:8000/api/v1/products/cart/${deleteList.cartId}`,
+            `${process.env.REACT_APP_BASE_URL}/api/v1/products/cart/${deleteList.cartId}`,
             { headers: headers }
           )
           .then((res) => {

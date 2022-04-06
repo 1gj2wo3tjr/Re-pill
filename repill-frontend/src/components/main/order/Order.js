@@ -81,7 +81,7 @@ function Order() {
 
   const getAddressList = () => {
     axios
-      .get("http://127.0.0.1:8000/api/v1/accounts/address/", {
+      .get(`${process.env.REACT_APP_BASE_URL}/api/v1/accounts/address/`, {
         headers: headers,
       })
       .then((res) => {
@@ -228,7 +228,7 @@ function Order() {
 
               axios
                 .post(
-                  `http://127.0.0.1:8000/api/v1/accounts/order/`,
+                  `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/order/`,
                   {
                     products: finalOrder,
                     address: finalAddress,
@@ -251,6 +251,8 @@ function Order() {
         params.item_name = itemName;
         params.total_amount = total;
 
+        console.log("approval_url", params.approval_url);
+        console.log("fail ", params.fail_url);
         axios({
           url: "/v1/payment/ready",
           method: "POST",
@@ -276,7 +278,7 @@ function Order() {
 
             axios
               .post(
-                `http://127.0.0.1:8000/api/v1/accounts/order/`,
+                `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/order/`,
                 {
                   products: finalOrder,
                   address: finalAddress,
@@ -287,9 +289,9 @@ function Order() {
               )
               .then((res) => {})
               .catch((err) => alert("주문실패ㅠㅠ"));
+            deleteCart();
           })
           .catch((error) => console.log("error!", error));
-        deleteCart();
       }
     } else {
       alert("동의해주세요");
@@ -307,6 +309,11 @@ function Order() {
     }
   };
 
+  const approval = process.env.REACT_APP_FRONT_BASE_URL + "/payResult";
+  // const approval = process.env.REACT_APP_FRONT_BASE_URL + "/payResult";
+  console.log("approval ", typeof approval);
+  const fail = process.env.REACT_APP_FRONT_BASE_URL + "/cart";
+
   const [data, setData] = useState({
     next_redirect_pc_url: "",
     tid: "",
@@ -314,15 +321,15 @@ function Order() {
       cid: "TC0ONETIME",
       partner_order_id: "partner_order_id",
       partner_user_id: "partner_user_id",
-      item_name: "동대문엽기떡볶이",
+      item_name: "리필",
       quantity: orderList.length,
       total_amount: 1,
       vat_amount: 0,
       tax_free_amount: 0,
       // router에 지정한 PayResult의 경로로 수정
-      approval_url: "http://localhost:3000/payResult",
-      fail_url: "http://localhost:3000/cart",
-      cancel_url: "http://localhost:3000/cart",
+      approval_url: approval,
+      fail_url: fail,
+      cancel_url: fail,
     },
   });
 
@@ -332,9 +339,12 @@ function Order() {
   const deleteCart = () => {
     orderList.map((item, index) =>
       axios
-        .delete(`http://127.0.0.1:8000/api/v1/products/cart/${item.cartId}`, {
-          headers: headers,
-        })
+        .delete(
+          `${process.env.REACT_APP_BASE_URL}/api/v1/products/cart/${item.cartId}`,
+          {
+            headers: headers,
+          }
+        )
         .then((res) => {
           console.log("주문 및삭제");
           // navigate(`/product`);

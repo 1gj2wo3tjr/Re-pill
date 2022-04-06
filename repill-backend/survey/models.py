@@ -66,7 +66,7 @@ class SurveyQuestionChoices(models.Model):
     number = models.PositiveSmallIntegerField()
     question = models.ForeignKey(SurveyQuestion, on_delete=models.CASCADE, related_name='choices')
     content = models.CharField(max_length=200)
-    related_ingrediant = models.ForeignKey(Ingrediant, on_delete=models.SET_NULL, blank=True, null=True)
+    # related_ingrediant = models.ForeignKey(Ingrediant, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return f'A{self.number}: {self.content}'
@@ -79,3 +79,10 @@ class Recommend(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     rating = models.FloatField()
+
+class ChoicesIngrediant(models.Model):
+    """
+    응답 - 영양소 중개 테이블입니다.
+    """
+    choice = models.ForeignKey(SurveyQuestionChoices, on_delete=models.CASCADE, related_name='related_ingrediants')
+    ingrediant = models.ForeignKey(Ingrediant, on_delete=models.CASCADE, related_name='related_choices')

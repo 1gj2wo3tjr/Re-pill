@@ -54,7 +54,7 @@ class KakaoLogin(View):
         else:  # DB에 회원정보 없으면 회원가입
             user_info = User(username = social_user["id"],
                 name = social_user["properties"]["nickname"],
-                email = social_user["properties"].get("email", "no email"),
+                email = social_user["kakao_account"].get("email", "no email"),
                 profile_img = social_user["properties"].get("profile_image", None)
             )
             user_info.save()

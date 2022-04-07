@@ -11,4 +11,5 @@ urlpatterns = [
     path('order/<int:order_pk>/', views.OrderDetail.as_view()),
     path('subscription/', views.SubscriptionList.as_view()),
     path('subscription/<int:product_pk>/', views.SubscriptionDetail.as_view()),
+    path('payment/ready/', views.kakaoPay),
 ]

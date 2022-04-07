@@ -7,6 +7,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 from .models import User, DeliveryAddress, Order, Subscription
 from products.models import Review
@@ -17,6 +19,8 @@ import os
 import requests
 import uuid
 
+import requests
+import json
 
 # SimpleJWT 토큰 생성
 def get_tokens(user):
@@ -327,3 +331,23 @@ class SubscriptionDetail(APIView):
             except:
                 return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def kakaoPay(request):
+    key = os.environ.get("REACT_APP_KAKAO_PAY_KEY")
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+
+        url = "https://kapi.kakao.com"
+        headers = {
+            'Authorization': 'KakaoAK ' + key,
+            'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+        }
+        params = request.GET
+        response = requests.post(url+"/v1/payment/ready", params=params, headers=headers)
+        response = json.loads(response.text)
+        return Response(response) 
+    else:
+        return Response(None, status=status.HTTP_405_METHOD_NOT_ALLOWED)

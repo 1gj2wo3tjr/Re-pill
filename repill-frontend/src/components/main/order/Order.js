@@ -210,10 +210,10 @@ function Order() {
           params.total_amount = total;
 
           axios({
-            url: "/v1/payment/ready",
+            url: `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/payment/ready/`,
             method: "POST",
             headers: {
-              Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_PAY_KEY}`,
+              Authorization: `Bearer ${token}`,
               "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
             },
             params,
@@ -255,10 +255,10 @@ function Order() {
         params.total_amount = total;
 
         axios({
-          url: "/v1/payment/ready",
+          url: `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/payment/ready/`,
           method: "POST",
           headers: {
-            Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_PAY_KEY}`,
+            Authorization: `Bearer ${token}`,
             "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
           },
 

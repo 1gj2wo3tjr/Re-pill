@@ -29,6 +29,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     'j6a503.p.ssafy.io',
+    'kapi.kakao.com',
 ]
 
 
@@ -146,17 +147,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS: 모든 Origin 허용 (배포 시 수정할 것)
-# CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = [
     'https://j6a503.p.ssafy.io:3000',
-    'http://localhost:3000',
-    'https://localhost:3000',
-    'http://127.0.0.1:3000',
-    'https://127.0.0.1:3000',
+    'https://kapi.kakao.com',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-
 # 자체 User Model 사용
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -196,3 +192,4 @@ SWAGGER_SETTINGS = {
 REACT_APP_REST_API_KEY = os.environ.get("REACT_APP_REST_API_KEY")
 REACT_APP_REDIRECT_URI = os.environ.get("REACT_APP_REDIRECT_URI")
 REACT_APP_JS_KEY = os.environ.get("REACT_APP_JS_KEY")
+REACT_APP_KAKAO_PAY_KEY = os.environ.get("REACT_APP_KAKAO_PAY_KEY")

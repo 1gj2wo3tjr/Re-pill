@@ -66,12 +66,7 @@ function Order() {
   });
 
   const agreementCheck = () => {
-    console.log("agreement ", agreement);
     setAgreement((prev) => !prev);
-
-    // if (agreement === true) {
-    //   goKakaoPay();
-    // }
   };
 
   const handleClick = (e) => {
@@ -85,9 +80,7 @@ function Order() {
         headers: headers,
       })
       .then((res) => {
-        console.log(res.data);
         setAddressList(res.data);
-        // getSelectAddress(0);
       })
       .catch((err) => console.log(err));
   };
@@ -105,7 +98,11 @@ function Order() {
         phone_number: "",
         zipcode: "",
       });
-      setNewAddress({ address_name: "" });
+      setNewAddress({
+        address_name: "",
+        detailed_address: "",
+        phone_number: "",
+      });
     } else {
       setAddress("");
       getSelectAddress(0);
@@ -115,8 +112,6 @@ function Order() {
   // 신규 배송지 입력 확인 event
   const onChange = (event) => {
     const { name, value } = event.target;
-    console.log(name);
-    console.log(value);
     setNewAddress({
       ...newAddress,
       [name]: value,
@@ -130,7 +125,6 @@ function Order() {
   const getSelectAddress = (idx) => {
     // addressList의 index 가져오자
     const selected = addressList[idx];
-    console.log(selected);
 
     // 등록된 배송지가 없을 경우
     if (!selected) {
@@ -197,10 +191,8 @@ function Order() {
     if (agreement) {
       setPay((prev) => !prev);
 
-      // let finalAddress="" ;
       if (radio === "new") {
-        console.log("신규");
-        console.log(newAddress.address_name);
+        console.log("신규 배송지로 주문");
 
         if (
           newAddress.address_name === "" ||
@@ -221,7 +213,7 @@ function Order() {
             url: "/v1/payment/ready",
             method: "POST",
             headers: {
-              Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+              Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_PAY_KEY}`,
               "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
             },
             params,
@@ -255,20 +247,18 @@ function Order() {
           deleteCart();
         }
       } else {
-        console.log("기존");
+        console.log("기존 배송지 주문");
         finalAddress =
           selectedAddress.address + " " + selectedAddress.detailed_address;
 
         params.item_name = itemName;
         params.total_amount = total;
 
-        console.log("approval_url", params.approval_url);
-        console.log("fail ", params.fail_url);
         axios({
           url: "/v1/payment/ready",
           method: "POST",
           headers: {
-            Authorization: "KakaoAK d986bfc7e3a2e411b1268864d2a7d97d",
+            Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_PAY_KEY}`,
             "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
           },
 
@@ -321,8 +311,6 @@ function Order() {
   };
 
   const approval = process.env.REACT_APP_FRONT_BASE_URL + "/payResult";
-  // const approval = process.env.REACT_APP_FRONT_BASE_URL + "/payResult";
-  console.log("approval ", typeof approval);
   const fail = process.env.REACT_APP_FRONT_BASE_URL + "/cart";
 
   const [data, setData] = useState({
@@ -357,7 +345,7 @@ function Order() {
           }
         )
         .then((res) => {
-          console.log("주문 및삭제");
+          console.log("주문 및 삭제");
           // navigate(`/product`);
         })
         .catch((err) => console.log(err))
@@ -591,7 +579,7 @@ function Order() {
                           value={selectedAddress.address_name}
                           title="받는분"
                           className={styles.mob_address_input}
-                          onChange={onChange}
+                          // onChange={onChange}
                           name="address_name"
                         />
                       ) : (
@@ -670,6 +658,7 @@ function Order() {
                           title="상세주소"
                           className={styles.mob_address_input}
                           style={{ width: "100%" }}
+                          // onChange={onChange}
                         />
                       ) : (
                         <input
@@ -700,6 +689,7 @@ function Order() {
                           title="휴대폰번호"
                           defaultValue=""
                           className={styles.mob_address_input}
+                          // onChange={onChange}
                         />
                       ) : (
                         <input
@@ -1128,7 +1118,7 @@ function Order() {
                           value={selectedAddress.address_name}
                           title="받는분"
                           className={styles.address_input}
-                          onChange={onChange}
+                          // onChange={onChange}
                           name="address_name"
                         />
                       ) : (
@@ -1208,6 +1198,7 @@ function Order() {
                             title="상세주소"
                             // defaultValue=""
                             className={styles.address_input}
+                            // onChange={onChange}
                           />
                         ) : (
                           <input
@@ -1238,6 +1229,7 @@ function Order() {
                           title="휴대폰번호"
                           defaultValue=""
                           className={styles.address_input}
+                          // onChange={onChange}
                         />
                       ) : (
                         <input

@@ -12,6 +12,7 @@ import axios from "axios";
 import { setDate } from "date-fns";
 
 function PayResult(props) {
+  const token = sessionStorage.getItem("token");
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });

@@ -32,6 +32,7 @@ import Checkbox from "@mui/material/Checkbox";
 import AddressModal from "./AddressModal";
 import PayReady from "./PayReady";
 import axios from "axios";
+import Subscription from "./Subscription";
 
 function Order() {
   let token = sessionStorage.getItem("token");
@@ -44,8 +45,9 @@ function Order() {
   // navigate()로 보낸 값 받기
   const location = useLocation();
   console.log("state", location.state);
-  const { orderList } = location.state;
+  // const { orderList } = location.state;
 
+  const [orderList, setOrderList] = useState(location.state.orderList)
   const [radio, setRadio] = useState("new");
   const [radioPay, setRadioPay] = useState("kakaopay");
   const [selector, setSelector] = useState(1);
@@ -809,6 +811,19 @@ function Order() {
               </Table>
             </div>
 
+            <div className={styles.pay_div}>
+              <p
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  marginBottom: "30px",
+                }}
+              >
+                구독하시겠습니까?
+              </p>
+            </div>
+            {orderList && orderList.map((item) => <Subscription orderList={item} />)}
+
             <div className={styles.mob_order_bottom}>
               <div className={styles.mob_final_pay}>
                 <p>최종 결제 금액</p>
@@ -1346,6 +1361,20 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
+            
+            <div className={styles.pay_div}>
+              <p
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  marginBottom: "30px",
+                }}
+              >
+                구독하시겠습니까?
+              </p>
+            </div>
+            {orderList && orderList.map((item) => <Subscription orderList={item} />)}
+
             <div className={styles.order_bottom}>
               <div className={styles.final_pay}>
                 <p>최종 결제 금액</p>

@@ -110,6 +110,19 @@
   margin: 80px 0;
 }
 
+/* 구독버튼 */
+.mob_subscription_buy {
+  background-color: #219f94;
+  padding: 12px 20px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  border: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin: 50px 0;
+}
+
 /* pc */
 
 .container {

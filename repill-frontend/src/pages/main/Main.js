@@ -8,7 +8,7 @@ import { useMediaQuery } from "react-responsive";
 import { Container } from "@mui/material";
 
 function Main() {
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
   const mobile_settings = {
     dots: true,
@@ -16,6 +16,7 @@ function Main() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true,
   };
 
   const settings = {
@@ -32,8 +33,8 @@ function Main() {
   });
 
   const goSurvey = () => {
-    navigate('/survey')
-  }
+    navigate("/survey");
+  };
 
   return (
     <>
@@ -73,7 +74,7 @@ function Main() {
       </style>
       {isMobile ? (
         <>
-          <div style={{ height: "550px", background: "#F2F5C8" }}>
+          <div style={{ height: "550px", background: "rgba(245,254,192,50%)" }}>
             <Slider {...mobile_settings}>
               <div>
                 <div style={{ marginTop: "10px" }}>
@@ -149,33 +150,61 @@ function Main() {
         </>
       ) : (
         <>
-          <div style={{ height: "320px", background: "#F2F5C8" }}>
+          <div style={{ height: "320px", background: "rgba(245,254,192,50%)" }}>
             <Slider {...settings}>
               <div>
                 <div
                   style={{
                     display: "flex",
                     marginTop: "10px",
-                    justifyContent: "start",
+                    justifyContent: "center",
                   }}
                 >
-                  <img
-                    src="/assets/survey.png"
-                    alt=""
-                    style={{
-                      width: "20%",
-                      height: "300px",
-                      marginLeft: "28%",
-                      borderRadius: "5%",
-                      boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)",
-                    }}
-                  />
                   <div style={{ marginLeft: "2%" }}>
-                    <h1>내게 딱 맞는 영양제, 궁금하다면?</h1>
-                    <h3>나만을 위한 맞춤영양제를 찾아보세요 </h3>
-                    <h3>간단하게 체크하고 내 몸에 맞는 영양성분 찾기</h3>
-                    <button className={styles.survey_button} onClick={goSurvey}>설문하기</button>
+                    <p
+                      style={{
+                        fontSize: "28px",
+                        fontWeight: "bold",
+                        color: "#2d2d2d",
+                        marginTop: "50px",
+                      }}
+                    >
+                      나만의 영양제로 채우다
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        color: "#2d2d2d",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      개인 맞춤형 영양제를 추천해드려요
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        color: "#2d2d2d",
+                        marginTop: "10px",
+                      }}
+                    >
+                      리필이 여러분의 영양제를 책임질게요
+                    </p>
+                    <button className={styles.survey_button} onClick={goSurvey}>
+                      설문하기
+                    </button>
                   </div>
+                  <img
+                    src="/img/009.png"
+                    alt=""
+                    style={{
+                      width: "400px",
+                      height: "250px",
+                      marginTop: "30px",
+                      marginLeft: "150px",
+                    }}
+                  />
                 </div>
               </div>
               <div>
@@ -183,21 +212,54 @@ function Main() {
                   style={{
                     display: "flex",
                     marginTop: "10px",
-                    justifyContent: "start",
+                    justifyContent: "center",
                   }}
                 >
+                  <div style={{ marginLeft: "2%" }}>
+                    <p
+                      style={{
+                        fontSize: "28px",
+                        fontWeight: "bold",
+                        color: "#2d2d2d",
+                        marginTop: "50px",
+                      }}
+                    >
+                      내게 딱 맞는 영양제 궁금하다면 ?
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        color: "#2d2d2d",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      나만을 위한 맞춤 영양제를 찾아보세요
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        color: "#2d2d2d",
+                        marginTop: "10px",
+                      }}
+                    >
+                      간단하게 설문하고 내 몸에 맞는 영양성분 찾기
+                    </p>
+                    <button className={styles.survey_button} onClick={goSurvey}>
+                      바로 시작
+                    </button>
+                  </div>
                   <img
-                    src="/assets/report.png"
+                    src="/img/006.png"
                     alt=""
                     style={{
-                      width: "20%",
-                      height: "300px",
-                      marginLeft: "28%",
-                      borderRadius: "5%",
-                      boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)",
+                      width: "400px",
+                      height: "250px",
+                      marginTop: "30px",
+                      marginLeft: "150px",
                     }}
                   />
-                  <div style={{ marginLeft: "2%" }}>맞춤형 분석</div>
                 </div>
               </div>
               <div>
@@ -205,21 +267,54 @@ function Main() {
                   style={{
                     display: "flex",
                     marginTop: "10px",
-                    justifyContent: "start",
+                    justifyContent: "center",
                   }}
                 >
+                  <div style={{ marginLeft: "2%" }}>
+                    <p
+                      style={{
+                        fontSize: "28px",
+                        fontWeight: "bold",
+                        color: "#2d2d2d",
+                        marginTop: "50px",
+                      }}
+                    >
+                      어떤 영양제를 살지 고민이신가요 ?
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        color: "#2d2d2d",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      리필의 추천 알고리즘으로 추천해드릴게요
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        color: "#2d2d2d",
+                        marginTop: "10px",
+                      }}
+                    >
+                      여러분의 건강 놓치지않을거에요 !
+                    </p>
+                    <button className={styles.survey_button} onClick={goSurvey}>
+                      리필 꾸욱
+                    </button>
+                  </div>
                   <img
-                    src="/assets/time.png"
+                    src="/img/007.png"
                     alt=""
                     style={{
-                      width: "20%",
-                      height: "300px",
-                      marginLeft: "28%",
-                      borderRadius: "5%",
-                      boxShadow: "10px 10px 5px 5px rgba(0.2,0.2,0.2,0.1)",
+                      width: "400px",
+                      height: "250px",
+                      marginTop: "30px",
+                      marginLeft: "150px",
                     }}
                   />
-                  <div style={{ marginLeft: "2%" }}>구독시스템</div>
                 </div>
               </div>
             </Slider>

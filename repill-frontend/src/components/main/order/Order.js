@@ -45,8 +45,9 @@ function Order() {
   // navigate()로 보낸 값 받기
   const location = useLocation();
   console.log("state", location.state);
-  const { orderList } = location.state;
+  // const { orderList } = location.state;
 
+  const [orderList, setOrderList] = useState(location.state.orderList)
   const [radio, setRadio] = useState("new");
   const [radioPay, setRadioPay] = useState("kakaopay");
   const [selector, setSelector] = useState(1);
@@ -1275,8 +1276,8 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
-
-            <Subscription orderList={orderList} />
+            
+            {orderList && <Subscription orderList={orderList} />}
 
             <div className={styles.order_bottom}>
               <div className={styles.final_pay}>

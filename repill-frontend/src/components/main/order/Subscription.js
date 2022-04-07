@@ -15,8 +15,6 @@ import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import axios from "axios";
 
 function Subscription({ orderList }) {
-  const [products, setProducts] = useState([])
-
   const [form, setForm] = useState({
     subscribe_times: "",
     period: "",
@@ -33,7 +31,7 @@ function Subscription({ orderList }) {
   };
 
   const openSubAlert = (item) => {
-    console.log(item.id)
+    // console.log(item.id)
     axios
       .post(
         `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/subscription/`,
@@ -58,8 +56,10 @@ function Subscription({ orderList }) {
       });
   };
 
+  console.log(orderList)
+
   useEffect(() => {
-    setProducts(orderList)
+    
   }, [])
 
   return (
@@ -75,8 +75,8 @@ function Subscription({ orderList }) {
         구독하시겠습니까?
       </p>
       <Table>
-        {products &&
-          products.map((item, index) => (
+        {orderList &&
+          orderList.map((item, index) => (
             <>
               <TableHead>
                 <TableRow>
@@ -125,7 +125,7 @@ function Subscription({ orderList }) {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell style={{ textAlign: "center" }}>
+                  {/* <TableCell style={{ textAlign: "center" }}>
                     <div
                       style={{
                         display: "flex",
@@ -137,12 +137,13 @@ function Subscription({ orderList }) {
                         value={item.quantity}
                         title="상품개수"
                         className={styles.qty_input}
+                        readOnly
                       />
                     </div>
                   </TableCell>
                   <TableCell style={{ textAlign: "center" }}>
                     <p>{item.price.toLocaleString()} 원</p>
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell className={styles.address_right}>
                     <FormControl>
                       <RadioGroup
@@ -157,7 +158,6 @@ function Subscription({ orderList }) {
                         }}
                       >
                         <Box
-                          component="form"
                           sx={{
                             "& > :not(style)": { m: 1, width: "25ch" },
                           }}

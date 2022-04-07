@@ -12,27 +12,32 @@ import { useNavigate } from "react-router-dom";
 import SubscriptionsCalender from "./SubscriptionsCalender";
 import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
 import Modal from "@mui/material/Modal";
+import axios from "axios"
 
 function SubscriptionsCompo() {
+  let token = sessionStorage.getItem('token')
+  const headers = {
+    Authorization: `Bearer ` + `${token}`
+  }
   const [modalOn, setModalOn] = useState(false);
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState([]);
+  const [products, setProducts] = useState([])
+  const [period, setPeriod] = useState([])
+  const filtered_date = []
 
   const navigate = useNavigate();
-  const productNames = [
-    "알약",
-    "물약",
-    "쓴약",
-    "단약",
-    "가루약",
-    "텐텐",
-    "비타민",
-    "한약",
-  ];
+
   const handleProduct = () => {
     navigate("/product");
   };
-  const handleCalender = (data) => {
-    setSelected(data);
+  const handleCalender = (item) => {
+    const sub_list = item.subscribe_dates
+    for(var key in sub_list) {
+      var date_num = sub_list[key]
+      filtered_date.push(date_num)
+    }
+    setPeriod(item)
+    setSelected(filtered_date);
     setModalOn(true);
     console.log("열렸다!");
   };
@@ -40,10 +45,64 @@ function SubscriptionsCompo() {
     setModalOn(false);
   };
 
+  const getSubscriptions = async() => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/subscription/`,
+        {
+          headers: headers,
+        }
+      );
+      console.log(response.data);
+      response.data.map((item) => 
+        axios
+          .get(
+            `${process.env.REACT_APP_BASE_URL}/api/v1/products/items/${item.product}`
+          )
+          .then((res) => {
+            console.log(res)
+            setProducts((products) => [
+              {
+                subscription_id: item.id,
+                period: item.period,
+                start_date: item.start_date,
+                subscribe_dates: item.subscribe_dates,
+                subscribe_times: item.subscribe_times,
+                title: res.data.name,
+                img_url: res.data.thumbnail_url,
+                product: item.product
+              },
+              ...products,
+            ])
+          })
+      )
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const deleteSubscription = (item) => {
+    axios
+      .delete(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/subscription/${item.product}`,
+        {
+          headers: headers
+        }
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+    setTimeout(window.location.reload(true), 500)
+  }
+
+  React.useEffect(() => {
+    getSubscriptions()
+    setProducts([])
+  }, [])
+
   return (
     <div class="subscriptionCompo">
       <div class="ui grid container">
-        {productNames.map((productName) => (
+        {products.map((item) => (
           <div class="four wide column">
             <Card
               sx={{
@@ -54,16 +113,18 @@ function SubscriptionsCompo() {
               <CardActionArea onClick={handleProduct}>
                 <CardMedia
                   component="img"
-                  height="140"
-                  image="#"
+                  height="160"
+                  image={item.img_url}
                   alt="subscription"
                 />
-                <CardContent style={{ height: "120px" }}>
+                <CardContent style={{ height: "150px" }}>
                   <Typography gutterBottom variant="h5" component="div">
-                    {productName}
+                    <p>
+                      {item.title}
+                    </p>
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    기간 들어갈 예정
+                    {item.start_date.slice(0, 10)}
                   </Typography>
                 </CardContent>
               </CardActionArea>
@@ -75,7 +136,7 @@ function SubscriptionsCompo() {
                     color: "black",
                     borderRadius: "20px",
                   }}
-                  onClick={handleCalender}
+                  onClick={() => handleCalender(item)}
                 >
                   <BuildOutlinedIcon
                     sx={{ color: "rgb(87, 87, 87)" }}
@@ -88,6 +149,7 @@ function SubscriptionsCompo() {
                     color: "black",
                     borderRadius: "20px",
                   }}
+                  onClick={() => deleteSubscription(item)}
                 >
                   <CancelOutlinedIcon
                     sx={{ color: "rgb(87, 87, 87)" }}
@@ -102,6 +164,7 @@ function SubscriptionsCompo() {
         <SubscriptionsCalender
           selectedData={selected}
           handleCancel={handleCancel}
+          period={period}
         />
       )}
     </div>

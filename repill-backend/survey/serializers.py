@@ -14,29 +14,26 @@ class SurveyHistoryListSerializer(serializers.ModelSerializer):
 class ResponsesSerializer(serializers.ModelSerializer):
         class Meta:
             model = SurveyResponse
-            fields = ['question', 'answer_choice', 'answer_text']
+            fields = ['question', 'answer_choice', 'answer_text', 'survey']
 
 class SurveyHistorySerializer(serializers.ModelSerializer):
     
-    # responses = serializers.StringRelatedField(many=True)
-    responses = ResponsesSerializer(many=True)
-    respondent = serializers.StringRelatedField(read_only=True)
-
-
-
+    responses = serializers.StringRelatedField(many=True, read_only=True)
+    # responses = ResponsesSerializer(many=True)
+    # respondent = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = SurveyHistory
         fields = '__all__'
         
-    def create(self, validated_data):
-        responses = validated_data.pop('responses')
-        survey = SurveyHistory.objects.create(**validated_data)
+    # def create(self, validated_data):
+    #     responses = validated_data.pop('responses')
+    #     survey = SurveyHistory.objects.create(**validated_data)
 
-        for response in responses:
-            SurveyResponse.objects.create(**response, survey=survey)
+    #     for response in responses:
+    #         SurveyResponse.objects.create(**response, survey=survey)
 
-        return survey
+    #     return survey
 
 
 class RecommendSerializer(serializers.ModelSerializer):

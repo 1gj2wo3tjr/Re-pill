@@ -131,7 +131,19 @@ function Order() {
   const getSelectAddress = (idx) => {
     // addressList의 index 가져오자
     const selected = addressList[idx];
-    setSelectedAddress(selected);
+    console.log(selected);
+
+    // 등록된 배송지가 없을 경우
+    if (!selected) {
+      setSelectedAddress({
+        address: "",
+        address_name: "",
+        detailed_address: "",
+        id: "",
+        phone_number: "",
+        zipcode: "",
+      });
+    } else setSelectedAddress(selected);
   };
 
   const handleAddress = (event) => {
@@ -520,24 +532,47 @@ function Order() {
                       {radio === "existing" ? (
                         <div>
                           <FormControl sx={{ m: 1, minWidth: 120 }}>
-                            <Select
-                              value={selectorAddress}
-                              onChange={handleAddress}
-                              displayEmpty
-                              inputProps={{ "aria-label": "Without label" }}
-                              className={styles.address_selector}
-                              sx={{
-                                "&.Mui-selected": {
-                                  border: "1px solid #f2f5c8",
-                                },
-                              }}
-                            >
-                              {addressList.map((item, index) => (
-                                <MenuItem value={index}>
-                                  {item.address_name} ({item.address})
-                                </MenuItem>
-                              ))}
-                            </Select>
+                            {addressList && addressList.length > 0 ? (
+                              <>
+                                <Select
+                                  value={selectorAddress}
+                                  onChange={handleAddress}
+                                  displayEmpty
+                                  inputProps={{ "aria-label": "Without label" }}
+                                  className={styles.address_selector}
+                                  sx={{
+                                    "&.Mui-selected": {
+                                      border: "1px solid #f2f5c8",
+                                    },
+                                  }}
+                                >
+                                  {addressList.map((item, index) => (
+                                    <MenuItem value={index}>
+                                      {item.address_name} ({item.address})
+                                    </MenuItem>
+                                  ))}{" "}
+                                </Select>
+                              </>
+                            ) : (
+                              <>
+                                <Select
+                                  // value={selectorAddress}
+                                  // onChange={handleAddress}
+                                  displayEmpty
+                                  inputProps={{ "aria-label": "Without label" }}
+                                  className={styles.address_selector}
+                                  sx={{
+                                    "&.Mui-selected": {
+                                      border: "1px solid #f2f5c8",
+                                    },
+                                  }}
+                                >
+                                  <MenuItem selected>
+                                    <p>등록된 배송지가 없습니다.</p>
+                                  </MenuItem>{" "}
+                                </Select>
+                              </>
+                            )}
                           </FormControl>
                         </div>
                       ) : null}
@@ -1023,24 +1058,47 @@ function Order() {
                       {radio === "existing" ? (
                         <div>
                           <FormControl sx={{ m: 1, minWidth: 120 }}>
-                            <Select
-                              value={selectorAddress}
-                              onChange={handleAddress}
-                              displayEmpty
-                              inputProps={{ "aria-label": "Without label" }}
-                              className={styles.address_selector}
-                              sx={{
-                                "&.Mui-selected": {
-                                  border: "1px solid #f2f5c8",
-                                },
-                              }}
-                            >
-                              {addressList.map((item, index) => (
-                                <MenuItem value={index}>
-                                  {item.address_name} ({item.address})
-                                </MenuItem>
-                              ))}
-                            </Select>
+                            {addressList && addressList.length > 0 ? (
+                              <>
+                                <Select
+                                  value={selectorAddress}
+                                  onChange={handleAddress}
+                                  displayEmpty
+                                  inputProps={{ "aria-label": "Without label" }}
+                                  className={styles.address_selector}
+                                  sx={{
+                                    "&.Mui-selected": {
+                                      border: "1px solid #f2f5c8",
+                                    },
+                                  }}
+                                >
+                                  {addressList.map((item, index) => (
+                                    <MenuItem value={index}>
+                                      {item.address_name} ({item.address})
+                                    </MenuItem>
+                                  ))}{" "}
+                                </Select>
+                              </>
+                            ) : (
+                              <>
+                                <Select
+                                  // value={selectorAddress}
+                                  // onChange={handleAddress}
+                                  displayEmpty
+                                  inputProps={{ "aria-label": "Without label" }}
+                                  className={styles.address_selector}
+                                  sx={{
+                                    "&.Mui-selected": {
+                                      border: "1px solid #f2f5c8",
+                                    },
+                                  }}
+                                >
+                                  <MenuItem selected>
+                                    <p>등록된 배송지가 없습니다.</p>
+                                  </MenuItem>{" "}
+                                </Select>
+                              </>
+                            )}
                           </FormControl>
                         </div>
                       ) : null}

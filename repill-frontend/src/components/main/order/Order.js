@@ -32,6 +32,7 @@ import Checkbox from "@mui/material/Checkbox";
 import AddressModal from "./AddressModal";
 import PayReady from "./PayReady";
 import axios from "axios";
+import Subscription from "./Subscription";
 
 function Order() {
   let token = sessionStorage.getItem("token");
@@ -1274,6 +1275,9 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
+
+            <Subscription orderList={orderList} />
+
             <div className={styles.order_bottom}>
               <div className={styles.final_pay}>
                 <p>최종 결제 금액</p>

@@ -36,6 +36,10 @@ function Main() {
     navigate("/survey");
   };
 
+  const goProduct = () => {
+    navigate(`/product`, { state: { keyword: "" } });
+  };
+
   return (
     <>
       <style>
@@ -433,14 +437,110 @@ function Main() {
             </Slider>
           </div>
           <Container className={styles.container}>
-            <div>
-              <h1>설문조사관련소개</h1>
+            <div
+              style={{
+                height: "400px",
+                display: "flex",
+                justifyContent: "space-around",
+                margin: "50px 0",
+              }}
+            >
+              <div style={{ alignSelf: "center" }}>
+                <p style={{ fontSize: "25px", fontWeight: "bold" }}>
+                  3분이면 설문조사 완료!
+                </p>
+                <p
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    marginBottom: "10px",
+                  }}
+                >
+                  나의 증상을 간단하게 체크하고
+                </p>
+                <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+                  나만의 건강기능식품을 진단받기
+                </p>
+                <p
+                  style={{
+                    fontSize: "13px",
+                    fontWeight: "bold",
+                    marginTop: "30px",
+                  }}
+                >
+                  (Re:pill은 모바일도 지원해요!)
+                </p>
+              </div>
+              <img src="/img/p1.png" alt="" />
             </div>
-            <div>
-              <h1>개인맞춤형분석소개</h1>
+            <div
+              style={{
+                height: "400px",
+                display: "flex",
+                justifyContent: "space-around",
+                margin: "100px 0",
+              }}
+            >
+              <img
+                src="/img/010.png"
+                alt=""
+                style={{ width: "500px", height: "350px" }}
+              />
+              <div style={{ alignSelf: "center", textAlign: "right" }}>
+                <p style={{ fontSize: "25px", fontWeight: "bold" }}>
+                  설문조사를 통해 추천받기
+                </p>
+                <p
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    marginBottom: "10px",
+                  }}
+                >
+                  설문조사를 Re:pill이 분석해
+                </p>
+                <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+                  여러분의 필요 성분을 파악하고 추천해드려요
+                </p>
+                <button className={styles.survey_button} onClick={goSurvey}>
+                  설문하러 가기
+                </button>
+              </div>
             </div>
-            <div>
-              <h1>구독시스템소개</h1>
+            <div
+              style={{
+                height: "400px",
+                display: "flex",
+                justifyContent: "space-around",
+                margin: "50px 0",
+              }}
+            >
+              <div style={{ alignSelf: "center" }}>
+                <p
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    marginBottom: "10px",
+                  }}
+                >
+                  구독 시스템을 통해 Re:pill 에서 구매한
+                </p>
+                <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+                  제품을 편하게 재주문해보세요 !
+                </p>
+                <button
+                  className={styles.survey_button}
+                  onClick={goProduct}
+                  style={{ backgroundColor: "#F2F5CB" }}
+                >
+                  제품 보러가기
+                </button>
+              </div>
+              <img
+                src="/img/004.png"
+                alt=""
+                style={{ width: "500px", height: "350px" }}
+              />
             </div>
           </Container>
         </>

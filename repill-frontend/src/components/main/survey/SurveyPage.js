@@ -16,7 +16,10 @@ function SurveyPage() {
     element.push({
       name: `${sb[i].id}`,
       title: `${sb[i].content}`,
-      type: "text"
+      type: "text",
+      "isRequired": true,
+      "inputType": "number",
+      "placeHolder": "숫자를 입력해주세요",
     })
   }
 
@@ -30,25 +33,27 @@ function SurveyPage() {
       "type": "checkbox",
       "name": "opSystem",
       "title": `${ob[i].content}`,
-      "hasOther": true,
+      "hasOther": false,
       "isRequired": true,
-      "choices": choices[i]
+      "choices": choices[i],
     })
   }
 
+  const pages = []
+  for(let i=0; i<element.length; i++) {
+    pages.push({elements: [element[i]]})
+  }
+
   const surveyJson = {
-    elements: element,
-    // showProgressBar: "bottom",
-    // goNextPageAutomatic: false,
-    // showNavigationButtons: true,
-    // showPreviewBeforeComplete: true,
-    // pageNextText: "next"
+    pages,
+    showProgressBar: "bottom",
+    goNextPageAutomatic: false,
+    showNavigationButtons: true,
+    pageNextText: "next",
   };
 
 
   const survey = new Model(surveyJson);
-
-  // const survey = new Model(surveyJson);
 
   // survey.focusFirstQuestionAutomatic = false;
   // const alertResults = useCallback((sender) => {
@@ -80,10 +85,15 @@ function SurveyPage() {
 
   return (
     <>
+      <style>
+        {`
+        .survey-progress {
+          margin-top: 300px;
+        }
+        `}
+      </style>
       <div>
-
         <Survey model={survey} />
- 
       </div>
     </>
   );

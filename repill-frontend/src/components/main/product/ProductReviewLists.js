@@ -13,7 +13,6 @@ function ProductReviewLists() {
     Authorization: `Bearer ${token}`,
   };
   const [reviews, setReviews] = useState([]);
-  const id = useState(1);
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });
@@ -22,12 +21,10 @@ function ProductReviewLists() {
   let location = useLocation();
 
   const getReviews = async () => {
+    console.log(location.state);
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/products/reviews/?product=${location.state.id}`,
-        {
-          product: id,
-        },
         {
           headers: headers,
         }
@@ -86,8 +83,8 @@ function ProductReviewLists() {
         </div>
       ) : (
         <div>
-          <Container style={{ marginTop: "3%" }}>
-            <h1>해당 상품에 대한 리뷰 모음</h1>
+          <Container style={{ marginTop: "100px" }}>
+            <h2>해당 상품에 대한 리뷰 모음</h2>
             {reviews.map((item) => (
               <div
                 style={{

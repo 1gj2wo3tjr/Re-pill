@@ -118,7 +118,7 @@ function NoticeDetail() {
         <>
           <Container>
             <h3 style={{ marginTop: "5%" }}>공지사항</h3>
-            {staff ? (
+            {staff === true ? (
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <button
                   className={styles.edit_notice_button_mob}
@@ -230,7 +230,7 @@ function NoticeDetail() {
         <>
           <Container>
             <h2 style={{ marginTop: "5%" }}>공지사항</h2>
-            {staff ? (
+            {staff === true ? (
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <button
                   className={styles.edit_notice_button}

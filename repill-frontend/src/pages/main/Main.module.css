@@ -1,30 +1,36 @@
 .survey_button {
-  color: black;
-  padding: .375rem .75rem;
-  background: #219F94;
+  color: #2d2d2d;
+  padding: 10px 50px;
+  background: #c1deae;
   border: 0;
-  border-radius: 25px;
+  border-radius: 20px;
   font-size: 1.2rem;
+  font-weight: bold;
   line-height: 1.5;
-  box-shadow: 0px 5px 10px rgb(207 206 206);
+  box-shadow: 1px 1px 5px rgb(207 206 206);
+  font-family: "Noto Sans KR";
   cursor: pointer;
-  margin-top: 10%;
-  width: 8rem;
+  margin-top: 30px;
+}
+
+.container {
+  margin-top: 100px;
+  margin-bottom: 150px;
 }
 
 /* mobile */
 
-.survey_button_mob {
-  color: black;
-  padding: .375rem .75rem;
-  background: #219F94;
+.mob_survey_button {
+  color: #2d2d2d;
+  padding: 10px 50px;
+  background: #c1deae;
   border: 0;
-  border-radius: 25px;
-  font-size: 1.2rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: bold;
   line-height: 1.5;
-  box-shadow: 0px 5px 10px rgb(207 206 206);
+  box-shadow: 1px 1px 5px rgb(207 206 206);
+  font-family: "Noto Sans KR";
   cursor: pointer;
-  margin-top: 10%;
-  width: 8rem;
-  margin-left: 35%;
+  margin-top: 20px;
 }

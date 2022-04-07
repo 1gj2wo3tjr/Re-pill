@@ -36,6 +36,10 @@ function ProductReviewLists() {
     }
   };
 
+  const orderList = reviews.sort(
+    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+  );
+
   const goBack = () => {
     navigate(-1);
   };
@@ -49,7 +53,7 @@ function ProductReviewLists() {
       {isMobile ? (
         <div>
           <Container style={{ marginTop: "3%" }}>
-            {reviews.map((item) => (
+            {orderList.map((item) => (
               <div
                 style={{
                   display: "flex",
@@ -85,7 +89,7 @@ function ProductReviewLists() {
         <div>
           <Container style={{ marginTop: "100px" }}>
             <h2>해당 상품에 대한 리뷰 모음</h2>
-            {reviews.map((item) => (
+            {orderList.map((item) => (
               <div
                 style={{
                   display: "flex",

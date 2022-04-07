@@ -94,7 +94,6 @@ function Order() {
 
   // 기존.신규 배송지 메소드
   const handleChange = (e) => {
-    console.log(e.target.value);
     setRadio(e.target.value);
 
     if (e.target.value === "new") {
@@ -131,7 +130,19 @@ function Order() {
   const getSelectAddress = (idx) => {
     // addressList의 index 가져오자
     const selected = addressList[idx];
-    setSelectedAddress(selected);
+    console.log(selected);
+
+    // 등록된 배송지가 없을 경우
+    if (!selected) {
+      setSelectedAddress({
+        address: "",
+        address_name: "",
+        detailed_address: "",
+        id: "",
+        phone_number: "",
+        zipcode: "",
+      });
+    } else setSelectedAddress(selected);
   };
 
   const handleAddress = (event) => {
@@ -257,7 +268,7 @@ function Order() {
           url: "/v1/payment/ready",
           method: "POST",
           headers: {
-            Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+            Authorization: "KakaoAK d986bfc7e3a2e411b1268864d2a7d97d",
             "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
           },
 
@@ -520,24 +531,47 @@ function Order() {
                       {radio === "existing" ? (
                         <div>
                           <FormControl sx={{ m: 1, minWidth: 120 }}>
-                            <Select
-                              value={selectorAddress}
-                              onChange={handleAddress}
-                              displayEmpty
-                              inputProps={{ "aria-label": "Without label" }}
-                              className={styles.address_selector}
-                              sx={{
-                                "&.Mui-selected": {
-                                  border: "1px solid #f2f5c8",
-                                },
-                              }}
-                            >
-                              {addressList.map((item, index) => (
-                                <MenuItem value={index}>
-                                  {item.address_name} ({item.address})
-                                </MenuItem>
-                              ))}
-                            </Select>
+                            {addressList && addressList.length > 0 ? (
+                              <>
+                                <Select
+                                  value={selectorAddress}
+                                  onChange={handleAddress}
+                                  displayEmpty
+                                  inputProps={{ "aria-label": "Without label" }}
+                                  className={styles.address_selector}
+                                  sx={{
+                                    "&.Mui-selected": {
+                                      border: "1px solid #f2f5c8",
+                                    },
+                                  }}
+                                >
+                                  {addressList.map((item, index) => (
+                                    <MenuItem value={index}>
+                                      {item.address_name} ({item.address})
+                                    </MenuItem>
+                                  ))}{" "}
+                                </Select>
+                              </>
+                            ) : (
+                              <>
+                                <Select
+                                  // value={selectorAddress}
+                                  // onChange={handleAddress}
+                                  displayEmpty
+                                  inputProps={{ "aria-label": "Without label" }}
+                                  className={styles.address_selector}
+                                  sx={{
+                                    "&.Mui-selected": {
+                                      border: "1px solid #f2f5c8",
+                                    },
+                                  }}
+                                >
+                                  <MenuItem selected>
+                                    <p>등록된 배송지가 없습니다.</p>
+                                  </MenuItem>{" "}
+                                </Select>
+                              </>
+                            )}
                           </FormControl>
                         </div>
                       ) : null}
@@ -659,14 +693,25 @@ function Order() {
                       <p>휴대폰 번호</p>
                     </TableCell>
                     <TableCell className={styles.mob_address_right}>
-                      <input
-                        type="text"
-                        value={selectedAddress.phone_number}
-                        title="휴대폰번호"
-                        className={styles.mob_address_input}
-                        style={{ width: "100%" }}
-                        defaultValue=""
-                      />
+                      {radio === "existing" ? (
+                        <input
+                          type="text"
+                          value={selectedAddress.phone_number}
+                          title="휴대폰번호"
+                          defaultValue=""
+                          className={styles.mob_address_input}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={newAddress.phone_number}
+                          title="휴대폰번호"
+                          defaultValue=""
+                          onChange={onChange}
+                          name="phone_number"
+                          className={styles.mob_address_input}
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -1023,24 +1068,47 @@ function Order() {
                       {radio === "existing" ? (
                         <div>
                           <FormControl sx={{ m: 1, minWidth: 120 }}>
-                            <Select
-                              value={selectorAddress}
-                              onChange={handleAddress}
-                              displayEmpty
-                              inputProps={{ "aria-label": "Without label" }}
-                              className={styles.address_selector}
-                              sx={{
-                                "&.Mui-selected": {
-                                  border: "1px solid #f2f5c8",
-                                },
-                              }}
-                            >
-                              {addressList.map((item, index) => (
-                                <MenuItem value={index}>
-                                  {item.address_name} ({item.address})
-                                </MenuItem>
-                              ))}
-                            </Select>
+                            {addressList && addressList.length > 0 ? (
+                              <>
+                                <Select
+                                  value={selectorAddress}
+                                  onChange={handleAddress}
+                                  displayEmpty
+                                  inputProps={{ "aria-label": "Without label" }}
+                                  className={styles.address_selector}
+                                  sx={{
+                                    "&.Mui-selected": {
+                                      border: "1px solid #f2f5c8",
+                                    },
+                                  }}
+                                >
+                                  {addressList.map((item, index) => (
+                                    <MenuItem value={index}>
+                                      {item.address_name} ({item.address})
+                                    </MenuItem>
+                                  ))}{" "}
+                                </Select>
+                              </>
+                            ) : (
+                              <>
+                                <Select
+                                  // value={selectorAddress}
+                                  // onChange={handleAddress}
+                                  displayEmpty
+                                  inputProps={{ "aria-label": "Without label" }}
+                                  className={styles.address_selector}
+                                  sx={{
+                                    "&.Mui-selected": {
+                                      border: "1px solid #f2f5c8",
+                                    },
+                                  }}
+                                >
+                                  <MenuItem selected>
+                                    <p>등록된 배송지가 없습니다.</p>
+                                  </MenuItem>{" "}
+                                </Select>
+                              </>
+                            )}
                           </FormControl>
                         </div>
                       ) : null}
@@ -1163,13 +1231,25 @@ function Order() {
                       <p>휴대폰 번호</p>
                     </TableCell>
                     <TableCell className={styles.address_right}>
-                      <input
-                        type="text"
-                        value={selectedAddress.phone_number}
-                        title="휴대폰번호"
-                        defaultValue=""
-                        className={styles.address_input}
-                      />
+                      {radio === "existing" ? (
+                        <input
+                          type="text"
+                          value={selectedAddress.phone_number}
+                          title="휴대폰번호"
+                          defaultValue=""
+                          className={styles.address_input}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={newAddress.phone_number}
+                          title="휴대폰번호"
+                          defaultValue=""
+                          onChange={onChange}
+                          name="phone_number"
+                          className={styles.address_input}
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>

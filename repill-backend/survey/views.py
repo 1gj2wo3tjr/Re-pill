@@ -49,13 +49,13 @@ class SurveyList(APIView):
             print(key, value)
             if isinstance(value, list):
                 for v in value:
-                    data = {"question": key, "answer_choice": v, "answer_text": None, "survey": history.id}
+                    data = {"question": int(key), "answer_choice": int(v), "answer_text": None, "survey": history.id}
                     print(data)
                     response = ResponsesSerializer(data=data)
                     if response.is_valid(raise_exception=True):
                         response.save()
             else:
-                data = {"question": key, "answer_choice": None, "answer_text": str(value), "survey": history.id}
+                data = {"question": int(key), "answer_choice": None, "answer_text": str(value), "survey": history.id}
                 print(data)
                 response = ResponsesSerializer(data=data)
                 if response.is_valid(raise_exception=True):

@@ -211,7 +211,9 @@ function CartList({ cart, total, setTotal }) {
   };
 
   const allOrder = () => {
-    navigate(`/order`, { state: { orderList: product } });
+    if (product.length > 0) {
+      navigate(`/order`, { state: { orderList: product } });
+    } else alert("장바구니에 상품을 담아주세요!");
   };
 
   useEffect(() => {

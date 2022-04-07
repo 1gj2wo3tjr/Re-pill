@@ -12,6 +12,7 @@ import axios from "axios";
 import { setDate } from "date-fns";
 
 function PayResult(props) {
+  const token = sessionStorage.getItem("token");
   const isMobile = useMediaQuery({
     query: "(max-width : 768px)",
   });
@@ -66,10 +67,10 @@ function PayResult(props) {
   useEffect(() => {
     console.log(params);
     axios({
-      url: "/v1/payment/approve",
+      url: `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/payment/approve/`,
       method: "POST",
       headers: {
-        Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+        Authorization: `Bearer ${token}`,
         "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
       },
       params,

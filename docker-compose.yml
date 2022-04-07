@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+        jenkins:
+                image: jenkins/jenkins:latest
+                restart: unless-stopped
+                user: root
+                privileged: true
+                ports:
+                        - '8081:8080'
+                        - '50000:50000'
+                volumes:
+                        - ./jenkins-data:/var/jenkins_home
+                        - /var/run/docker.sock:/var/run/docker.sock
+                        - $HOME:/home
+                #environment:
+                          #- JENKINS_OPTS="--prefix=admin/jenkins"
+                container_name: 'jenkins'
+        nginx:
+                image: nginx:latest
+                container_name: 'nginx'
+                restart: always
+                volumes:
+                        - ./nginx:/etc/nginx
+                        - ./certbot/conf:/etc/letsencrypt
+                        - ./certbot/www:/var/www/certbot
+                ports:
+                        - '80:80'
+                        - '443:443'
+                environment:
+                        - NGINX_HOST=j6a503.p.ssafy.io
+                        - NGINX_POST=443
+        repill-db:
+                image: mysql:8.0.28
+                restart: always
+                container_name: 'repill-db'
+                command: --lower_case_table_names=1
+                cap_add:
+                        - SYS_NICE
+                environment:
+                        - MYSQL_DATABASE=repill_db
+                        - MYSQL_ROOT_PASSWORD={MYSQL_ROOT_PASSWORD}
+                        - TZ=Asia/Seoul
+                ports:
+                        - '3306:3306'                
+                volumes:
+                        - db-volume:/var/lib/mysql
+        #certbot:
+                #image: certbot/certbot:latest
+                #restart: always
+                #volumes:
+                  #- ./data/certbot/conf:/etc/letsencrypt
+                  #- ./data/certbot/www:/var/www/certbot
+        repill-backend:
+               image: repill-backend:1.0
+               container_name: 'repill-backend'
+               ports:
+                       - '8000:8000'
+               environment:
+                       - REACT_APP_REST_API_KEY={REACT_APP_REST_API_KEY}
+                       - REACT_APP_REDIRECT_URI=https://j6a503.ssafy.p.io/oauth/callback/kakao
+                       - REACT_APP_JS_KEY={REACT_APP_JS_KEY}
+                       - DJANGO_SECRET_KEY={DJANGO_SECRET_KEY}
+        repill-frontend:
+                image: repill-frontend:1.0
+                container_name: 'repill-frontend'
+                ports: 
+                        - '3000:3000'
+
+
+volumes:
+        db-volume:

@@ -32,6 +32,7 @@ import Checkbox from "@mui/material/Checkbox";
 import AddressModal from "./AddressModal";
 import PayReady from "./PayReady";
 import axios from "axios";
+import Subscription from "./Subscription";
 
 function Order() {
   let token = sessionStorage.getItem("token");
@@ -44,8 +45,9 @@ function Order() {
   // navigate()로 보낸 값 받기
   const location = useLocation();
   console.log("state", location.state);
-  const { orderList } = location.state;
+  // const { orderList } = location.state;
 
+  const [orderList, setOrderList] = useState(location.state.orderList)
   const [radio, setRadio] = useState("new");
   const [radioPay, setRadioPay] = useState("kakaopay");
   const [selector, setSelector] = useState(1);
@@ -66,12 +68,7 @@ function Order() {
   });
 
   const agreementCheck = () => {
-    console.log("agreement ", agreement);
     setAgreement((prev) => !prev);
-
-    // if (agreement === true) {
-    //   goKakaoPay();
-    // }
   };
 
   const handleClick = (e) => {
@@ -85,16 +82,13 @@ function Order() {
         headers: headers,
       })
       .then((res) => {
-        console.log(res.data);
         setAddressList(res.data);
-        // getSelectAddress(0);
       })
       .catch((err) => console.log(err));
   };
 
   // 기존.신규 배송지 메소드
   const handleChange = (e) => {
-    console.log(e.target.value);
     setRadio(e.target.value);
 
     if (e.target.value === "new") {
@@ -106,7 +100,11 @@ function Order() {
         phone_number: "",
         zipcode: "",
       });
-      setNewAddress({ address_name: "" });
+      setNewAddress({
+        address_name: "",
+        detailed_address: "",
+        phone_number: "",
+      });
     } else {
       setAddress("");
       getSelectAddress(0);
@@ -116,8 +114,6 @@ function Order() {
   // 신규 배송지 입력 확인 event
   const onChange = (event) => {
     const { name, value } = event.target;
-    console.log(name);
-    console.log(value);
     setNewAddress({
       ...newAddress,
       [name]: value,
@@ -131,7 +127,18 @@ function Order() {
   const getSelectAddress = (idx) => {
     // addressList의 index 가져오자
     const selected = addressList[idx];
-    setSelectedAddress(selected);
+
+    // 등록된 배송지가 없을 경우
+    if (!selected) {
+      setSelectedAddress({
+        address: "",
+        address_name: "",
+        detailed_address: "",
+        id: "",
+        phone_number: "",
+        zipcode: "",
+      });
+    } else setSelectedAddress(selected);
   };
 
   const handleAddress = (event) => {
@@ -186,10 +193,8 @@ function Order() {
     if (agreement) {
       setPay((prev) => !prev);
 
-      // let finalAddress="" ;
       if (radio === "new") {
-        console.log("신규");
-        console.log(newAddress.address_name);
+        console.log("신규 배송지로 주문");
 
         if (
           newAddress.address_name === "" ||
@@ -207,10 +212,10 @@ function Order() {
           params.total_amount = total;
 
           axios({
-            url: "/v1/payment/ready",
+            url: `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/payment/ready/`,
             method: "POST",
             headers: {
-              Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+              Authorization: `Bearer ${token}`,
               "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
             },
             params,
@@ -244,20 +249,18 @@ function Order() {
           deleteCart();
         }
       } else {
-        console.log("기존");
+        console.log("기존 배송지 주문");
         finalAddress =
           selectedAddress.address + " " + selectedAddress.detailed_address;
 
         params.item_name = itemName;
         params.total_amount = total;
 
-        console.log("approval_url", params.approval_url);
-        console.log("fail ", params.fail_url);
         axios({
-          url: "/v1/payment/ready",
+          url: `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/payment/ready/`,
           method: "POST",
           headers: {
-            Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+            Authorization: `Bearer ${token}`,
             "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
           },
 
@@ -310,8 +313,6 @@ function Order() {
   };
 
   const approval = process.env.REACT_APP_FRONT_BASE_URL + "/payResult";
-  // const approval = process.env.REACT_APP_FRONT_BASE_URL + "/payResult";
-  console.log("approval ", typeof approval);
   const fail = process.env.REACT_APP_FRONT_BASE_URL + "/cart";
 
   const [data, setData] = useState({
@@ -346,7 +347,7 @@ function Order() {
           }
         )
         .then((res) => {
-          console.log("주문 및삭제");
+          console.log("주문 및 삭제");
           // navigate(`/product`);
         })
         .catch((err) => console.log(err))
@@ -520,24 +521,47 @@ function Order() {
                       {radio === "existing" ? (
                         <div>
                           <FormControl sx={{ m: 1, minWidth: 120 }}>
-                            <Select
-                              value={selectorAddress}
-                              onChange={handleAddress}
-                              displayEmpty
-                              inputProps={{ "aria-label": "Without label" }}
-                              className={styles.address_selector}
-                              sx={{
-                                "&.Mui-selected": {
-                                  border: "1px solid #f2f5c8",
-                                },
-                              }}
-                            >
-                              {addressList.map((item, index) => (
-                                <MenuItem value={index}>
-                                  {item.address_name} ({item.address})
-                                </MenuItem>
-                              ))}
-                            </Select>
+                            {addressList && addressList.length > 0 ? (
+                              <>
+                                <Select
+                                  value={selectorAddress}
+                                  onChange={handleAddress}
+                                  displayEmpty
+                                  inputProps={{ "aria-label": "Without label" }}
+                                  className={styles.address_selector}
+                                  sx={{
+                                    "&.Mui-selected": {
+                                      border: "1px solid #f2f5c8",
+                                    },
+                                  }}
+                                >
+                                  {addressList.map((item, index) => (
+                                    <MenuItem value={index}>
+                                      {item.address_name} ({item.address})
+                                    </MenuItem>
+                                  ))}{" "}
+                                </Select>
+                              </>
+                            ) : (
+                              <>
+                                <Select
+                                  // value={selectorAddress}
+                                  // onChange={handleAddress}
+                                  displayEmpty
+                                  inputProps={{ "aria-label": "Without label" }}
+                                  className={styles.address_selector}
+                                  sx={{
+                                    "&.Mui-selected": {
+                                      border: "1px solid #f2f5c8",
+                                    },
+                                  }}
+                                >
+                                  <MenuItem selected>
+                                    <p>등록된 배송지가 없습니다.</p>
+                                  </MenuItem>{" "}
+                                </Select>
+                              </>
+                            )}
                           </FormControl>
                         </div>
                       ) : null}
@@ -557,7 +581,7 @@ function Order() {
                           value={selectedAddress.address_name}
                           title="받는분"
                           className={styles.mob_address_input}
-                          onChange={onChange}
+                          // onChange={onChange}
                           name="address_name"
                         />
                       ) : (
@@ -636,6 +660,7 @@ function Order() {
                           title="상세주소"
                           className={styles.mob_address_input}
                           style={{ width: "100%" }}
+                          // onChange={onChange}
                         />
                       ) : (
                         <input
@@ -659,14 +684,26 @@ function Order() {
                       <p>휴대폰 번호</p>
                     </TableCell>
                     <TableCell className={styles.mob_address_right}>
-                      <input
-                        type="text"
-                        value={selectedAddress.phone_number}
-                        title="휴대폰번호"
-                        className={styles.mob_address_input}
-                        style={{ width: "100%" }}
-                        defaultValue=""
-                      />
+                      {radio === "existing" ? (
+                        <input
+                          type="text"
+                          value={selectedAddress.phone_number}
+                          title="휴대폰번호"
+                          defaultValue=""
+                          className={styles.mob_address_input}
+                          // onChange={onChange}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={newAddress.phone_number}
+                          title="휴대폰번호"
+                          defaultValue=""
+                          onChange={onChange}
+                          name="phone_number"
+                          className={styles.mob_address_input}
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -773,6 +810,19 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
+
+            <div className={styles.pay_div}>
+              <p
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  marginBottom: "30px",
+                }}
+              >
+                구독하시겠습니까?
+              </p>
+            </div>
+            {orderList && orderList.map((item) => <Subscription orderList={item} />)}
 
             <div className={styles.mob_order_bottom}>
               <div className={styles.mob_final_pay}>
@@ -1023,24 +1073,47 @@ function Order() {
                       {radio === "existing" ? (
                         <div>
                           <FormControl sx={{ m: 1, minWidth: 120 }}>
-                            <Select
-                              value={selectorAddress}
-                              onChange={handleAddress}
-                              displayEmpty
-                              inputProps={{ "aria-label": "Without label" }}
-                              className={styles.address_selector}
-                              sx={{
-                                "&.Mui-selected": {
-                                  border: "1px solid #f2f5c8",
-                                },
-                              }}
-                            >
-                              {addressList.map((item, index) => (
-                                <MenuItem value={index}>
-                                  {item.address_name} ({item.address})
-                                </MenuItem>
-                              ))}
-                            </Select>
+                            {addressList && addressList.length > 0 ? (
+                              <>
+                                <Select
+                                  value={selectorAddress}
+                                  onChange={handleAddress}
+                                  displayEmpty
+                                  inputProps={{ "aria-label": "Without label" }}
+                                  className={styles.address_selector}
+                                  sx={{
+                                    "&.Mui-selected": {
+                                      border: "1px solid #f2f5c8",
+                                    },
+                                  }}
+                                >
+                                  {addressList.map((item, index) => (
+                                    <MenuItem value={index}>
+                                      {item.address_name} ({item.address})
+                                    </MenuItem>
+                                  ))}{" "}
+                                </Select>
+                              </>
+                            ) : (
+                              <>
+                                <Select
+                                  // value={selectorAddress}
+                                  // onChange={handleAddress}
+                                  displayEmpty
+                                  inputProps={{ "aria-label": "Without label" }}
+                                  className={styles.address_selector}
+                                  sx={{
+                                    "&.Mui-selected": {
+                                      border: "1px solid #f2f5c8",
+                                    },
+                                  }}
+                                >
+                                  <MenuItem selected>
+                                    <p>등록된 배송지가 없습니다.</p>
+                                  </MenuItem>{" "}
+                                </Select>
+                              </>
+                            )}
                           </FormControl>
                         </div>
                       ) : null}
@@ -1060,7 +1133,7 @@ function Order() {
                           value={selectedAddress.address_name}
                           title="받는분"
                           className={styles.address_input}
-                          onChange={onChange}
+                          // onChange={onChange}
                           name="address_name"
                         />
                       ) : (
@@ -1140,6 +1213,7 @@ function Order() {
                             title="상세주소"
                             // defaultValue=""
                             className={styles.address_input}
+                            // onChange={onChange}
                           />
                         ) : (
                           <input
@@ -1163,13 +1237,26 @@ function Order() {
                       <p>휴대폰 번호</p>
                     </TableCell>
                     <TableCell className={styles.address_right}>
-                      <input
-                        type="text"
-                        value={selectedAddress.phone_number}
-                        title="휴대폰번호"
-                        defaultValue=""
-                        className={styles.address_input}
-                      />
+                      {radio === "existing" ? (
+                        <input
+                          type="text"
+                          value={selectedAddress.phone_number}
+                          title="휴대폰번호"
+                          defaultValue=""
+                          className={styles.address_input}
+                          // onChange={onChange}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={newAddress.phone_number}
+                          title="휴대폰번호"
+                          defaultValue=""
+                          onChange={onChange}
+                          name="phone_number"
+                          className={styles.address_input}
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -1274,6 +1361,20 @@ function Order() {
                 </TableBody>
               </Table>
             </div>
+            
+            <div className={styles.pay_div}>
+              <p
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  marginBottom: "30px",
+                }}
+              >
+                구독하시겠습니까?
+              </p>
+            </div>
+            {orderList && orderList.map((item) => <Subscription orderList={item} />)}
+
             <div className={styles.order_bottom}>
               <div className={styles.final_pay}>
                 <p>최종 결제 금액</p>

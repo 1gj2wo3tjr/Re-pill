@@ -274,7 +274,7 @@ class SubscriptionList(APIView):
                 subscribe_dates["0"] = str(prev_date)
 
                 for idx in range(1, int(request.data.get("subscribe_times"))):
-                    next_date = prev_date + timedelta(days=request.data.get("period"))
+                    next_date = prev_date + timedelta(days=int(request.data.get("period")))
                     subscribe_dates[str(idx)] = str(next_date)
                     prev_date = next_date
 

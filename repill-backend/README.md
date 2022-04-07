@@ -64,3 +64,17 @@ python data.py
 ```bash
 python load.py
 ```
+
+----
+
+## Docker-compose Setup
+
+`docker-compose up`: docker-compose 시작 (서비스에 필요한 모든 container를 build, recreate, start 등)
+`-d` 옵션: 백그라운드 실행
+`-f` 옵션: 파일 지정 (`docker-compose -f docker.compose.yml`처럼 사용)
+
+`docker-compose start`: docker-compose 시작 (이미 존재하는 container를 start), 기본 백그라운드 실행
+
+`docker-compose stop`: docker-compose의 container들을 종료
+
+`docker-compose down`: (docker-compose up과 start의 관계와 비슷) 정의된 network 등과 함께 docker-compose의 container들을 종료/삭제

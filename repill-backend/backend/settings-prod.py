@@ -28,7 +28,6 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
     'j6a503.p.ssafy.io',
 ]
 
@@ -94,10 +93,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
@@ -153,6 +148,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS: 모든 Origin 허용 (배포 시 수정할 것)
 # CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = [
+    'https://j6a503.p.ssafy.io:3000',
     'http://localhost:3000',
     'https://localhost:3000',
     'http://127.0.0.1:3000',
@@ -171,18 +167,13 @@ JWT_AUTH = {
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        # 기본값: 로그인 사용자
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 기본값: JWT 토큰 확인
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',        # BasicAuth로 동작 확인: 추후 끌 것
     ),
 }
 
-# SimpleJWT 관련 추가 설정
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=14),
@@ -191,7 +182,6 @@ SIMPLE_JWT = {
     'TOKEN_USER_CLASS': 'accounts.User'
 }
 
-# Swagger에서 인증을 Basic으로 사용하도록 정의: 추후 바꿀 것
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'api_key': {

@@ -351,3 +351,23 @@ def kakaoPay(request):
         return Response(response) 
     else:
         return Response(None, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def kakaoPayApprove(request):
+    key = os.environ.get("REACT_APP_KAKAO_PAY_KEY")
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+
+        url = "https://kapi.kakao.com"
+        headers = {
+            'Authorization': 'KakaoAK ' + key,
+            'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+        }
+        params = request.GET
+        response = requests.post(url+"/v1/payment/approve", params=params, headers=headers)
+        response = json.loads(response.text)
+        return Response(response) 
+    else:
+        return Response(None, status=status.HTTP_405_METHOD_NOT_ALLOWED)

@@ -6,6 +6,7 @@ import { Survey, StylesManager, Model } from "survey-react";
 StylesManager.applyTheme("modern");
 
 function SurveyPage() {
+  let token = sessionStorage.getItem('token')
   const [sb, setSb] = useState([])  // sb에 주관식 2개 있음
   const [ob, setOb] = useState([])
   const element = []
@@ -57,8 +58,17 @@ function SurveyPage() {
 
   survey.focusFirstQuestionAutomatic = false;
   const alertResults = useCallback((sender) => {
-    const results = JSON.stringify(sender.data);
+    const results = sender.data
     console.log(results)
+    axios.post(`${process.env.REACT_APP_BASE_URL}/api/v1/survey/report/`, {
+      results
+    },{
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }}
+    )
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err))
   }, []);
   survey.onComplete.add(alertResults);
   

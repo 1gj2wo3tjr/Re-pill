@@ -94,7 +94,6 @@ function Order() {
 
   // 기존.신규 배송지 메소드
   const handleChange = (e) => {
-    console.log(e.target.value);
     setRadio(e.target.value);
 
     if (e.target.value === "new") {
@@ -269,7 +268,7 @@ function Order() {
           url: "/v1/payment/ready",
           method: "POST",
           headers: {
-            Authorization: "KakaoAK de0e3076b485b703b1f1a4a2419440e6",
+            Authorization: "KakaoAK d986bfc7e3a2e411b1268864d2a7d97d",
             "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
           },
 
@@ -694,14 +693,25 @@ function Order() {
                       <p>휴대폰 번호</p>
                     </TableCell>
                     <TableCell className={styles.mob_address_right}>
-                      <input
-                        type="text"
-                        value={selectedAddress.phone_number}
-                        title="휴대폰번호"
-                        className={styles.mob_address_input}
-                        style={{ width: "100%" }}
-                        defaultValue=""
-                      />
+                      {radio === "existing" ? (
+                        <input
+                          type="text"
+                          value={selectedAddress.phone_number}
+                          title="휴대폰번호"
+                          defaultValue=""
+                          className={styles.mob_address_input}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={newAddress.phone_number}
+                          title="휴대폰번호"
+                          defaultValue=""
+                          onChange={onChange}
+                          name="phone_number"
+                          className={styles.mob_address_input}
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -1221,13 +1231,25 @@ function Order() {
                       <p>휴대폰 번호</p>
                     </TableCell>
                     <TableCell className={styles.address_right}>
-                      <input
-                        type="text"
-                        value={selectedAddress.phone_number}
-                        title="휴대폰번호"
-                        defaultValue=""
-                        className={styles.address_input}
-                      />
+                      {radio === "existing" ? (
+                        <input
+                          type="text"
+                          value={selectedAddress.phone_number}
+                          title="휴대폰번호"
+                          defaultValue=""
+                          className={styles.address_input}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={newAddress.phone_number}
+                          title="휴대폰번호"
+                          defaultValue=""
+                          onChange={onChange}
+                          name="phone_number"
+                          className={styles.address_input}
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>

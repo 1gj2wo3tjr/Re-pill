@@ -29,7 +29,7 @@ function Footer() {
       </style>
 
       <Segment inverted vertical>
-        <Container textAlign="center" style={{ marginTop: "30px" }}>
+        <Container textAlign="center" style={{ marginTop: "5px" }}>
           {/* logo 자리 */}
           <Image src="/img/logo_2.png" centered size="small" />
           <List horizontal inverted divided link size="small">

@@ -27,15 +27,15 @@ function SurveyPage() {
   // 객관식 filter된 배열을 하나씩 꺼내서 저장
   for(let i=0; i<ob.length; i++) {
     for(let j=0; j<ob[i].choices.length; j++) {
-      choices[i].push(ob[i].choices[j].content)
+      choices[i].push({"value": ob[i].choices[j].id, "text":ob[i].choices[j].content})
     }
     element.push({
       "type": "checkbox",
-      "name": "opSystem",
+      "name": `${ob[i].number}`,
       "title": `${ob[i].content}`,
       "hasOther": false,
       "isRequired": true,
-      "choices": choices[i],
+      "choices": choices[i]
     })
   }
 
@@ -55,13 +55,13 @@ function SurveyPage() {
 
   const survey = new Model(surveyJson);
 
-  // survey.focusFirstQuestionAutomatic = false;
-  // const alertResults = useCallback((sender) => {
-  //   const results = JSON.stringify(sender.data);
-  //   alert(results);
-  // }, []);
-  // survey.onComplete.add(alertResults);
-
+  survey.focusFirstQuestionAutomatic = false;
+  const alertResults = useCallback((sender) => {
+    const results = JSON.stringify(sender.data);
+    console.log(results)
+  }, []);
+  survey.onComplete.add(alertResults);
+  
   const [questions, setQuestions] = useState([])
 
   const getQuestions = async() => {

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -27,21 +28,29 @@ function Category() {
         <></>
       ) : (
         <List sx={style} component="nav" aria-label="mailbox folders">
-          <h2 style={{ padding: "0px 0 0 8px " }}>카테고리</h2>
-          <ListItem button>
-            <ListItemText primary="Inbox" />
-          </ListItem>
+          {/* <h2 style={{ padding: "0px 0 0 8px " }}>카테고리</h2> */}
+          <Link to="/mypage/userinfo">
+            <ListItem button>
+              <ListItemText primary="회원정보 관리" />
+            </ListItem>
+          </Link>
           <Divider />
-          <ListItem button divider>
-            <ListItemText primary="Drafts" />
-          </ListItem>
-          <ListItem button>
-            <ListItemText primary="Trash" />
-          </ListItem>
+          <Link to="/mypage/address">
+            <ListItem button divider>
+              <ListItemText primary="배송지 관리" />
+            </ListItem>
+          </Link>
+          <Link to="/mypage/myorder">
+            <ListItem button>
+              <ListItemText primary="결제 내역" />
+            </ListItem>
+          </Link>
           <Divider light />
-          <ListItem button>
-            <ListItemText primary="Spam" />
-          </ListItem>
+          <Link to="/mypage/subscriptions">
+            <ListItem button>
+              <ListItemText primary="구독 관리" />
+            </ListItem>
+          </Link>
         </List>
       )}
     </>

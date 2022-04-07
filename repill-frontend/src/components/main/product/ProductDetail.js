@@ -201,12 +201,10 @@ function ProductDetail() {
           </div>
           {/* 상품 성분 및 정보  */}
           <hr></hr>
-          <div className={styles.mob_main}>
-            {/* 다른 이미지 많이 필요할 것 같은 */}
+          {/* <div className={styles.mob_main}>
             <div className={styles.mob_img}>
               <img src={detail.thumbnail_url} alt="" />
             </div>
-            {/* ingrediants */}
             <div style={{ display: "flex", justifyContent: "center" }}>
               <table
                 style={{
@@ -228,7 +226,7 @@ function ProductDetail() {
                 </tbody>
               </table>
             </div>
-          </div>
+          </div> */}
           <div style={{ margin: "30px 0" }}>
             <p style={{ fontSize: "16px", fontWeight: "bold" }}>상품 리뷰</p>
             <ProductReview list={review} />
@@ -317,10 +315,8 @@ function ProductDetail() {
             </div>
           </div>
           {/* 상품 성분 및 정보  */}
-          <div className={styles.detail_main}>
-            {/* 다른 이미지 많이 필요할 것 같은 */}
+          {/* <div className={styles.detail_main}>
             <img src={detail.thumbnail_url} alt="" style={{ width: "400px" }} />
-            {/* ingrediants */}
             <div style={{ display: "flex", justifyContent: "center" }}>
               <table
                 style={{
@@ -338,8 +334,8 @@ function ProductDetail() {
                 </tr>
               </table>
             </div>
-          </div>
-          <div style={{ margin: "50px 0" }}>
+          </div> */}
+          <div style={{ margin: "100px 0" }}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p style={{ fontSize: "16px", fontWeight: "bold" }}>상품 리뷰</p>
               <p

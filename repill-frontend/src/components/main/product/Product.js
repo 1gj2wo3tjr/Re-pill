@@ -177,9 +177,7 @@ function Product() {
             </div>
           ) : (
             <div>
-              <div style={{ display: "inline" }}>
-                <Category />
-              </div>
+              <div style={{ display: "inline" }}>{/* <Category /> */}</div>
               <Container className={styles.container}>
                 <div className={styles.search_num}>
                   <p>총 {result.length}건</p>

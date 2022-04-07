@@ -12,18 +12,18 @@ import { useNavigate } from "react-router-dom";
 import SubscriptionsCalender from "./SubscriptionsCalender";
 import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
 import Modal from "@mui/material/Modal";
-import axios from "axios"
+import axios from "axios";
 
 function SubscriptionsCompo() {
-  let token = sessionStorage.getItem('token')
+  let token = sessionStorage.getItem("token");
   const headers = {
-    Authorization: `Bearer ` + `${token}`
-  }
+    Authorization: `Bearer ` + `${token}`,
+  };
   const [modalOn, setModalOn] = useState(false);
   const [selected, setSelected] = useState([]);
-  const [products, setProducts] = useState([])
-  const [period, setPeriod] = useState([])
-  const filtered_date = []
+  const [products, setProducts] = useState([]);
+  const [period, setPeriod] = useState([]);
+  const filtered_date = [];
 
   const navigate = useNavigate();
 
@@ -31,12 +31,12 @@ function SubscriptionsCompo() {
     navigate("/product");
   };
   const handleCalender = (item) => {
-    const sub_list = item.subscribe_dates
-    for(var key in sub_list) {
-      var date_num = sub_list[key]
-      filtered_date.push(date_num)
+    const sub_list = item.subscribe_dates;
+    for (var key in sub_list) {
+      var date_num = sub_list[key];
+      filtered_date.push(date_num);
     }
-    setPeriod(item)
+    setPeriod(item);
     setSelected(filtered_date);
     setModalOn(true);
     console.log("열렸다!");
@@ -45,7 +45,7 @@ function SubscriptionsCompo() {
     setModalOn(false);
   };
 
-  const getSubscriptions = async() => {
+  const getSubscriptions = async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/subscription/`,
@@ -54,13 +54,13 @@ function SubscriptionsCompo() {
         }
       );
       console.log(response.data);
-      response.data.map((item) => 
+      response.data.map((item) =>
         axios
           .get(
             `${process.env.REACT_APP_BASE_URL}/api/v1/products/items/${item.product}`
           )
           .then((res) => {
-            console.log(res)
+            console.log(res);
             setProducts((products) => [
               {
                 subscription_id: item.id,
@@ -70,38 +70,39 @@ function SubscriptionsCompo() {
                 subscribe_times: item.subscribe_times,
                 title: res.data.name,
                 img_url: res.data.thumbnail_url,
-                product: item.product
+                product: item.product,
               },
               ...products,
-            ])
+            ]);
           })
-      )
+      );
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const deleteSubscription = (item) => {
     axios
       .delete(
         `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/subscription/${item.product}`,
         {
-          headers: headers
+          headers: headers,
         }
       )
       .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-    setTimeout(window.location.reload(true), 500)
-  }
+      .catch((err) => console.log(err));
+    setTimeout(window.location.reload(true), 500);
+  };
 
   React.useEffect(() => {
-    getSubscriptions()
-    setProducts([])
-  }, [])
+    getSubscriptions();
+    setProducts([]);
+  }, []);
 
   return (
     <div class="subscriptionCompo">
-      <div class="ui grid container">
+      <h2>구독 내역</h2>
+      <div class="ui grid container" style={{ marginTop: "50px" }}>
         {products.map((item) => (
           <div class="four wide column">
             <Card
@@ -116,12 +117,11 @@ function SubscriptionsCompo() {
                   height="160"
                   image={item.img_url}
                   alt="subscription"
+                  sx={{ objectFit: "contain", padding: "10px" }}
                 />
                 <CardContent style={{ height: "150px" }}>
                   <Typography gutterBottom variant="h5" component="div">
-                    <p>
-                      {item.title}
-                    </p>
+                    <p>{item.title}</p>
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {item.start_date.slice(0, 10)}

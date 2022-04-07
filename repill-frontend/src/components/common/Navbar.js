@@ -371,7 +371,10 @@ function Navbar() {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/mypage" className={styles.navbar_top_list}>
+                      <Link
+                        to="/mypage/userinfo"
+                        className={styles.navbar_top_list}
+                      >
                         마이페이지
                       </Link>
                     </li>

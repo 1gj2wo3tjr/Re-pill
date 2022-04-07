@@ -79,7 +79,6 @@ export default function PersistentDrawerLeft() {
         color: "black",
       }}
     >
-      <CssBaseline />
       <Button
         variant="contained"
         disableElevation

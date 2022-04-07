@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from backend.permissions import IsOwnerOnly
-from .models import Recommend, SurveyHistory, SurveyQuestion
-from .serializers import RecommendSerializer, ResponsesSerializer, SurveyHistoryListSerializer, SurveyHistorySerializer, ReviewRecommendSerializer, ProductRecommendSerializer, SurveyQuestionListSerializer
+from .models import ChoicesIngrediant, Recommend, SurveyHistory, SurveyQuestion, SurveyQuestionChoices, SurveyResponse
+from .serializers import RecommendSerializer, ResponsesSerializer, SurveyHistoryListSerializer, SurveyHistorySerializer, SurveyQuestionListSerializer, ProductSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
@@ -157,3 +157,43 @@ class RecommAlgorithm(APIView):
                 for j in range(R_predicted.shape[1]):
                     if R_predicted[i, j] >= 1:
                         f.write('%d::%s::%.3f\n' % (i, j, R_predicted[i, j]))
+
+
+# 가장 최근에 진행한 설문조사를 바탕으로 추천 상품을 받아옵니다.
+class SurveyRecommend(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        survey = SurveyHistory.objects.filter(respondent=request.user).last()  # 가장 최근 진행한 설문조사를 가져옵니다.
+        responses = get_list_or_404(SurveyResponse, survey=survey)
+        responses_serializer = ResponsesSerializer(responses, many=True)  # 해당 설문조사의 답변을 가져옵니다.
+        required_ingrediants = dict()
+
+        for response in responses_serializer.data:
+            try:
+                choice = get_object_or_404(SurveyQuestionChoices, 
+                question_id=response.get("question"), number=response.get("answer_choice"))
+
+                choices_ingrediant_objs = get_list_or_404(ChoicesIngrediant, choice=choice.pk)
+                for obj in choices_ingrediant_objs:
+                    # 각 답변 (증상)과 연관된 영양 성분의 ID값을 찾아 required_ingrediants에 기록합니다.
+                    ingrediant_pk = str(obj.ingrediant.pk)
+                    if ingrediant_pk not in required_ingrediants:
+                        required_ingrediants[ingrediant_pk] = 1  # 해당 성분을 처음 기록할 때는 가중치를 1로 두며
+                    else:
+                        required_ingrediants[ingrediant_pk] += 1  # 이후 다시 기록될 경우 가중치를 1씩 높여줍니다.
+                        # 가중치는 서비스 고도화 단계에서 수정이 가능할 것 같습니다.
+            except:
+                continue
+        
+        # 가장 가중치가 높은 영양 성분을 최대 5개까지 가져옵니다.
+        max_ingrediants = min(len(required_ingrediants), 5)
+        best_ingrediants = sorted(required_ingrediants, key=required_ingrediants.get, reverse=True)[:max_ingrediants]
+        recomm_products = []
+
+        # 해당 영양 성분이 포함된 상품 중 최신 20개를 가져옵니다.
+        for best_ingrediant in best_ingrediants:
+            recomm_products.extend(Product.objects.filter(ingrediants=best_ingrediant).order_by("-pk")[:20])
+            
+        serializer = ProductSerializer(recomm_products, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

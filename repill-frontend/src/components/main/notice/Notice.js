@@ -45,7 +45,7 @@ function Notice() {
           <Container style={{ marginTop: "5%" }}>
             <h3>공지사항</h3>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              {staff ? (
+              {staff === true ? (
                 <>
                   <input
                     type="text"
@@ -97,7 +97,7 @@ function Notice() {
           <Container style={{ marginTop: "100px" }}>
             <h2>공지사항</h2>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              {staff ? (
+              {staff === true ? (
                 <>
                   <input
                     type="text"

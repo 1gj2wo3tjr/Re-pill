@@ -39,10 +39,32 @@ class SurveyList(APIView):
         return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
-        serializer = SurveyHistorySerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(respondent=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        survey = SurveyHistorySerializer(data={"respondent": request.user.pk})
+        if survey.is_valid(raise_exception=True):
+            history = survey.save()
+        respondent = request.data
+        response = ResponsesSerializer()
+
+        for key, value in respondent.items():
+            print(key, value)
+            if isinstance(value, list):
+                for v in value:
+                    data = {"question": key, "answer_choice": v, "answer_text": None, "survey": history.id}
+                    print(data)
+                    response = ResponsesSerializer(data=data)
+                    if response.is_valid(raise_exception=True):
+                        response.save()
+            else:
+                data = {"question": key, "answer_choice": None, "answer_text": str(value), "survey": history.id}
+                print(data)
+                response = ResponsesSerializer(data=data)
+                if response.is_valid(raise_exception=True):
+                    response.save()       
+
+        # serializer = SurveyHistorySerializer(data=request.data)
+        # if serializer.is_valid(raise_exception=True):
+        #     serializer.save(respondent=request.user)
+        return Response(survey.data, status=status.HTTP_201_CREATED)
 
 class Survey(APIView):
     permission_classes = [IsOwnerOnly]

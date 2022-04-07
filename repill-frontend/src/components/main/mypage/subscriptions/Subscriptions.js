@@ -157,7 +157,7 @@ export default function PersistentDrawerLeft() {
             marginLeft: "10%",
             marginRight: "10%",
             height: "550px",
-            overflow: "overlay",
+            overflow: "hidden",
           }}
         >
           {login ? <SubscriptionsCompo /> : <h1>로그인 하고 들어와라</h1>}

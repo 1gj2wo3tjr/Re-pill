@@ -6,84 +6,115 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import Button from "@mui/material/Button";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { DateRangePicker } from "react-date-range";
-import { addDays } from "date-fns";
-import { Component } from "react";
+import styles from "../Mypage.module.css"
 
-// function SubscriptionsCalender({ handleCancel }) {
-//   const [value, onChange] = useState(new Date());
-//   const selectionRange = {
-//     startDate: new Date(),
-//     endDate: new Date(),
-//     key: "selection",
-//   };
+function SubscriptionsCalender({ selectedData, handleCancel, period }) {
+  const [value, onChange] = useState(new Date());
 
-//   const onCancel = () => {
-//     handleCancel();
-//   };
+  const [dates, setDates] = useState(selectedData)
 
-//   return (
-//     <div
-//       className="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-sky"
-//       style={{ height: "70%", width: "100%" }}
-//     >
-//       <div className="bg-white rouded shadow-lg w-10 md:w-2/5">
-//         <button
-//           onClick={onCancel}
-//           className="bg-green-300 hover:bg-green-500 rounded text-white "
-//           style={{ border: "none" }}
-//         >
-//           <CancelIcon />
-//         </button>
-//         <h3 style={{ textAlign: "center" }}>구독 확인</h3>
-//         <div className="flex justify-center items-center">
-//           <Calendar
-//             className="text-gray-500 mt-12"
-//             onChange={onChange}
-//             ranges={[selectionRange]}
-//           />
-//           <hr></hr>
-//         </div>
-//         <div className="text-gray-500 mt-4 flex justify-center items-center">
-//           {moment(value).format("YYYY년 MM월 DD일")}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default SubscriptionsCalender;
-
-class SubscriptionsCalender extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selection: {
-        startDate: new Date(),
-        endDate: new Date(),
-        key: "selection",
-      },
-      handleCancel: props.handleCancel,
-    };
-  }
-
-  onRangeChange = (ranges) => {
-    console.log(ranges["selection"]);
-    this.setState({
-      selection: ranges["selection"],
-    });
+  const onCancel = () => {
+    handleCancel();
   };
 
-  onCancel = () => {
-    this.state.handleCancel();
-  };
-
-  render() {
-    return (
+  return (
+    <>
+      <style>
+        {`
+          .react-calendar { 
+            width: 400px;
+            max-width: 100%;
+            background-color: #fff;
+            color: #222;
+            border-radius: 8px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.125em;
+          }
+          .react-calendar__navigation button {
+            color: #6f48eb;
+            min-width: 44px;
+            background: none;
+            font-size: 16px;
+            margin-top: 8px;
+          }
+          .react-calendar__navigation button:enabled:hover,
+          .react-calendar__navigation button:enabled:focus {
+            background-color: #f8f8fa;
+          }
+          .react-calendar__navigation button[disabled] {
+            background-color: #f0f0f0;
+          }
+          abbr[title] {
+            text-decoration: none;
+          }
+          /* .react-calendar__month-view__days__day--weekend {
+            color: #d10000;
+          } */
+          .react-calendar__tile:enabled:hover,
+          .react-calendar__tile:enabled:focus {
+            background: #f8f8fa;
+            color: #6f48eb;
+            border-radius: 6px;
+          }
+          .react-calendar__tile--now {
+            background: #6f48eb33;
+            border-radius: 6px;
+            font-weight: bold;
+            color: #6f48eb;
+          }
+          .react-calendar__tile--now:enabled:hover,
+          .react-calendar__tile--now:enabled:focus {
+            background: #6f48eb33;
+            border-radius: 6px;
+            font-weight: bold;
+            color: #6f48eb;
+          }
+          .react-calendar__tile--hasActive:enabled:hover,
+          .react-calendar__tile--hasActive:enabled:focus {
+            background: #f8f8fa;
+          }
+          .react-calendar__tile--active {
+            background: #6f48eb;
+            border-radius: 6px;
+            font-weight: bold;
+            color: white;
+          }
+          .react-calendar__tile--active:enabled:hover,
+          .react-calendar__tile--active:enabled:focus {
+            background: #6f48eb;
+            color: white;
+          }
+          .react-calendar--selectRange .react-calendar__tile--hover {
+            background-color: #f8f8fa;
+          }
+          .react-calendar__tile--range {
+            background: #f8f8fa;
+            color: #6f48eb;
+            border-radius: 0;
+          }
+          .react-calendar__tile--rangeStart {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+            background: #6f48eb;
+            color: white;
+          }
+          .react-calendar__tile--rangeEnd {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            background: #6f48eb;
+            color: white;
+          }
+        `}
+      </style>
       <div
         style={{
-          height: "70%",
-          width: "40%",
+          height: "50%",
+          width: "27%",
           position: "absolute",
           top: "60%",
           left: "50%",
@@ -96,7 +127,7 @@ class SubscriptionsCalender extends Component {
       >
         <Button
           variant="contained"
-          onClick={this.onCancel}
+          onClick={onCancel}
           style={{
             border: "none",
             backgroundColor: "#E8E8A6",
@@ -107,28 +138,38 @@ class SubscriptionsCalender extends Component {
         >
           <CancelIcon />
         </Button>
-        <h1 style={{ textAlign: "center" }}>구독 관리</h1>
-        <div style={{ transform: "translate(10%, 15%)" }}>
-          <DateRangePicker
-            onChange={this.onRangeChange}
-            months={1}
-            minDate={addDays(new Date(), -300)}
-            maxDate={addDays(new Date(), 900)}
-            direction="vertical"
-            scroll={{ enabled: true }}
-            ranges={[this.state.selection]}
+        <h1 style={{ textAlign: "center", marginLeft: "55px" }}>구독 정보 보기</h1>
+        <div style={{ transform: "translate(10%, 10%)" }}>
+          <Calendar
+            onChange={onChange}
+            value={value}
+            formatDay={(locale, date) => moment(date).format("DD")}
+            tileContent={({ date, view }) => {
+              let html = []
+              if (dates.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
+                html.push(<div className={styles.dot}></div>)
+              }
+              return (
+                <>
+                  <div className="flex justify-center items-center absoluteDiv">
+                    {html}
+                  </div>
+                </>
+              );
+              }
+            }
           />
-          <div style={{ color: "green" }}>
-            {" "}
-            startDate : {this.state.selection.startDate.toString()}
-          </div>
-          <div style={{ color: "green" }}>
-            {" "}
-            endDate : {this.state.selection.endDate.toString()}
-          </div>
+        <div style={{ marginTop: "7%" }}>
+          <p>
+            구독 주기 :{period.period} 일
+          </p>
+          <p>
+            구독 횟수 :{period.subscribe_times} 회
+          </p>
+        </div>
         </div>
       </div>
-    );
-  }
+  </>)
 }
+
 export default SubscriptionsCalender;

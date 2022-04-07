@@ -145,25 +145,6 @@ function MypageCompo() {
               </div>
             </Paper>
           </Grid>
-          {/* <Grid item xs={12}>
-            <h3 style={{ textAlign: "center" }}>맞춤형 케어</h3>
-          </Grid>
-          <Grid item xs={6}>
-            <Paper
-              className={classes.paper}
-              style={{ backgroundColor: "rgba(245,254,192,50%)" }}
-            >
-              무릎 관절염
-            </Paper>
-          </Grid>
-          <Grid item xs={6}>
-            <Paper
-              className={classes.paper}
-              style={{ backgroundColor: "rgba(245,254,192,50%)" }}
-            >
-              안구 건조증
-            </Paper>
-          </Grid> */}
         </Grid>
       </div>
     </>

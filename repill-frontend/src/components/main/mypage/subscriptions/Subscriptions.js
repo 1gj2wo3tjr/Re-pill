@@ -3,22 +3,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SubscriptionsCompo from "./SubscriptionsCompo";
 import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import PersonIcon from "@mui/icons-material/Person";
-import ReceiptTwoToneIcon from "@mui/icons-material/ReceiptTwoTone";
-import CardMembershipTwoToneIcon from "@mui/icons-material/CardMembershipTwoTone";
-import HomeWorkIcon from "@mui/icons-material/HomeWork";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import Category from "../../product/Category";
+import { Container } from "semantic-ui-react";
 
 const drawerWidth = 240;
 
@@ -72,97 +58,14 @@ export default function PersistentDrawerLeft() {
   });
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        height: "700px",
-        color: "black",
-      }}
-    >
-      <CssBaseline />
-      <Button
-        variant="contained"
-        disableElevation
-        color="inherit"
-        aria-label="open drawer"
-        onClick={handleDrawerOpen}
-        edge="start"
-        sx={{ mr: 2, ...(open && { display: "none" }) }}
-      >
-        <ArrowForwardIosIcon />
-      </Button>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <DrawerHeader>
-          <Button onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </Button>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          <ListItem>
-            <ListItemIcon>
-              <BarChartIcon />
-            </ListItemIcon>
-            <Link to="/recommend">분석리포트</Link>
-          </ListItem>
-        </List>
-        <Divider />
-        <List>
-          <ListItem>
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
-            <Link to="/mypage/userinfo">회원정보 관리</Link>
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <ReceiptTwoToneIcon />
-            </ListItemIcon>
-            <Link to="/mypage/myorder">결제 내역</Link>
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <CardMembershipTwoToneIcon />
-            </ListItemIcon>
-            <Link to="/mypage/subscriptions">구독관리</Link>
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <HomeWorkIcon />
-            </ListItemIcon>
-            <Link to="/mypage/address">배송지 관리</Link>
-          </ListItem>
-        </List>
-      </Drawer>
-      <Main open={open}>
-        <h1 style={{ textAlign: "center", marginBottom: "3%" }}>구독 상품</h1>
-        <div
-          style={{
-            marginLeft: "10%",
-            marginRight: "10%",
-            height: "550px",
-            overflow: "hidden",
-          }}
-        >
-          {login ? <SubscriptionsCompo /> : <h1>로그인 하고 들어와라</h1>}
-        </div>
-      </Main>
-    </Box>
+    <>
+      <div style={{ display: "inline" }}>
+        <Category />
+      </div>
+
+      <Container style={{ marginTop: "100px", marginBottom: "150px" }}>
+        {login ? <SubscriptionsCompo /> : <h1>로그인 하고 들어와라</h1>}
+      </Container>
+    </>
   );
 }

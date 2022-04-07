@@ -12,6 +12,7 @@ import AddressEditModal from "./AddressEditModal";
 import styles from "../Mypage.module.css";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
+import Category from "../../product/Category";
 
 function AddressTab() {
   let token = sessionStorage.getItem("token");
@@ -151,6 +152,9 @@ function AddressTab() {
         </>
       ) : (
         <>
+          <div style={{ display: "inline" }}>
+            <Category />
+          </div>
           <Container style={{ marginTop: "5%" }}>
             <h1>배송지 목록</h1>
             <div style={{ display: "flex", justifyContent: "space-between" }}>

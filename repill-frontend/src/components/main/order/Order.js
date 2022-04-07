@@ -811,6 +811,19 @@ function Order() {
               </Table>
             </div>
 
+            <div className={styles.pay_div}>
+              <p
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  marginBottom: "30px",
+                }}
+              >
+                구독하시겠습니까?
+              </p>
+            </div>
+            {orderList && orderList.map((item) => <Subscription orderList={item} />)}
+
             <div className={styles.mob_order_bottom}>
               <div className={styles.mob_final_pay}>
                 <p>최종 결제 금액</p>
@@ -1349,7 +1362,18 @@ function Order() {
               </Table>
             </div>
             
-            {orderList && <Subscription orderList={orderList} />}
+            <div className={styles.pay_div}>
+              <p
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  marginBottom: "30px",
+                }}
+              >
+                구독하시겠습니까?
+              </p>
+            </div>
+            {orderList && orderList.map((item) => <Subscription orderList={item} />)}
 
             <div className={styles.order_bottom}>
               <div className={styles.final_pay}>

@@ -1,16 +1,10 @@
-import React from 'react'
-import {
-  Container,
-  Image,
-  List,
-  Segment,
-} from 'semantic-ui-react'
-import styles from './Footer.module.css';
+import React from "react";
+import { Container, Image, List, Segment } from "semantic-ui-react";
+import styles from "./Footer.module.css";
 
 function Footer() {
   return (
     <div className={styles.footer}>
-
       <style>
         {`
           .ui.inverted.header{
@@ -35,29 +29,31 @@ function Footer() {
       </style>
 
       <Segment inverted vertical>
-        <Container textAlign='center'>
+        <Container textAlign="center" style={{ marginTop: "5px" }}>
           {/* logo 자리 */}
-          <Image src='/logo.png' centered size='mini' />
-          <List horizontal inverted divided link size='small'>
-            <List.Item as='a' href='#'>
+          <Image src="/img/logo_2.png" centered size="small" />
+          <List horizontal inverted divided link size="small">
+            <List.Item as="a" href="#">
               Email
             </List.Item>
-            <List.Item as='a' href='#'>
+            <List.Item as="a" href="#">
               Github
             </List.Item>
-            <List.Item as='a' href='#'>
+            <List.Item as="a" href="#">
               Notion
             </List.Item>
-            <List.Item as='a' href='#'>
+            <List.Item as="a" href="#">
               Re:pill
             </List.Item>
           </List>
           <br></br>
-          Copyright © 2022. All rights reserved.
+          <p style={{ fontWeight: "bold", margin: "10px 0" }}>
+            Copyright © 2022. All rights reserved.
+          </p>
         </Container>
       </Segment>
     </div>
-  )
+  );
 }
 
-export default Footer
+export default Footer;

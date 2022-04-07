@@ -20,7 +20,7 @@ import ProductReview from "./components/main/product/ProductReviewLists";
 import PayResult from "./components/main/order/PayResult";
 import PayReady from "./components/main/order/PayReady";
 import UserInfo from "./components/main/mypage/UserInfo/UserInfo";
-import Survey from "./components/main/survey/Survey";
+import SurveyPage from "./components/main/survey/SurveyPage";
 
 function App() {
   return (
@@ -46,7 +46,7 @@ function App() {
           <Route path="/mypage/subscriptions" element={<Subscriptions />} />
           <Route path="/productReview" element={<ProductReview />} />
           <Route path="/mypage/userinfo" element={<UserInfo />} />
-          <Route path="/survey/Survey.js" element={<Survey />} />
+          <Route path="/Survey" element={<SurveyPage />} />
         </Routes>
       </div>
       <Footer />

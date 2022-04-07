@@ -42,7 +42,7 @@ class SurveyList(APIView):
         survey = SurveyHistorySerializer(data={"respondent": request.user.pk})
         if survey.is_valid(raise_exception=True):
             history = survey.save()
-        respondent = request.data
+        respondent = request.data.get('results')
         response = ResponsesSerializer()
 
         for key, value in respondent.items():
@@ -59,7 +59,7 @@ class SurveyList(APIView):
                 print(data)
                 response = ResponsesSerializer(data=data)
                 if response.is_valid(raise_exception=True):
-                    response.save()       
+                    response.save()
 
         # serializer = SurveyHistorySerializer(data=request.data)
         # if serializer.is_valid(raise_exception=True):

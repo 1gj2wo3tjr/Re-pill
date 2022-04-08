@@ -27,8 +27,8 @@ function SubscriptionsCompo() {
 
   const navigate = useNavigate();
 
-  const handleProduct = () => {
-    navigate("/product");
+  const handleProduct = (item) => {
+    navigate(`/product/${item.product}`);
   };
   const handleCalender = (item) => {
     const sub_list = item.subscribe_dates;
@@ -112,7 +112,7 @@ function SubscriptionsCompo() {
                 minWidth: "80%",
               }}
             >
-              <CardActionArea onClick={handleProduct}>
+              <CardActionArea onClick={() => handleProduct(item)}>
                 <CardMedia
                   component="img"
                   height="160"

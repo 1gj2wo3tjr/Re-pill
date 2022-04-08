@@ -81,8 +81,8 @@ function SubscriptionsCompo() {
     }
   };
 
-  const deleteSubscription = (item) => {
-    axios
+  const deleteSubscription = async (item) => {
+    await axios
       .delete(
         `${process.env.REACT_APP_BASE_URL}/api/v1/accounts/subscription/${item.product}`,
         {
@@ -91,6 +91,7 @@ function SubscriptionsCompo() {
       )
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
+    getSubscriptions();
     setTimeout(window.location.reload(true), 500);
   };
 

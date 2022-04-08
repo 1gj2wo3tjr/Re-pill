@@ -33,6 +33,8 @@ function Recommend() {
   const getReviewRecomm = async() => {
     try{
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/v1/survey/report/recomm/`, {
+
+      }, {
         headers: headers
       })
       console.log(response.data)

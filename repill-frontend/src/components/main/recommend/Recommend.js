@@ -32,7 +32,7 @@ function Recommend() {
   // review 기반 요청
   const getReviewRecomm = async() => {
     try{
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/survey/report/recomm/`, {
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/v1/survey/report/recomm/`, {
         headers: headers
       })
       console.log(response.data)

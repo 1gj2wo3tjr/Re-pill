@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 class NoticeAuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username')
+        fields = ('id', 'username', 'name')
 
 class NoticeListSerializer(serializers.ModelSerializer):
     author = NoticeAuthorSerializer(read_only=True)
